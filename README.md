@@ -1,42 +1,46 @@
-# FM Rádio Prijímač s Digitálnym Ladením
+# FM Radio Receiver with Digital Tuning
 
-Tento projekt je digitálny FM prijímač postavený na báze mikrokontroléra (MCU) a špecializovaného tuner modulu Si4703. Umožňuje presné digitálne ladenie, hľadanie staníc a zobrazenie informácií o frekvencii a stanici (RDS) na displeji.
+This project is a digital FM receiver built around a microcontroller (MCU) and a specialized Si4703 tuner module. It allows for precise digital tuning, station seeking, and displays frequency and station information (RDS) on a display.
 
+## Our Team
+* Lukáš Vizina
+* Rastislav Štefan Sokol
+* Martin Šveda
+* Samuel Sedmák
 
+## 1. Problem Statement & Solution
 
-## 1. Problém a Návrh Riešenia (Problem Statement & Solution)
+### Problem Statement
+Traditional analog FM radios often rely on manual tuning using a variable capacitor, which is imprecise and cumbersome. The user cannot see the exact frequency they are tuned to, and modern features like automatic station seeking or displaying the station name (RDS) are missing.
 
-### Popis Problému
-Tradičné analógové FM rádiá sa často spoliehajú na manuálne ladenie pomocou otočného kondenzátora, čo je nepresné a ťažkopádne. Užívateľ nevidí presnú frekvenciu, na ktorej sa nachádza, a chýbajú moderné funkcie ako automatické hľadanie staníc alebo zobrazenie názvu stanice (RDS).
+### Proposed Solution (with MCU)
+Our solution uses a microcontroller (e.g., Arduino Uno) as the control unit, which communicates digitally with the FM tuner module (Si4703) via the I2C bus.
+1.  **MCU (The Brain):** Receives inputs from the buttons (Tune Up, Tune Down, Seek).
+2.  **Tuner Control:** The MCU sends commands directly to the Si4703 module (e.g., "tune to 94.8 MHz" or "find the next strong station").
+3.  **Data Display:** The MCU reads the current status from the tuner (frequency, signal strength) and any available RDS data (station name). It then displays this information in real-time on an OLED display.
 
-### Navrhované Riešenie (s MCU)
-Naše riešenie využíva mikrokontrolér (napr. Arduino Nano) ako riadiacu jednotku, ktorá digitálne komunikuje s FM tuner modulom (Si4703) prostredníctvom I2C zbernice.
-1.  **MCU (Mozog):** Prijíma vstupy z tlačidiel (Ladiť Hore, Ladiť Dole, Hľadať).
-2.  **Ovládanie Tunera:** MCU posiela príkazy priamo modulu Si4703 (napr. "nalaď frekvenciu 94.8 MHz" alebo "nájdi ďalšiu silnú stanicu").
-3.  **Zobrazenie Dát:** MCU číta aktuálny stav z tunera (frekvenciu, silu signálu) a prípadné RDS dáta (názov stanice). Tieto informácie potom zobrazuje v reálnom čase na OLED displeji.
-
-Výsledkom je kompaktný, presný a užívateľsky prívetivý FM prijímač.
+The result is a compact, accurate, and user-friendly FM receiver.
 
 ---
 
-## 2. Hardvérové Komponenty (Hardware Components)
+## 2. Hardware Components
 
-Zoznam hlavných komponentov potrebných na stavbu.
+A list of the main components required for the build.
 
-| Komponent | Počet | Dôvod použitia (Justification) |
+| Component | Quantity | Justification |
 | :--- | :---: | :--- |
-| **MCU: Arduino Uno** | 1 ks | Srdce projektu. Spracováva vstupy z tlačidiel, riadi tuner a displej cez I2C zbernicu. Je malé a má dostatok pinov. |
-| **FM Tuner: Si4703 Breakout Board**| 1 ks | Kľúčový komponent. Je to kompletný FM prijímač na čipe. Ovláda sa digitálne (I2C), čo umožňuje presné ladenie, a hlavne **podporuje RDS**. |
-| **Displej: OLED 0.96" (SSD1306)** | 1 ks | Zobrazuje frekvenciu, názov stanice (RDS) a silu signálu. Zvolený kvôli vysokému kontrastu, nízkej spotrebe a I2C rozhraniu (šetrí piny MCU). |
-| **Taktilné tlačidlá** | 3 ks | Jednoduchý vstup pre užívateľa. Slúžia na: Ladiť Hore, Ladiť Dole a Automatické Hľadanie (Seek). |
-| **3.5mm Audio Jack (slúchadlový)** | 1 ks | Poskytuje štandardný výstup pre slúchadlá alebo externé reproduktory. Audio signál ide priamo z modulu Si4703. |
-| **Kontaktné pole a káble** | 1 sada| Na prepojenie prototypu. |
+| **MCU: Arduino Uno** | 1 pc | The heart of the project. It processes inputs from the buttons, controls the tuner and the display via the I2C bus. It is small and has enough pins. |
+| **FM Tuner: Si4703 Breakout Board**| 1 pc | A key component. It is a complete FM receiver on a chip. It is controlled digitally (I2C), which allows for precise tuning, and most importantly, it **supports RDS**. |
+| **Display: OLED 0.96" (SSD1306)** | 1 pc | Displays the frequency, station name (RDS), and signal strength. Chosen for its high contrast, low power consumption, and I2C interface (saves MCU pins). |
+| **Tactile Buttons** | 3 pcs | Simple input for the user. They are used for: Tune Up, Tune Down, and Automatic Seek. |
+| **3.5mm Audio Jack** | 1 pc | Provides a standard output for headphones or external speakers. The audio signal comes directly from the Si4703 module. |
+| **Breadboard and Jumper Wires** | 1 set | For interconnecting the prototype. |
 
 ---
 
-## 3. Návrh Softvéru (Software Design)
+## 3. Software Design
 
-Táto sekcia popisuje logiku a tok programu.
+This section describes the program logic and flow.
 
-### Blokový Diagram Systému
-Diagram znázorňuje tok signálov a dát medzi komponentmi.
+### System Block Diagram
+The diagram illustrates the flow of signals and data between components.
