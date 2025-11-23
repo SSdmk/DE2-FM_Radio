@@ -29,7 +29,7 @@ A list of the main components required for the build.
 
 | Component | Quantity | Justification |
 | :--- | :---: | :--- |
-| **MCU: Arduino Uno** | 1 pc | The heart of the project. It processes inputs from the buttons, controls the tuner and the display via the I2C bus. It is small and has enough pins. |
+| **MCU: Arduino Nano** | 1 pc | The heart of the project. It processes inputs from the buttons, controls the tuner and the display via the I2C bus. It is small and has enough pins. |
 | **FM Tuner: Si4703 Breakout Board**| 1 pc | A key component. It is a complete FM receiver on a chip. It is controlled digitally (I2C), which allows for precise tuning, and most importantly, it **supports RDS**. |
 | **Display: OLED 0.96" (SSD1306)** | 1 pc | Displays the frequency, station name (RDS), and signal strength. Chosen for its high contrast, low power consumption, and I2C interface (saves MCU pins). |
 | **Tactile Buttons** | 3 pcs | Simple input for the user. They are used for: Tune Up, Tune Down, and Automatic Seek. |
