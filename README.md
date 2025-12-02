@@ -38,9 +38,13 @@ A list of the main components required for the build.
 | **3.5mm Audio Jack** | 1 pc | Provides a standard output for headphones or external speakers. The audio signal comes directly from the Si4703 module. |
 | **Breadboard and Jumper Wires** | 1 set | For interconnecting the prototype. |
 
----
 ### Wiring Diagram
+Below is the photos of our actual hardware setup and wiring connections.
+
 ![DE2_hradware](https://github.com/user-attachments/assets/150adc52-20e1-42d6-8283-6ac59b0839c0)
+![zapojenie](https://github.com/user-attachments/assets/a37a5ced-9b3b-4971-9c7e-e3ed2ae64850)
+
+
 
 
 ## 3. Software Design
