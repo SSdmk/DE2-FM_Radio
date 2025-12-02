@@ -39,6 +39,9 @@ A list of the main components required for the build.
 | **Breadboard and Jumper Wires** | 1 set | For interconnecting the prototype. |
 
 ---
+### Wiring Diagram
+![DE2_hradware](https://github.com/user-attachments/assets/150adc52-20e1-42d6-8283-6ac59b0839c0)
+
 
 ## 3. Software Design
 
