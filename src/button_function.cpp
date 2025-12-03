@@ -1,11 +1,12 @@
 #include <stdbool.h>
 #include "button_function.h"
+#include "oled.h"
 
 // !!! Uprav podľa reálneho názvu hlavičky s funkciami rádia
 // Na screenshote boli funkcie ako incChannel(), seekUp(), incVolume()...
 #include "Si4703.h"   // alebo napr. "radio.h"
 extern Si4703 radio;
-
+extern int current_freq_khz;
 /* --------------------------------------------------------------------------
  * UDALOSTI Z UI (tlačidlá + enkóder)
  * Tieto hodnoty má vracať tvoj input modul (debounce + enkóder logika).
@@ -101,6 +102,8 @@ void radio_ui_handle_event(ui_event_t ev)
         s_favorite_freq = current; // uložíme ako obľúbenú
         // s_has_favorite = true; // ak používaš flag
         // sem prípadne neskôr dáš nejaký indikátor na displej
+        // >>> tu pridaj volanie na OLED <<<
+        oled_show_favorite_saved_bottom(current);
         break;
     }
 
