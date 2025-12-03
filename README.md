@@ -58,4 +58,6 @@ The firmware operates in a continuous polling loop, handling user inputs and upd
     * Reads real-time data from Si4703 (Channel, RSSI, Volume).
     * Refreshes the OLED display with current status.
 
+
 ### Software Flowchart
+<img width="956" height="443" alt="Výkres 3" src="https://github.com/user-attachments/assets/6d446190-c761-4fb4-85e6-d05a0ced022b" />
