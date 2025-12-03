@@ -85,6 +85,14 @@ This project successfully demonstrates the design and implementation of a digita
 ### Future Improvements
 Although the project is fully functional, there is room for further enhancements:
 * **3D Printed Enclosure:** Designing a custom case to house the components and make the device portable.
-* **Battery Operation:** Adding a Li-Po battery and charging circuit for true portability.
+* **Battery Operation:** Adding a battery and charging circuit for true portability.
 * **Multiple Favorites:** Expanding the software to save a list of favorite stations into the EEPROM memory, not just one.
 * **Better Antenna:** Replacing the headphone wire antenna with a dedicated telescopic antenna for better signal reception.
+
+## 6. Video Demonstration
+Check out the video recordings of the device in action:
+
+* **[▶️ Video 1:](https://youtube.com/shorts/VkSr56Elnn0)**
+* **[▶️ Video 2:](https://youtube.com/shorts/RAxw9ENuTcU)**
+
+
