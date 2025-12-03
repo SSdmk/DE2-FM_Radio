@@ -1,0 +1,76 @@
+\doxysection{Si4703.\+h File Reference}
+\hypertarget{_si4703_8h}{}\label{_si4703_8h}\index{Si4703.h@{Si4703.h}}
+
+
+Rozhranie pre ovládanie FM rádia \doxylink{class_si4703}{Si4703}.  
+
+
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}gpio.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_si4703}{Si4703}}
+\begin{DoxyCompactList}\small\item\em Trieda zapúzdrujúca ovládanie FM rádia \doxylink{class_si4703}{Si4703}. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_d_e_v_i_c_e_i_d__t_1_1bits}{Si4703\+::\+DEVICEID\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_c_h_i_p_i_d__t_1_1bits}{Si4703\+::\+CHIPID\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits}{Si4703\+::\+POWERCFG\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_c_h_a_n_n_e_l__t_1_1bits}{Si4703\+::\+CHANNEL\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits}{Si4703\+::\+SYSCONFIG1\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g2__t_1_1bits}{Si4703\+::\+SYSCONFIG2\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g3__t_1_1bits}{Si4703\+::\+SYSCONFIG3\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_t_e_s_t1__t_1_1bits}{Si4703\+::\+TEST1\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_t_e_s_t2__t_1_1bits}{Si4703\+::\+TEST2\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_b_o_o_t_c_o_n_f_i_g__t_1_1bits}{Si4703\+::\+BOOTCONFIG\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits}{Si4703\+::\+STATUSRSSI\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_r_e_a_d_c_h_a_n__t_1_1bits}{Si4703\+::\+READCHAN\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_r_d_s_a__t_1_1bits}{Si4703\+::\+RDSA\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_r_d_s_b__t_1_1bits}{Si4703\+::\+RDSB\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_r_d_s_c__t_1_1bits}{Si4703\+::\+RDSC\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1_r_d_s_d__t_1_1bits}{Si4703\+::\+RDSD\+\_\+t\+::bits}}
+\item 
+struct \mbox{\hyperlink{struct_si4703_1_1shadow__t_1_1reg}{Si4703\+::shadow\+\_\+t\+::reg}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{_si4703_8h_a3eca60932ee4119828944ccd69a6272b}\label{_si4703_8h_a3eca60932ee4119828944ccd69a6272b} 
+using {\bfseries byte} = uint8\+\_\+t
+\begin{DoxyCompactList}\small\item\em Kratší alias pre uint8\+\_\+t. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Rozhranie pre ovládanie FM rádia \doxylink{class_si4703}{Si4703}. 
+
+Tento hlavičkový súbor obsahuje\+:
+\begin{DoxyItemize}
+\item konštanty a symbolické názvy pre nastavenie rádia (pásmo, de-\/emfáza, rozstup kanálov, GPIO režimy, parametre seeku atď.),
+\item deklaráciu triedy \doxylink{class_si4703}{Si4703}, ktorá zapúzdruje komunikáciu s čipom,
+\item dátové štruktúry (union + bitové polia) reprezentujúce registre \doxylink{class_si4703}{Si4703} vrátane „shadow“ kópie všetkých registrov.
+\end{DoxyItemize}
+
+Trieda \doxylink{class_si4703}{Si4703} poskytuje metódy na\+:
+\begin{DoxyItemize}
+\item zapnutie/vypnutie čipu,
+\item ladenie frekvencie a seekovanie,
+\item čítanie RSSI a stavových príznakov (stereo, RDS, STC),
+\item nastavenie hlasitosti, mute, mono, rozšíreného rozsahu hlasitosti,
+\item prácu s RDS a GPIO pinmi. 
+\end{DoxyItemize}

@@ -1,0 +1,51 @@
+\doxysection{uart.\+h File Reference}
+\hypertarget{uart_8h}{}\label{uart_8h}\index{uart.h@{uart.h}}
+{\ttfamily \#include $<$avr/pgmspace.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_ga367ff7b5de225ed936a63239ad4adb0b}{UART\+\_\+\+BAUD\+\_\+\+SELECT}}(baud\+Rate,  xtal\+Cpu)
+\begin{DoxyCompactList}\small\item\em Výpočet hodnoty registra pre nastavenie baudrate v štandardnom režime. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_ga1a02d45130520cb651ab313e69039382}{UART\+\_\+\+BAUD\+\_\+\+SELECT\+\_\+\+DOUBLE\+\_\+\+SPEED}}(baud\+Rate,  xtal\+Cpu)
+\begin{DoxyCompactList}\small\item\em Výpočet hodnoty registra pre nastavenie baudrate v režime dvojnásobnej rýchlosti. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_ga5bdd6772c246436bb14377095de79b31}{UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE}}~64
+\begin{DoxyCompactList}\small\item\em Veľkosť kruhového prijímacieho bufferu v bajtoch (mocnina 2). \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_ga05f5d709605c6317c97e4974bec3402a}{UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE}}~64
+\begin{DoxyCompactList}\small\item\em Veľkosť kruhového vysielacieho bufferu v bajtoch (mocnina 2). \end{DoxyCompactList}\item 
+\#define {\bfseries UART\+\_\+\+FRAME\+\_\+\+ERROR}~0x1000
+\begin{DoxyCompactList}\small\item\em Príznak rámcovej chyby (framing error) prijímača UART. \end{DoxyCompactList}\item 
+\#define {\bfseries UART\+\_\+\+OVERRUN\+\_\+\+ERROR}~0x0800
+\begin{DoxyCompactList}\small\item\em Príznak pretečenia (overrun) vnútorného UART prijímača. \end{DoxyCompactList}\item 
+\#define {\bfseries UART\+\_\+\+PARITY\+\_\+\+ERROR}~0x0400
+\begin{DoxyCompactList}\small\item\em Príznak parity chyby prijatého bajtu. \end{DoxyCompactList}\item 
+\#define {\bfseries UART\+\_\+\+BUFFER\+\_\+\+OVERFLOW}~0x0200
+\begin{DoxyCompactList}\small\item\em Príznak pretečenia (overflow) softvérového prijímacieho kruhového bufferu. \end{DoxyCompactList}\item 
+\#define {\bfseries UART\+\_\+\+NO\+\_\+\+DATA}~0x0100
+\begin{DoxyCompactList}\small\item\em Príznak, že nie sú k dispozícii žiadne prijaté dáta. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_gae9e143569df2285379bc55f9f5595bf9}{uart\+\_\+puts\+\_\+P}}(\+\_\+\+\_\+s)
+\begin{DoxyCompactList}\small\item\em Pomocné makro pre odoslanie reťazca z programovej pamäte. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_gaabd7a5b0c15611ee9ecb2873cc9ee87a}{uart1\+\_\+puts\+\_\+P}}(\+\_\+\+\_\+s)
+\begin{DoxyCompactList}\small\item\em Pomocné makro pre odoslanie reťazca z programovej pamäte cez USART1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__pfleury__uart_gac19a76bb7d446125734a67f9f4b68991}{uart\+\_\+init}} (unsigned int baudrate)
+\begin{DoxyCompactList}\small\item\em Inicializuje UART a nastaví prenosovú rýchlosť (baudrate). \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{group__pfleury__uart_gaefaab30a8338ec46a6be35b99b1b4f09}{uart\+\_\+getc}} (void)
+\begin{DoxyCompactList}\small\item\em Získa prijatý bajt z prijímacieho kruhového bufferu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2}{uart\+\_\+putc}} (unsigned char data)
+\begin{DoxyCompactList}\small\item\em Zapíše jeden bajt do vysielacieho kruhového bufferu UART. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gae52facc0a56086a365bb0018160d8d71}{uart\+\_\+puts}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Zapíše textový reťazec z RAM do vysielacieho bufferu UART. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f}{uart\+\_\+puts\+\_\+p}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Zapíše textový reťazec z programovej pamäte (Flash) do vysielacieho bufferu UART. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga4db697cb5469fd70e794fa7df73a6d6a}{uart1\+\_\+init}} (unsigned int baudrate)
+\begin{DoxyCompactList}\small\item\em Inicializuje perifériu USART1 (len na vybraných mikrokontroléroch). \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{group__pfleury__uart_gaeb1405c641e5bc9b7224018f5e8d90de}{uart1\+\_\+getc}} (void)
+\begin{DoxyCompactList}\small\item\em Získa prijatý bajt z prijímacieho bufferu USART1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gab465f689d197fadfbacc374fc9411154}{uart1\+\_\+putc}} (unsigned char data)
+\begin{DoxyCompactList}\small\item\em Zapíše jeden bajt do vysielacieho bufferu USART1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga5568f8f3913b218fd4d0346af78831b2}{uart1\+\_\+puts}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Zapíše reťazec z RAM do vysielacieho bufferu USART1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga1e8074d0a2d5922601c5db2f9777ba79}{uart1\+\_\+puts\+\_\+p}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Zapíše reťazec z programovej pamäte do vysielacieho bufferu USART1. \end{DoxyCompactList}\end{DoxyCompactItemize}

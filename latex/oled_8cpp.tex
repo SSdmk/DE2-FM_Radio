@@ -1,0 +1,283 @@
+\doxysection{oled.\+cpp File Reference}
+\hypertarget{oled_8cpp}{}\label{oled_8cpp}\index{oled.cpp@{oled.cpp}}
+
+
+Implementácia funkcií na ovládanie OLED displeja (I2C, 128x64).  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$util/delay.\+h$>$}\newline
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include "{}twi.\+h"{}}\newline
+{\ttfamily \#include "{}oled.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_font5x7_char}{Font5x7\+Char}}
+\begin{DoxyCompactList}\small\item\em Štruktúra jedného znaku 5x7 v bitmapovej podobe. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{oled_8cpp_a7dfa2c4cfbfcba36416046052e7943e8}\label{oled_8cpp_a7dfa2c4cfbfcba36416046052e7943e8} 
+\#define {\bfseries OLED\+\_\+\+ADDR}~0x3C
+\begin{DoxyCompactList}\small\item\em I2C adresa OLED displeja. \end{DoxyCompactList}\item 
+\Hypertarget{oled_8cpp_a6202de0afc10764d94a0333eaa0b87a1}\label{oled_8cpp_a6202de0afc10764d94a0333eaa0b87a1} 
+\#define {\bfseries OLED\+\_\+\+CMD}~0x00
+\begin{DoxyCompactList}\small\item\em Hodnota na označenie príkazových bajtov pri I2C prenose. \end{DoxyCompactList}\item 
+\Hypertarget{oled_8cpp_a93e8917859fa2ae044f01ceb96797c95}\label{oled_8cpp_a93e8917859fa2ae044f01ceb96797c95} 
+\#define {\bfseries OLED\+\_\+\+DATA}~0x40
+\begin{DoxyCompactList}\small\item\em Hodnota na označenie dátových bajtov pri I2C prenose. \end{DoxyCompactList}\item 
+\Hypertarget{oled_8cpp_a0e83bad9b3c157416443e054db0e0795}\label{oled_8cpp_a0e83bad9b3c157416443e054db0e0795} 
+\#define {\bfseries FONT\+\_\+\+TABLE\+\_\+\+SIZE}~(sizeof(font\+\_\+table)/sizeof(\mbox{\hyperlink{struct_font5x7_char}{Font5x7\+Char}}))
+\begin{DoxyCompactList}\small\item\em Počet položiek v tabuľke fontu font\+\_\+table. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{oled_8cpp_a66cdd05fb3a765535af54825cb9eb26c}{oled\+\_\+clear}} (void)
+\begin{DoxyCompactList}\small\item\em Vymaže celý OLED displej (všetky stránky a stĺpce). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{oled_8cpp_a965a903511fe77096f3d867e1446d1b1}{oled\+\_\+draw\+\_\+char}} (uint8\+\_\+t page, uint8\+\_\+t \texorpdfstring{$\ast$}{*}col, char c)
+\begin{DoxyCompactList}\small\item\em Vykreslí jeden znak fontu 5x7 na danú stránku a stĺpec. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{oled_8cpp_a3e97406871b960bc42345090086dee07}{oled\+\_\+draw\+\_\+string}} (uint8\+\_\+t page, uint8\+\_\+t col, const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Vykreslí C-\/reťazec na danú stránku od zvoleného stĺpca. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{oled_8cpp_a4bc890e9f5199ecfb320eb10ed156e31}{oled\+\_\+draw\+\_\+char\+\_\+big}} (uint8\+\_\+t page, uint8\+\_\+t \texorpdfstring{$\ast$}{*}col, char c)
+\begin{DoxyCompactList}\small\item\em Vykreslí jeden „zväčšený“ znak – jednoduchý väčší font. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{oled_8cpp_acaec8e084f8f90ddc7c2d8b03ab83a8d}{oled\+\_\+draw\+\_\+string\+\_\+big}} (uint8\+\_\+t page, uint8\+\_\+t col, const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Vykreslí reťazec vo „väčšom“ fonte (používa \doxylink{oled_8cpp_a4bc890e9f5199ecfb320eb10ed156e31}{oled\+\_\+draw\+\_\+char\+\_\+big}). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{oled_8cpp_ad95f850c4c6d949229270c8da88c02cb}{oled\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializuje OLED displej (I2C rozhranie a základná konfigurácia). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{oled_8cpp_a99a1333fda6336b0993a6eb62cfae22d}{oled\+\_\+show\+\_\+favorite\+\_\+saved\+\_\+bottom}} (int freq\+\_\+khz)
+\begin{DoxyCompactList}\small\item\em Zobrazí krátku hlášku o uložení obľúbenej stanice v spodnom riadku. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{oled_8cpp_a73b1b0c88932700a241f54267bd1e202}{oled\+\_\+show\+\_\+radio\+\_\+screen}} (int freq\+\_\+khz, int volume, int rssi, bool muted)
+\begin{DoxyCompactList}\small\item\em Zobrazí hlavnú obrazovku FM rádia (frekvencia, hlasitosť, RSSI, mute). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{oled_8cpp_a30f16333a73ccde8d8b747f3a5387da7}{oled\+\_\+show\+\_\+power\+\_\+off}} (void)
+\begin{DoxyCompactList}\small\item\em Zobrazí hlavičku pre stav, že FM rádio je vypnuté (power off). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementácia funkcií na ovládanie OLED displeja (I2C, 128x64). 
+
+
+
+\label{doc-func-members}
+\Hypertarget{oled_8cpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{oled_8cpp_a66cdd05fb3a765535af54825cb9eb26c}\index{oled.cpp@{oled.cpp}!oled\_clear@{oled\_clear}}
+\index{oled\_clear@{oled\_clear}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_clear()}{oled\_clear()}}
+{\footnotesize\ttfamily \label{oled_8cpp_a66cdd05fb3a765535af54825cb9eb26c} 
+void oled\+\_\+clear (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Vymaže celý OLED displej (všetky stránky a stĺpce). 
+
+Vymaže celý obsah OLED displeja.
+
+Pre každú stránku (0–7)\+:
+\begin{DoxyItemize}
+\item nastaví stĺpec na 0,
+\item zapíše 132 bajtov hodnôt 0x00 (čierne pixely). 
+\end{DoxyItemize}\Hypertarget{oled_8cpp_a965a903511fe77096f3d867e1446d1b1}\index{oled.cpp@{oled.cpp}!oled\_draw\_char@{oled\_draw\_char}}
+\index{oled\_draw\_char@{oled\_draw\_char}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_draw\_char()}{oled\_draw\_char()}}
+{\footnotesize\ttfamily \label{oled_8cpp_a965a903511fe77096f3d867e1446d1b1} 
+void oled\+\_\+draw\+\_\+char (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{page}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{col}{, }\item[{char}]{c}{}\end{DoxyParamCaption})}
+
+
+
+Vykreslí jeden znak fontu 5x7 na danú stránku a stĺpec. 
+
+Vykreslí jeden znak fontu 5×7 na zadanú page a stĺpec.
+
+Postup\+:
+\begin{DoxyItemize}
+\item získa bitmapu znaku cez font\+\_\+get\+\_\+char,
+\item nastaví pozíciu kurzora na {\ttfamily page} a {\ttfamily \texorpdfstring{$\ast$}{*}col},
+\item postupne pošle 5 stĺpcov bitmapy,
+\item pridá jeden prázdny stĺpec ako medzeru medzi znakmi,
+\item po vykreslení posunie {\ttfamily \texorpdfstring{$\ast$}{*}col} o 6 stĺpcov.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em page} & Stránka (0–7), na ktorej sa má znak vykresliť. \\
+\hline
+{\em col} & Ukazovateľ na aktuálny stĺpec; po vykreslení bude posunutý. \\
+\hline
+{\em c} & Znak, ktorý sa má vykresliť. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{oled_8cpp_a4bc890e9f5199ecfb320eb10ed156e31}\index{oled.cpp@{oled.cpp}!oled\_draw\_char\_big@{oled\_draw\_char\_big}}
+\index{oled\_draw\_char\_big@{oled\_draw\_char\_big}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_draw\_char\_big()}{oled\_draw\_char\_big()}}
+{\footnotesize\ttfamily \label{oled_8cpp_a4bc890e9f5199ecfb320eb10ed156e31} 
+void oled\+\_\+draw\+\_\+char\+\_\+big (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{page}{, }\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{col}{, }\item[{char}]{c}{}\end{DoxyParamCaption})}
+
+
+
+Vykreslí jeden „zväčšený“ znak – jednoduchý väčší font. 
+
+Základný znak 5x7 je roztiahnutý horizontálne\+:
+\begin{DoxyItemize}
+\item každý druhý stĺpec sa duplikuje,
+\item výsledná šírka znaku je väčšia (viac pixelov).
+\end{DoxyItemize}
+
+Používa sa pre výrazné zobrazenie frekvencie rádia.
+
+
+\begin{DoxyParams}{Parameters}
+{\em page} & Stránka, kde sa má znak vykresliť. \\
+\hline
+{\em col} & Ukazovateľ na stĺpec; po vykreslení sa posunie o 9. \\
+\hline
+{\em c} & Znak, ktorý sa má vykresliť. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{oled_8cpp_a3e97406871b960bc42345090086dee07}\index{oled.cpp@{oled.cpp}!oled\_draw\_string@{oled\_draw\_string}}
+\index{oled\_draw\_string@{oled\_draw\_string}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_draw\_string()}{oled\_draw\_string()}}
+{\footnotesize\ttfamily \label{oled_8cpp_a3e97406871b960bc42345090086dee07} 
+void oled\+\_\+draw\+\_\+string (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{page}{, }\item[{uint8\+\_\+t}]{col}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Vykreslí C-\/reťazec na danú stránku od zvoleného stĺpca. 
+
+Vykreslí C-\/reťazec na danú stránku od zadaného stĺpca.
+
+Iteratívne volá \doxylink{oled_8cpp_a965a903511fe77096f3d867e1446d1b1}{oled\+\_\+draw\+\_\+char}, kým\+:
+\begin{DoxyItemize}
+\item nenarazí na koniec reťazca,
+\item alebo by ďalší znak presiahol šírku displeja (kontrola {\ttfamily col} \texorpdfstring{$<$}{<}= 122).
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em page} & Stránka (0–7), na ktorej sa text vykresľuje. \\
+\hline
+{\em col} & Počiatočný stĺpec. \\
+\hline
+{\em s} & Nulou ukončený C-\/reťazec. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{oled_8cpp_acaec8e084f8f90ddc7c2d8b03ab83a8d}\index{oled.cpp@{oled.cpp}!oled\_draw\_string\_big@{oled\_draw\_string\_big}}
+\index{oled\_draw\_string\_big@{oled\_draw\_string\_big}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_draw\_string\_big()}{oled\_draw\_string\_big()}}
+{\footnotesize\ttfamily \label{oled_8cpp_acaec8e084f8f90ddc7c2d8b03ab83a8d} 
+void oled\+\_\+draw\+\_\+string\+\_\+big (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{page}{, }\item[{uint8\+\_\+t}]{col}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption})}
+
+
+
+Vykreslí reťazec vo „väčšom“ fonte (používa \doxylink{oled_8cpp_a4bc890e9f5199ecfb320eb10ed156e31}{oled\+\_\+draw\+\_\+char\+\_\+big}). 
+
+Vhodné pre zobrazenie frekvencie (napr. „107.0MHz“) viac na veľko.
+
+
+\begin{DoxyParams}{Parameters}
+{\em page} & Stránka, kde sa má text vykresliť. \\
+\hline
+{\em col} & Počiatočný stĺpec. \\
+\hline
+{\em s} & Nulou ukončený C-\/reťazec. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{oled_8cpp_ad95f850c4c6d949229270c8da88c02cb}\index{oled.cpp@{oled.cpp}!oled\_init@{oled\_init}}
+\index{oled\_init@{oled\_init}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_init()}{oled\_init()}}
+{\footnotesize\ttfamily \label{oled_8cpp_ad95f850c4c6d949229270c8da88c02cb} 
+void oled\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializuje OLED displej (I2C rozhranie a základná konfigurácia). 
+
+Inicializuje OLED displej a pripraví ho na použitie.
+
+Kroky\+:
+\begin{DoxyItemize}
+\item inicializuje TWI/\+I2C volaním \doxylink{group__fryza__twi_ga16f0e6b2fa5a26eadbf4086ab6d54467}{twi\+\_\+init},
+\item počká cca 100 ms po napájaní,
+\item pošle sériu inicializačných príkazov podľa datasheetu,
+\item zapne displej (0x\+AF),
+\item vymaže obrazovku volaním \doxylink{oled_8cpp_a66cdd05fb3a765535af54825cb9eb26c}{oled\+\_\+clear}. 
+\end{DoxyItemize}\Hypertarget{oled_8cpp_a99a1333fda6336b0993a6eb62cfae22d}\index{oled.cpp@{oled.cpp}!oled\_show\_favorite\_saved\_bottom@{oled\_show\_favorite\_saved\_bottom}}
+\index{oled\_show\_favorite\_saved\_bottom@{oled\_show\_favorite\_saved\_bottom}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_show\_favorite\_saved\_bottom()}{oled\_show\_favorite\_saved\_bottom()}}
+{\footnotesize\ttfamily \label{oled_8cpp_a99a1333fda6336b0993a6eb62cfae22d} 
+void oled\+\_\+show\+\_\+favorite\+\_\+saved\+\_\+bottom (\begin{DoxyParamCaption}\item[{int}]{freq\+\_\+khz}{}\end{DoxyParamCaption})}
+
+
+
+Zobrazí krátku hlášku o uložení obľúbenej stanice v spodnom riadku. 
+
+Krátko zobrazí informáciu o uložení obľúbenej stanice v spodnej časti.
+
+Postup\+:
+\begin{DoxyItemize}
+\item prepočíta {\ttfamily freq\+\_\+khz} na formát MHz (napr. 10700 → 107.\+0),
+\item pripraví text v tvare {\ttfamily "{}FAVORITE 107.\+0\+MHz"{}},
+\item vymaže spodnú stránku (page 7),
+\item vykreslí text s menším horizontálnym odsadením,
+\item nechá správu svietiť \texorpdfstring{$\sim$}{\string~}3 sekundy,
+\item znovu vymaže spodný riadok.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em freq\+\_\+khz} & Frekvencia uložená ako obľúbená, v k\+Hz. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{oled_8cpp_a30f16333a73ccde8d8b747f3a5387da7}\index{oled.cpp@{oled.cpp}!oled\_show\_power\_off@{oled\_show\_power\_off}}
+\index{oled\_show\_power\_off@{oled\_show\_power\_off}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_show\_power\_off()}{oled\_show\_power\_off()}}
+{\footnotesize\ttfamily \label{oled_8cpp_a30f16333a73ccde8d8b747f3a5387da7} 
+void oled\+\_\+show\+\_\+power\+\_\+off (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zobrazí hlavičku pre stav, že FM rádio je vypnuté (power off). 
+
+Zobrazí informáciu, že FM rádio je vypnuté (power off).
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item vyčistí horný riadok (page 0), kde predtým mohol byť text „\+FM Radio“ alebo „\+FM Radio is Mute“,
+\item vykreslí text „\+FM Radio is power off“ s malým odsadením.
+\end{DoxyItemize}
+
+Používa sa pri dlhom stlačení dolného tlačidla, keď sa modul rádia vypne volaním {\ttfamily radio.\+power\+Down()}. \Hypertarget{oled_8cpp_a73b1b0c88932700a241f54267bd1e202}\index{oled.cpp@{oled.cpp}!oled\_show\_radio\_screen@{oled\_show\_radio\_screen}}
+\index{oled\_show\_radio\_screen@{oled\_show\_radio\_screen}!oled.cpp@{oled.cpp}}
+\doxysubsubsection{\texorpdfstring{oled\_show\_radio\_screen()}{oled\_show\_radio\_screen()}}
+{\footnotesize\ttfamily \label{oled_8cpp_a73b1b0c88932700a241f54267bd1e202} 
+void oled\+\_\+show\+\_\+radio\+\_\+screen (\begin{DoxyParamCaption}\item[{int}]{freq\+\_\+khz}{, }\item[{int}]{volume}{, }\item[{int}]{rssi}{, }\item[{bool}]{muted}{}\end{DoxyParamCaption})}
+
+
+
+Zobrazí hlavnú obrazovku FM rádia (frekvencia, hlasitosť, RSSI, mute). 
+
+Zobrazí hlavnú obrazovku rádia (frekvencia, hlasitosť, RSSI, mute).
+
+Obrazovka obsahuje\+:
+\begin{DoxyItemize}
+\item horný riadok – hlavičku\+:
+\begin{DoxyItemize}
+\item „\+FM Radio is Mute“, ak je {\ttfamily muted} = true,
+\item „\+FM Radio“, inak (s predchádzajúcim riadkom vyčisteným),
+\end{DoxyItemize}
+\item stred – veľkým fontom frekvencia v tvare „107.0MHz“,
+\item spodný riadok – text „\+Vol\+:xx RSSI\+:yy“.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em freq\+\_\+khz} & Frekvencia v k\+Hz (napr. 10700 → 107.\+0 MHz). \\
+\hline
+{\em volume} & Hlasitosť (0–15 alebo podľa tunera). \\
+\hline
+{\em rssi} & RSSI hodnota, úroveň signálu. \\
+\hline
+{\em muted} & {\ttfamily true} ak je zvuk aktuálne stlmený, inak {\ttfamily false}. \\
+\hline
+\end{DoxyParams}

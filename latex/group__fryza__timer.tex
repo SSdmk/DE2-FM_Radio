@@ -1,0 +1,397 @@
+\doxysection{Knižnica časovačov \texorpdfstring{$<$}{<}timer.\+h\texorpdfstring{$>$}{>} }
+\hypertarget{group__fryza__timer}{}\label{group__fryza__timer}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+
+
+Knižnica makier na ovládanie časovačov pre AVR-\/\+GCC.  
+
+
+\doxysubsubsection*{Makrá pre 16-\/bitový Timer/\+Counter1}
+\begin{DoxyNote}{Note}
+Čas pretečenia\+: $ t_{OVF} = \frac{1}{F_{CPU}} \cdot \text{prescaler} \cdot 2^{16} $, kde F\+\_\+\+CPU = 16 MHz. 
+\end{DoxyNote}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gac7fe8fa6e7d978a01c857dc32c1cdd44}{tim1\+\_\+stop}}()
+\begin{DoxyCompactList}\small\item\em Zastaví Timer1 (prescaler = 0, časovač stojí). \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gacd637b282a0cd5fec9bbaaa0d50d1de4}{tim1\+\_\+ovf\+\_\+4ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každé 4 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gae356989c9434cd5797dee7f0c23f7104}{tim1\+\_\+ovf\+\_\+33ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každých 33 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gadd51272a969a158bb26b641b036f7eb1}{tim1\+\_\+ovf\+\_\+262ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každých 262 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaf81b3545a8171e699a18235450ba565b}{tim1\+\_\+ovf\+\_\+1sec}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každú 1 sekundu. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga8e4257a7c3525380b262b23e84fddf25}{tim1\+\_\+ovf\+\_\+4sec}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každé 4 sekundy. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga85b064ac152cdf8ea01f837276f384bc}{tim1\+\_\+ovf\+\_\+enable}}()
+\begin{DoxyCompactList}\small\item\em Povolenie prerušenia pri pretečení Timer1. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga10e5de82299abd3952a37c50fa5bda90}{tim1\+\_\+ovf\+\_\+disable}}()
+\begin{DoxyCompactList}\small\item\em Zakázanie prerušenia pri pretečení Timer1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Makrá pre 8-\/bitový Timer/\+Counter0}
+\begin{DoxyNote}{Note}
+Čas pretečenia\+: $ t_{OVF} = \frac{1}{F_{CPU}} \cdot \text{prescaler} \cdot 2^{8} $, kde F\+\_\+\+CPU = 16 MHz. 
+\end{DoxyNote}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga6484f15611180337aa61403326f924d1}{tim0\+\_\+stop}}()
+\begin{DoxyCompactList}\small\item\em Zastaví Timer0 (prescaler = 0, časovač stojí). \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga2c8afeb802c5d22bfd00c14e9a2f8215}{tim0\+\_\+ovf\+\_\+16us}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každých 16 µs. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaa46b7e021525c70c9ff9673195993c76}{tim0\+\_\+ovf\+\_\+128us}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každých 128 µs. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gab94c86f5efc59e34734d22b4b7c6f776}{tim0\+\_\+ovf\+\_\+1ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každých 1 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaee5866da7aea112e8f08efe088604711}{tim0\+\_\+ovf\+\_\+4ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každé 4 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga22c9a7162498d32fd58bc649a136045f}{tim0\+\_\+ovf\+\_\+16ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každých 16 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga385ca3024038fdac8303511287bd1222}{tim0\+\_\+ovf\+\_\+enable}}()
+\begin{DoxyCompactList}\small\item\em Povolenie prerušenia pri pretečení Timer0. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gad3b76ead823ef633a9afd01050387cdd}{tim0\+\_\+ovf\+\_\+disable}}()
+\begin{DoxyCompactList}\small\item\em Zakázanie prerušenia pri pretečení Timer0. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Makrá pre 8-\/bitový Timer/\+Counter2}
+\begin{DoxyNote}{Note}
+Čas pretečenia\+: $ t_{OVF} = \frac{1}{F_{CPU}} \cdot \text{prescaler} \cdot 2^{8} $, kde F\+\_\+\+CPU = 16 MHz. 
+\end{DoxyNote}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaaf7091ca0c4c12b4049b2ef5b305fa59}{tim2\+\_\+stop}}()
+\begin{DoxyCompactList}\small\item\em Zastaví Timer2 (prescaler = 0, časovač stojí). \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaf6b0c2da350233bf541988387e0ac4af}{tim2\+\_\+ovf\+\_\+16ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer2 tak, aby pretečenie nastalo približne každých 16 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaab0c29e35e8532596fed18342d7d505c}{tim2\+\_\+ovf\+\_\+enable}}()
+\begin{DoxyCompactList}\small\item\em Povolenie prerušenia pri pretečení Timer2. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga1f7e43561be4d016c806ef42aa2c89b5}{tim2\+\_\+ovf\+\_\+disable}}()
+\begin{DoxyCompactList}\small\item\em Zakázanie prerušenia pri pretečení Timer2. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Knižnica makier na ovládanie časovačov pre AVR-\/\+GCC. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{timer_8h}{timer.h}}>}\ }
+
+\end{DoxyCode}
+
+
+Knižnica obsahuje sadu makier pre konfiguráciu časovačov/čítačov mikrokontroléra (Timer/\+Counter0, 1 a 2). Umožňuje jednoducho\+:
+\begin{DoxyItemize}
+\item zastaviť časovač,
+\item nastaviť preddeľovač (prescaler) tak, aby došlo k pretečeniu v zvolenom intervale,
+\item povoliť alebo zakázať prerušenie pri pretečení (overflow).
+\end{DoxyItemize}
+
+Makrá sú navrhnuté pre ATmega328P s F\+\_\+\+CPU = 16 MHz. Pri zmene frekvencie CPU sa menia aj reálne časy pretečenia.
+
+\begin{DoxyNote}{Note}
+Knižnica je čisto hlavičková – neexistuje žiadny .c súbor, obsahuje iba makrá nad registrami časovačov. 
+\end{DoxyNote}
+\begin{DoxyCopyright}{Copyright}
+(c) 2019-\/2024 Tomas Fryza, MIT license 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{group__fryza__timer_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{group__fryza__timer_gaa46b7e021525c70c9ff9673195993c76}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim0\_ovf\_128us@{tim0\_ovf\_128us}}
+\index{tim0\_ovf\_128us@{tim0\_ovf\_128us}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim0\_ovf\_128us}{tim0\_ovf\_128us}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gaa46b7e021525c70c9ff9673195993c76} 
+\#define tim0\+\_\+ovf\+\_\+128us(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR0B\ \&=\ \string~((1<<CS02)\ |\ (1<<CS00));\ TCCR0B\ |=\ (1<<CS01);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer0 tak, aby pretečenie nastalo približne každých 128 µs. 
+
+Zodpovedá nastaveniu prescaler = 8 (bity CS02..CS00 = 010). \Hypertarget{group__fryza__timer_ga22c9a7162498d32fd58bc649a136045f}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim0\_ovf\_16ms@{tim0\_ovf\_16ms}}
+\index{tim0\_ovf\_16ms@{tim0\_ovf\_16ms}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim0\_ovf\_16ms}{tim0\_ovf\_16ms}}
+{\footnotesize\ttfamily \label{group__fryza__timer_ga22c9a7162498d32fd58bc649a136045f} 
+\#define tim0\+\_\+ovf\+\_\+16ms(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR0B\ \&=\ \string~(1<<CS01);\ TCCR0B\ |=\ (1<<CS02)\ |\ (1<<CS00);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer0 tak, aby pretečenie nastalo približne každých 16 ms. 
+
+Zodpovedá nastaveniu prescaler = 1024 (bity CS02..CS00 = 101). \Hypertarget{group__fryza__timer_ga2c8afeb802c5d22bfd00c14e9a2f8215}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim0\_ovf\_16us@{tim0\_ovf\_16us}}
+\index{tim0\_ovf\_16us@{tim0\_ovf\_16us}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim0\_ovf\_16us}{tim0\_ovf\_16us}}
+{\footnotesize\ttfamily \label{group__fryza__timer_ga2c8afeb802c5d22bfd00c14e9a2f8215} 
+\#define tim0\+\_\+ovf\+\_\+16us(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR0B\ \&=\ \string~((1<<CS02)\ |\ (1<<CS01));\ TCCR0B\ |=\ (1<<CS00);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer0 tak, aby pretečenie nastalo približne každých 16 µs. 
+
+Zodpovedá nastaveniu prescaler = 1 (bity CS02..CS00 = 001). \Hypertarget{group__fryza__timer_gab94c86f5efc59e34734d22b4b7c6f776}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim0\_ovf\_1ms@{tim0\_ovf\_1ms}}
+\index{tim0\_ovf\_1ms@{tim0\_ovf\_1ms}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim0\_ovf\_1ms}{tim0\_ovf\_1ms}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gab94c86f5efc59e34734d22b4b7c6f776} 
+\#define tim0\+\_\+ovf\+\_\+1ms(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR0B\ \&=\ \string~(1<<CS02);\ TCCR0B\ |=\ (1<<CS01)\ |\ (1<<CS00);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer0 tak, aby pretečenie nastalo približne každých 1 ms. 
+
+Zodpovedá nastaveniu prescaler = 64 (bity CS02..CS00 = 011). \Hypertarget{group__fryza__timer_gaee5866da7aea112e8f08efe088604711}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim0\_ovf\_4ms@{tim0\_ovf\_4ms}}
+\index{tim0\_ovf\_4ms@{tim0\_ovf\_4ms}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim0\_ovf\_4ms}{tim0\_ovf\_4ms}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gaee5866da7aea112e8f08efe088604711} 
+\#define tim0\+\_\+ovf\+\_\+4ms(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR0B\ \&=\ \string~((1<<CS01)\ |\ (1<<CS00));\ TCCR0B\ |=\ (1<<CS02);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer0 tak, aby pretečenie nastalo približne každé 4 ms. 
+
+Zodpovedá nastaveniu prescaler = 256 (bity CS02..CS00 = 100). \Hypertarget{group__fryza__timer_gad3b76ead823ef633a9afd01050387cdd}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim0\_ovf\_disable@{tim0\_ovf\_disable}}
+\index{tim0\_ovf\_disable@{tim0\_ovf\_disable}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim0\_ovf\_disable}{tim0\_ovf\_disable}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gad3b76ead823ef633a9afd01050387cdd} 
+\#define tim0\+\_\+ovf\+\_\+disable(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TIMSK0\ \&=\ \string~(1<<TOIE0);}
+
+\end{DoxyCode}
+
+
+Zakázanie prerušenia pri pretečení Timer0. 
+
+Vynuluje bit TOIE0 v registri TIMSK0. \Hypertarget{group__fryza__timer_ga385ca3024038fdac8303511287bd1222}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim0\_ovf\_enable@{tim0\_ovf\_enable}}
+\index{tim0\_ovf\_enable@{tim0\_ovf\_enable}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim0\_ovf\_enable}{tim0\_ovf\_enable}}
+{\footnotesize\ttfamily \label{group__fryza__timer_ga385ca3024038fdac8303511287bd1222} 
+\#define tim0\+\_\+ovf\+\_\+enable(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TIMSK0\ |=\ (1<<TOIE0);}
+
+\end{DoxyCode}
+
+
+Povolenie prerušenia pri pretečení Timer0. 
+
+Nastaví bit TOIE0 v registri TIMSK0 na 1. \Hypertarget{group__fryza__timer_ga6484f15611180337aa61403326f924d1}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim0\_stop@{tim0\_stop}}
+\index{tim0\_stop@{tim0\_stop}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim0\_stop}{tim0\_stop}}
+{\footnotesize\ttfamily \label{group__fryza__timer_ga6484f15611180337aa61403326f924d1} 
+\#define tim0\+\_\+stop(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR0B\ \&=\ \string~((1<<CS02)\ |\ (1<<CS01)\ |\ (1<<CS00));}
+
+\end{DoxyCode}
+
+
+Zastaví Timer0 (prescaler = 0, časovač stojí). 
+
+\Hypertarget{group__fryza__timer_gaf81b3545a8171e699a18235450ba565b}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim1\_ovf\_1sec@{tim1\_ovf\_1sec}}
+\index{tim1\_ovf\_1sec@{tim1\_ovf\_1sec}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim1\_ovf\_1sec}{tim1\_ovf\_1sec}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gaf81b3545a8171e699a18235450ba565b} 
+\#define tim1\+\_\+ovf\+\_\+1sec(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR1B\ \&=\ \string~((1<<CS11)\ |\ (1<<CS10));\ TCCR1B\ |=\ (1<<CS12);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer1 tak, aby pretečenie nastalo približne každú 1 sekundu. 
+
+Zodpovedá nastaveniu prescaler = 256 (bity CS12..CS10 = 100). \Hypertarget{group__fryza__timer_gadd51272a969a158bb26b641b036f7eb1}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim1\_ovf\_262ms@{tim1\_ovf\_262ms}}
+\index{tim1\_ovf\_262ms@{tim1\_ovf\_262ms}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim1\_ovf\_262ms}{tim1\_ovf\_262ms}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gadd51272a969a158bb26b641b036f7eb1} 
+\#define tim1\+\_\+ovf\+\_\+262ms(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR1B\ \&=\ \string~(1<<CS12);\ TCCR1B\ |=\ (1<<CS11)\ |\ (1<<CS10);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer1 tak, aby pretečenie nastalo približne každých 262 ms. 
+
+Zodpovedá nastaveniu prescaler = 64 (bity CS12..CS10 = 011). \Hypertarget{group__fryza__timer_gae356989c9434cd5797dee7f0c23f7104}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim1\_ovf\_33ms@{tim1\_ovf\_33ms}}
+\index{tim1\_ovf\_33ms@{tim1\_ovf\_33ms}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim1\_ovf\_33ms}{tim1\_ovf\_33ms}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gae356989c9434cd5797dee7f0c23f7104} 
+\#define tim1\+\_\+ovf\+\_\+33ms(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR1B\ \&=\ \string~((1<<CS12)\ |\ (1<<CS10));\ TCCR1B\ |=\ (1<<CS11);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer1 tak, aby pretečenie nastalo približne každých 33 ms. 
+
+Zodpovedá nastaveniu prescaler = 8 (bity CS12..CS10 = 010). \Hypertarget{group__fryza__timer_gacd637b282a0cd5fec9bbaaa0d50d1de4}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim1\_ovf\_4ms@{tim1\_ovf\_4ms}}
+\index{tim1\_ovf\_4ms@{tim1\_ovf\_4ms}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim1\_ovf\_4ms}{tim1\_ovf\_4ms}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gacd637b282a0cd5fec9bbaaa0d50d1de4} 
+\#define tim1\+\_\+ovf\+\_\+4ms(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR1B\ \&=\ \string~((1<<CS12)\ |\ (1<<CS11));\ TCCR1B\ |=\ (1<<CS10);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer1 tak, aby pretečenie nastalo približne každé 4 ms. 
+
+Zodpovedá nastaveniu prescaler = 1 (bity CS12..CS10 = 001). \Hypertarget{group__fryza__timer_ga8e4257a7c3525380b262b23e84fddf25}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim1\_ovf\_4sec@{tim1\_ovf\_4sec}}
+\index{tim1\_ovf\_4sec@{tim1\_ovf\_4sec}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim1\_ovf\_4sec}{tim1\_ovf\_4sec}}
+{\footnotesize\ttfamily \label{group__fryza__timer_ga8e4257a7c3525380b262b23e84fddf25} 
+\#define tim1\+\_\+ovf\+\_\+4sec(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR1B\ \&=\ \string~(1<<CS11);\ TCCR1B\ |=\ (1<<CS12)\ |\ (1<<CS10);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer1 tak, aby pretečenie nastalo približne každé 4 sekundy. 
+
+Zodpovedá nastaveniu prescaler = 1024 (bity CS12..CS10 = 101). \Hypertarget{group__fryza__timer_ga10e5de82299abd3952a37c50fa5bda90}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim1\_ovf\_disable@{tim1\_ovf\_disable}}
+\index{tim1\_ovf\_disable@{tim1\_ovf\_disable}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim1\_ovf\_disable}{tim1\_ovf\_disable}}
+{\footnotesize\ttfamily \label{group__fryza__timer_ga10e5de82299abd3952a37c50fa5bda90} 
+\#define tim1\+\_\+ovf\+\_\+disable(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TIMSK1\ \&=\ \string~(1<<TOIE1);}
+
+\end{DoxyCode}
+
+
+Zakázanie prerušenia pri pretečení Timer1. 
+
+Vynuluje bit TOIE1 v registri TIMSK1. \Hypertarget{group__fryza__timer_ga85b064ac152cdf8ea01f837276f384bc}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim1\_ovf\_enable@{tim1\_ovf\_enable}}
+\index{tim1\_ovf\_enable@{tim1\_ovf\_enable}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim1\_ovf\_enable}{tim1\_ovf\_enable}}
+{\footnotesize\ttfamily \label{group__fryza__timer_ga85b064ac152cdf8ea01f837276f384bc} 
+\#define tim1\+\_\+ovf\+\_\+enable(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TIMSK1\ |=\ (1<<TOIE1);}
+
+\end{DoxyCode}
+
+
+Povolenie prerušenia pri pretečení Timer1. 
+
+Nastaví bit TOIE1 v registri TIMSK1 na 1. \Hypertarget{group__fryza__timer_gac7fe8fa6e7d978a01c857dc32c1cdd44}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim1\_stop@{tim1\_stop}}
+\index{tim1\_stop@{tim1\_stop}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim1\_stop}{tim1\_stop}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gac7fe8fa6e7d978a01c857dc32c1cdd44} 
+\#define tim1\+\_\+stop(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR1B\ \&=\ \string~((1<<CS12)\ |\ (1<<CS11)\ |\ (1<<CS10));}
+
+\end{DoxyCode}
+
+
+Zastaví Timer1 (prescaler = 0, časovač stojí). 
+
+\Hypertarget{group__fryza__timer_gaf6b0c2da350233bf541988387e0ac4af}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim2\_ovf\_16ms@{tim2\_ovf\_16ms}}
+\index{tim2\_ovf\_16ms@{tim2\_ovf\_16ms}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim2\_ovf\_16ms}{tim2\_ovf\_16ms}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gaf6b0c2da350233bf541988387e0ac4af} 
+\#define tim2\+\_\+ovf\+\_\+16ms(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR2B\ |=\ (1<<CS22)\ |\ (1<<CS21)\ |\ (1<<CS20);}
+
+\end{DoxyCode}
+
+
+Nastaví Timer2 tak, aby pretečenie nastalo približne každých 16 ms. 
+
+Zodpovedá nastaveniu prescaler = 1024 (bity CS22..CS20 = 111). \Hypertarget{group__fryza__timer_ga1f7e43561be4d016c806ef42aa2c89b5}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim2\_ovf\_disable@{tim2\_ovf\_disable}}
+\index{tim2\_ovf\_disable@{tim2\_ovf\_disable}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim2\_ovf\_disable}{tim2\_ovf\_disable}}
+{\footnotesize\ttfamily \label{group__fryza__timer_ga1f7e43561be4d016c806ef42aa2c89b5} 
+\#define tim2\+\_\+ovf\+\_\+disable(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TIMSK2\ \&=\ \string~(1<<TOIE2);}
+
+\end{DoxyCode}
+
+
+Zakázanie prerušenia pri pretečení Timer2. 
+
+Vynuluje bit TOIE2 v registri TIMSK2. \Hypertarget{group__fryza__timer_gaab0c29e35e8532596fed18342d7d505c}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim2\_ovf\_enable@{tim2\_ovf\_enable}}
+\index{tim2\_ovf\_enable@{tim2\_ovf\_enable}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim2\_ovf\_enable}{tim2\_ovf\_enable}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gaab0c29e35e8532596fed18342d7d505c} 
+\#define tim2\+\_\+ovf\+\_\+enable(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TIMSK2\ |=\ (1<<TOIE2);}
+
+\end{DoxyCode}
+
+
+Povolenie prerušenia pri pretečení Timer2. 
+
+Nastaví bit TOIE2 v registri TIMSK2 na 1. \Hypertarget{group__fryza__timer_gaaf7091ca0c4c12b4049b2ef5b305fa59}\index{Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}!tim2\_stop@{tim2\_stop}}
+\index{tim2\_stop@{tim2\_stop}!Knižnica časovačov $<$timer.h$>$@{Knižnica časovačov $<$timer.h$>$}}
+\doxysubsubsection{\texorpdfstring{tim2\_stop}{tim2\_stop}}
+{\footnotesize\ttfamily \label{group__fryza__timer_gaaf7091ca0c4c12b4049b2ef5b305fa59} 
+\#define tim2\+\_\+stop(\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{TCCR2B\ \&=\ \string~((1<<CS22)\ |\ (1<<CS21)\ |\ (1<<CS20));}
+
+\end{DoxyCode}
+
+
+Zastaví Timer2 (prescaler = 0, časovač stojí). 
+

@@ -1,0 +1,151 @@
+\doxysection{Rotary\+Encoder Class Reference}
+\hypertarget{class_rotary_encoder}{}\label{class_rotary_encoder}\index{RotaryEncoder@{RotaryEncoder}}
+
+
+Trieda na obsluhu rotačného enkódera vrátane tlačidla.  
+
+
+
+
+{\ttfamily \#include $<$Rotary\+Encoder.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_rotary_encoder_a364b4fb0108ebc77472e19a7aefcbb40}{Rotary\+Encoder}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}ddr\+CLK, volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}pin\+Reg\+CLK, uint8\+\_\+t bit\+CLK, volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}ddr\+DT, volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}pin\+Reg\+DT, uint8\+\_\+t bit\+DT, volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}ddr\+SW, volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}pin\+Reg\+SW, uint8\+\_\+t bit\+SW)
+\begin{DoxyCompactList}\small\item\em Konštruktor enkódera – uloží ukazovatele na registre a bity pre CLK, DT a SW. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_rotary_encoder_a4e2829a93900546ec724e855a7f8c332}{begin}} ()
+\begin{DoxyCompactList}\small\item\em Inicializuje piny enkódera ako vstupy s interným pull-\/up rezistorom. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{Encoder\+Event}} \mbox{\hyperlink{class_rotary_encoder_a3e1b29e2997aedd554bd2d00bdefc53f}{check\+Event}} ()
+\begin{DoxyCompactList}\small\item\em Skontroluje aktuálny stav enkódera a vráti prípadnú udalosť. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Trieda na obsluhu rotačného enkódera vrátane tlačidla. 
+
+Trieda \doxylink{class_rotary_encoder}{Rotary\+Encoder} obsluhuje všetky tri piny enkódera\+:
+\begin{DoxyItemize}
+\item CLK (signál A),
+\item DT (signál B),
+\item SW (tlačidlo).
+\end{DoxyItemize}
+
+Vnútorne uchováva ukazovatele na registre DDR a PIN a bitové pozície pre každý z troch pinov, aby bolo možné enkóder pripojiť na ľubovoľné piny. 
+
+\label{doc-constructors}
+\Hypertarget{class_rotary_encoder_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_rotary_encoder_a364b4fb0108ebc77472e19a7aefcbb40}\index{RotaryEncoder@{RotaryEncoder}!RotaryEncoder@{RotaryEncoder}}
+\index{RotaryEncoder@{RotaryEncoder}!RotaryEncoder@{RotaryEncoder}}
+\doxysubsubsection{\texorpdfstring{RotaryEncoder()}{RotaryEncoder()}}
+{\footnotesize\ttfamily \label{class_rotary_encoder_a364b4fb0108ebc77472e19a7aefcbb40} 
+Rotary\+Encoder\+::\+Rotary\+Encoder (\begin{DoxyParamCaption}\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{ddr\+CLK}{, }\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{pin\+Reg\+CLK}{, }\item[{uint8\+\_\+t}]{bit\+CLK}{, }\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{ddr\+DT}{, }\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{pin\+Reg\+DT}{, }\item[{uint8\+\_\+t}]{bit\+DT}{, }\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{ddr\+SW}{, }\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{pin\+Reg\+SW}{, }\item[{uint8\+\_\+t}]{bit\+SW}{}\end{DoxyParamCaption})}
+
+
+
+Konštruktor enkódera – uloží ukazovatele na registre a bity pre CLK, DT a SW. 
+
+Konštruktor enkódera – uloží ukazovatele na registre a bity pinov.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ddr\+CLK} & Ukazovateľ na DDR register pre pin CLK. \\
+\hline
+{\em pin\+Reg\+CLK} & Ukazovateľ na PIN register pre pin CLK. \\
+\hline
+{\em bit\+CLK} & Bitová pozícia pinu CLK v danom porte. \\
+\hline
+{\em ddr\+DT} & Ukazovateľ na DDR register pre pin DT. \\
+\hline
+{\em pin\+Reg\+DT} & Ukazovateľ na PIN register pre pin DT. \\
+\hline
+{\em bit\+DT} & Bitová pozícia pinu DT v danom porte. \\
+\hline
+{\em ddr\+SW} & Ukazovateľ na DDR register pre pin SW (tlačidlo). \\
+\hline
+{\em pin\+Reg\+SW} & Ukazovateľ na PIN register pre pin SW. \\
+\hline
+{\em bit\+SW} & Bitová pozícia pinu SW v danom porte.\\
+\hline
+\end{DoxyParams}
+Konštruktor si uloží informácie o\+:
+\begin{DoxyItemize}
+\item dátových smerových registroch (DDR),
+\item vstupných registroch (PIN),
+\item bitových pozíciách pinov CLK, DT a SW.
+\end{DoxyItemize}
+
+Vďaka tomu môže enkóder pracovať na ľubovoľných pinoch mikrokontroléra. 
+
+\label{doc-func-members}
+\Hypertarget{class_rotary_encoder_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_rotary_encoder_a4e2829a93900546ec724e855a7f8c332}\index{RotaryEncoder@{RotaryEncoder}!begin@{begin}}
+\index{begin@{begin}!RotaryEncoder@{RotaryEncoder}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily \label{class_rotary_encoder_a4e2829a93900546ec724e855a7f8c332} 
+void Rotary\+Encoder\+::begin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializuje piny enkódera ako vstupy s interným pull-\/up rezistorom. 
+
+Nastaví všetky tri piny (CLK, DT, SW) do režimu INPUT\+\_\+\+PULLUP, aby bolo možné spoľahlivo detegovať otočenie aj stlačenie tlačidla.
+
+Nastaví piny\+:
+\begin{DoxyItemize}
+\item CLK, DT a SW do režimu INPUT\+\_\+\+PULLUP,
+\item uloží počiatočný stav pinu CLK na detekciu neskoršej zmeny.
+\end{DoxyItemize}
+
+V kľudovom stave sú piny log. 1 (HIGH) a pri akcii (otočenie/stlačenie) padajú na log. 0 (LOW). \Hypertarget{class_rotary_encoder_a3e1b29e2997aedd554bd2d00bdefc53f}\index{RotaryEncoder@{RotaryEncoder}!checkEvent@{checkEvent}}
+\index{checkEvent@{checkEvent}!RotaryEncoder@{RotaryEncoder}}
+\doxysubsubsection{\texorpdfstring{checkEvent()}{checkEvent()}}
+{\footnotesize\ttfamily \label{class_rotary_encoder_a3e1b29e2997aedd554bd2d00bdefc53f} 
+\mbox{\hyperlink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{Encoder\+Event}} Rotary\+Encoder\+::check\+Event (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Skontroluje aktuálny stav enkódera a vráti prípadnú udalosť. 
+
+Zistí aktuálnu udalosť z enkódera (otáčanie alebo stlačenie).
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item sleduje zmenu stavu signálu CLK/\+DT na detekciu smeru otáčania,
+\item sleduje tlačidlo SW vrátane debounce,
+\item vracia jednu z hodnôt \doxylink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{Encoder\+Event} podľa zistenej udalosti.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Hodnota typu \doxylink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{Encoder\+Event} podľa zistenej udalosti.
+\end{DoxyReturn}
+Funkcia\+:
+\begin{DoxyItemize}
+\item deteguje stlačenie tlačidla SW s jednoduchým debounce,
+\item dekóduje otáčanie mechanického enkódera pomocou Grayovho kódu,
+\item na základe prechodovej tabuľky určí smer otáčania,
+\item vracia hodnotu typu \doxylink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{Encoder\+Event}.
+\end{DoxyItemize}
+
+Implementácia je prispôsobená bežným EC11 enkóderom a snaží sa\+:
+\begin{DoxyItemize}
+\item minimalizovať falošné kroky,
+\item neprehadzovať smer pri rýchlom otáčaní.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+
+\begin{DoxyItemize}
+\item EVENT\+\_\+\+BUTTON – detegované stlačenie tlačidla enkódera,
+\item EVENT\+\_\+\+CW – otočenie v smere hodinových ručičiek,
+\item EVENT\+\_\+\+CCW – otočenie proti smeru hodinových ručičiek,
+\item EVENT\+\_\+\+NONE – žiadna nová udalosť. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_rotary_encoder_8h}{Rotary\+Encoder.\+h}}\item 
+\mbox{\hyperlink{_rotary_encoder_8cpp}{Rotary\+Encoder.\+cpp}}\end{DoxyCompactItemize}

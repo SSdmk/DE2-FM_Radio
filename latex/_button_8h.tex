@@ -1,0 +1,99 @@
+\doxysection{Button.\+h File Reference}
+\hypertarget{_button_8h}{}\label{_button_8h}\index{Button.h@{Button.h}}
+
+
+Trieda pre obsluhu jedného tlačidla s debouncingom a detekciou krátkeho/dlhého stlačenia.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}gpio.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_button}{Button}}
+\begin{DoxyCompactList}\small\item\em Trieda na obsluhu jedného tlačidla s debouncingom a detekciou dĺžky stlačenia. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{Button\+Event}} \{ \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba7b71507b179d796e8483189782349b15}{BTN\+\_\+\+EVENT\+\_\+\+NONE}}
+, \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba90ee54fe2a8b4aacdd0f17d685f5cf7b}{BTN\+\_\+\+EVENT\+\_\+\+SHORT}}
+, \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba4c030c8a536c4361a9027ed1a9b33a44}{BTN\+\_\+\+EVENT\+\_\+\+LONG}}
+ \}
+\begin{DoxyCompactList}\small\item\em Typy udalostí tlačidla. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned long \mbox{\hyperlink{_button_8h_a77fdf24910de9db4719daced3b996551}{timer\+\_\+millis}} ()
+\begin{DoxyCompactList}\small\item\em Globálna funkcia poskytujúca aktuálny čas v milisekundách. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Trieda pre obsluhu jedného tlačidla s debouncingom a detekciou krátkeho/dlhého stlačenia. 
+
+Tlačidlo je pripojené na zvolený pin mikrokontroléra a táto trieda\+:
+\begin{DoxyItemize}
+\item realizuje softvérový debouncing (odfiltrovanie kmitania kontaktov),
+\item rozlišuje krátke a dlhé stlačenie,
+\item vracia udalosti typu \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{Button\+Event}, ktoré ďalej spracúva UI logika rádia. 
+\end{DoxyItemize}
+
+\label{doc-enum-members}
+\Hypertarget{_button_8h_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}\index{Button.h@{Button.h}!ButtonEvent@{ButtonEvent}}
+\index{ButtonEvent@{ButtonEvent}!Button.h@{Button.h}}
+\doxysubsubsection{\texorpdfstring{ButtonEvent}{ButtonEvent}}
+{\footnotesize\ttfamily \label{_button_8h_a0c77398f416844d1f79e0a06ff20d0db} 
+enum \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{Button\+Event}}}
+
+
+
+Typy udalostí tlačidla. 
+
+Udalosť vracaná metódou \doxylink{class_button_ab31f5a23eae0b5cdc8e76dddf13a7499}{Button\+::check\+Event()}. \begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BTN\_EVENT\_NONE@{BTN\_EVENT\_NONE}!Button.h@{Button.h}}\index{Button.h@{Button.h}!BTN\_EVENT\_NONE@{BTN\_EVENT\_NONE}}}\Hypertarget{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba7b71507b179d796e8483189782349b15}\label{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba7b71507b179d796e8483189782349b15} 
+BTN\+\_\+\+EVENT\+\_\+\+NONE&Žiadna nová udalosť (tlačidlo je buď v kľude, alebo už spracované). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BTN\_EVENT\_SHORT@{BTN\_EVENT\_SHORT}!Button.h@{Button.h}}\index{Button.h@{Button.h}!BTN\_EVENT\_SHORT@{BTN\_EVENT\_SHORT}}}\Hypertarget{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba90ee54fe2a8b4aacdd0f17d685f5cf7b}\label{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba90ee54fe2a8b4aacdd0f17d685f5cf7b} 
+BTN\+\_\+\+EVENT\+\_\+\+SHORT&Krátke stlačenie tlačidla (kratšie než definovaný časový prah). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BTN\_EVENT\_LONG@{BTN\_EVENT\_LONG}!Button.h@{Button.h}}\index{Button.h@{Button.h}!BTN\_EVENT\_LONG@{BTN\_EVENT\_LONG}}}\Hypertarget{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba4c030c8a536c4361a9027ed1a9b33a44}\label{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba4c030c8a536c4361a9027ed1a9b33a44} 
+BTN\+\_\+\+EVENT\+\_\+\+LONG&Dlhé stlačenie tlačidla (dlhšie než definovaný časový prah). \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\label{doc-func-members}
+\Hypertarget{_button_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{_button_8h_a77fdf24910de9db4719daced3b996551}\index{Button.h@{Button.h}!timer\_millis@{timer\_millis}}
+\index{timer\_millis@{timer\_millis}!Button.h@{Button.h}}
+\doxysubsubsection{\texorpdfstring{timer\_millis()}{timer\_millis()}}
+{\footnotesize\ttfamily \label{_button_8h_a77fdf24910de9db4719daced3b996551} 
+unsigned long timer\+\_\+millis (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Globálna funkcia poskytujúca aktuálny čas v milisekundách. 
+
+Implementácia je v {\ttfamily \doxylink{main_8cpp}{main.\+cpp}} (počítanie cez Timer0 ISR). Trieda \doxylink{class_button}{Button} túto funkciu používa na debouncing a meranie dĺžky stlačenia.
+
+\begin{DoxyReturn}{Returns}
+Počet milisekúnd od štartu systému.
+\end{DoxyReturn}
+Globálna funkcia poskytujúca aktuálny čas v milisekundách.
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item dočasne zakáže prerušenia (CLI),
+\item prečíta \doxylink{main_8cpp_a4d4dce098fcf458ec5166f4e9413a5eb}{millis\+\_\+counter} do lokálnej premennej,
+\item obnoví stav registra SREG (povolenie prerušenia),
+\item vráti prečítanú hodnotu.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Aktuálny čas v milisekundách od štartu programu. 
+\end{DoxyReturn}

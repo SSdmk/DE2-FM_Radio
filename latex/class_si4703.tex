@@ -1,0 +1,674 @@
+\doxysection{Si4703 Class Reference}
+\hypertarget{class_si4703}{}\label{class_si4703}\index{Si4703@{Si4703}}
+
+
+Trieda zapúzdrujúca ovládanie FM rádia \doxylink{class_si4703}{Si4703}.  
+
+
+
+
+{\ttfamily \#include $<$Si4703.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_si4703_ab89b6b8489f38955343e4e68e1ed4d69}{Si4703}} (int rst\+Pin=PD4, int sdio\+Pin=PC4, int sclk\+Pin=PC5, int int\+Pin=0, int band=BAND\+\_\+\+US\+\_\+\+EU, int space=SPACE\+\_\+100\+KHz, int de=DE\+\_\+75us, int skmode=SKMODE\+\_\+\+STOP, int seekth=24, int skcnt=SKSNR\+\_\+\+MAX, int sksnr=SKCNT\+\_\+\+MIN, int agcd=0)
+\begin{DoxyCompactList}\small\item\em Konštruktor triedy \doxylink{class_si4703}{Si4703} s možnosťou nastaviť piny MCU a základné parametre rádia. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_si4703_ac0002cf7ef18b780b806a50cbed8d40a}{power\+Up}} ()
+\begin{DoxyCompactList}\small\item\em Zapne rádio (napájanie a základná inicializácia). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_si4703_a1181664a9cc5b1f4b1bc956c720c4144}{power\+Down}} ()
+\begin{DoxyCompactList}\small\item\em Vypne rádio kvôli úspore energie. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_si4703_a8f00c9ce7499978dfff92793bdb98d11}{start}} ()
+\begin{DoxyCompactList}\small\item\em Spustí rádio (po power\+Up nastaví prevádzkové režimy). \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_ab37227ef8401d94f625b856044cb6519}{get\+PN}} ()
+\begin{DoxyCompactList}\small\item\em Získa číslo dielu (Part Number) z registra DEVICEID. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_ae1b853737188d10ccc44c3e01b653de6}{get\+MFGID}} ()
+\begin{DoxyCompactList}\small\item\em Získa Manufacturer ID z registra DEVICEID. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a9ffb458dbf00710e158308201a723778}{get\+REV}} ()
+\begin{DoxyCompactList}\small\item\em Získa verziu čipu (REV) z registra CHIPID. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_ad46f8d835e15c509c3f669c26f4b72c0}{get\+DEV}} ()
+\begin{DoxyCompactList}\small\item\em Získa typ zariadenia (DEV) z registra CHIPID. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a68acd9ffda2cb1ac33d083de5af9bbe4}{get\+FIRMWARE}} ()
+\begin{DoxyCompactList}\small\item\em Získa verziu firmvéru z registra CHIPID. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a4794320e795b2bbe35cfcd0bebd2c815}{get\+Band\+Start}} ()
+\begin{DoxyCompactList}\small\item\em Vráti počiatočnú frekvenciu pásma v MHz. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a3cd5fa99ce5f52f2ca83b71c4f592332}{get\+Band\+End}} ()
+\begin{DoxyCompactList}\small\item\em Vráti koncovú frekvenciu pásma v MHz. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a16d2cbc024300c7666681818f09f98eb}{get\+Band\+Space}} ()
+\begin{DoxyCompactList}\small\item\em Vráti rozstup kanálov (spacing) v k\+Hz alebo MHz podľa konfigurácie. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a23cb4a52f1c26d6aa8051b31faed9d17}{get\+RSSI}} (void)
+\begin{DoxyCompactList}\small\item\em Získa aktuálnu hodnotu RSSI (Received Signal Strength Indicator). \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a8bc3951538eda5313bf8bbc143ce982d}{get\+Channel}} (void)
+\begin{DoxyCompactList}\small\item\em Vráti aktuálny kanál (interné 3-\/miestne číslo). \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_af9a30ea0699fbb207881e3e7ae2eef42}{set\+Channel}} (int freq)
+\begin{DoxyCompactList}\small\item\em Nastaví kanál podaním frekvencie; vráti nastavený kanál. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a20f8c256348a4944be2bab61b38deaf3}{inc\+Channel}} (void)
+\begin{DoxyCompactList}\small\item\em Zvýši frekvenciu o jeden krok pásma. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a0862da0e911ae9f6b04165bcfcb4cbb7}{dec\+Channel}} (void)
+\begin{DoxyCompactList}\small\item\em Zníži frekvenciu o jeden krok pásma. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a4051c68f611cf6e43dc9ed3ec622bc60}{seek\+Up}} (void)
+\begin{DoxyCompactList}\small\item\em Seek smerom nahor; vráti naladený kanál alebo 0 pri neúspechu. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a567cad6cc687804a4f3308b26ff4715f}{seek\+Down}} (void)
+\begin{DoxyCompactList}\small\item\em Seek smerom nadol; vráti naladený kanál alebo 0 pri neúspechu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_si4703_a0bdb79478d9938b0cd4e715f4c4d54f8}{set\+Mono}} (bool en)
+\begin{DoxyCompactList}\small\item\em Nastaví nútený mono režim (true = mono). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_si4703_af1e2c94de7b45e3f8524aac261997b56}{get\+Mono}} (void)
+\begin{DoxyCompactList}\small\item\em Zistí, či je rádio v mono režime. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_si4703_a05f876d5bc89796365c02eaad5c3994d}{get\+ST}} (void)
+\begin{DoxyCompactList}\small\item\em Zistí, či je príjem stereo (ST = 1). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_si4703_a297fb4fd569ab9ff35269873338afcf0}{set\+Mute}} (bool en)
+\begin{DoxyCompactList}\small\item\em Nastaví mute (true = zvuk vypnutý). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_si4703_ace1eba55bcdd2286f8da0f2d3e7febf1}{get\+Mute}} (void)
+\begin{DoxyCompactList}\small\item\em Zistí aktuálny mute stav. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_si4703_a69c56af25ece1c014f82e564bceac1a0}{set\+Vol\+Ext}} (bool en)
+\begin{DoxyCompactList}\small\item\em Nastaví rozšírený rozsah hlasitosti (VOLEXT). \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_si4703_aa1f5035dcbf914f0c4e7ea1c575eb953}{get\+Vol\+Ext}} (void)
+\begin{DoxyCompactList}\small\item\em Zistí, či je rozšírený rozsah hlasitosti zapnutý. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_a097ee0476bdda9773b469fd763db2506}{get\+Volume}} (void)
+\begin{DoxyCompactList}\small\item\em Získa aktuálnu hlasitosť (0–15). \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_adcf50bf10efcb2787593726a56735772}{set\+Volume}} (int volume)
+\begin{DoxyCompactList}\small\item\em Nastaví hlasitosť (0–15); vráti nastavenú hodnotu. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_ad5e235a6e289a0284ebc29141282501b}{inc\+Volume}} (void)
+\begin{DoxyCompactList}\small\item\em Zvýši hlasitosť o jeden krok; vráti novú hodnotu. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_si4703_ad74b36eafa236a803c485b5e0291076d}{dec\+Volume}} (void)
+\begin{DoxyCompactList}\small\item\em Zníži hlasitosť o jeden krok; vráti novú hodnotu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_si4703_a9c00132f8913f12c9874f148d69ffad6}{read\+RDS}} (void)
+\begin{DoxyCompactList}\small\item\em Prečíta RDS dáta z registrov a spracuje ich (napr. PS/\+RT). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_si4703_ae55e12b48d6bc18119be8254aa53d4b6}{write\+GPIO}} (int GPIO, int val)
+\begin{DoxyCompactList}\small\item\em Zapíše hodnotu na GPIO piny \doxylink{class_si4703}{Si4703}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Trieda zapúzdrujúca ovládanie FM rádia \doxylink{class_si4703}{Si4703}. 
+
+Trieda rieši\+:
+\begin{DoxyItemize}
+\item inicializáciu a zapnutie/vypnutie čipu,
+\item nastavenie pásma, rozstupu kanálov a de-\/emfázy,
+\item ladenie konkrétnej frekvencie a seekovanie nahor/nadol,
+\item získanie RSSI, informácií o stereo/mono režime, mute stave a pod.,
+\item ovládanie hlasitosti a rozšíreného rozsahu hlasitosti,
+\item čítanie RDS dát,
+\item konfiguráciu GPIO pinov \doxylink{class_si4703}{Si4703}.
+\end{DoxyItemize}
+
+Komunikácia prebieha cez I2C (2-\/wire režim) alebo 3-\/wire rozhranie podľa interných funkcií triedy. 
+
+\label{doc-constructors}
+\Hypertarget{class_si4703_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_si4703_ab89b6b8489f38955343e4e68e1ed4d69}\index{Si4703@{Si4703}!Si4703@{Si4703}}
+\index{Si4703@{Si4703}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{Si4703()}{Si4703()}}
+{\footnotesize\ttfamily \label{class_si4703_ab89b6b8489f38955343e4e68e1ed4d69} 
+Si4703\+::\+Si4703 (\begin{DoxyParamCaption}\item[{int}]{rst\+Pin}{ = {\ttfamily PD4}, }\item[{int}]{sdio\+Pin}{ = {\ttfamily PC4}, }\item[{int}]{sclk\+Pin}{ = {\ttfamily PC5}, }\item[{int}]{int\+Pin}{ = {\ttfamily 0}, }\item[{int}]{band}{ = {\ttfamily BAND\+\_\+US\+\_\+EU}, }\item[{int}]{space}{ = {\ttfamily SPACE\+\_\+100KHz}, }\item[{int}]{de}{ = {\ttfamily DE\+\_\+75us}, }\item[{int}]{skmode}{ = {\ttfamily SKMODE\+\_\+STOP}, }\item[{int}]{seekth}{ = {\ttfamily 24}, }\item[{int}]{skcnt}{ = {\ttfamily SKSNR\+\_\+MAX}, }\item[{int}]{sksnr}{ = {\ttfamily SKCNT\+\_\+MIN}, }\item[{int}]{agcd}{ = {\ttfamily 0}}\end{DoxyParamCaption})}
+
+
+
+Konštruktor triedy \doxylink{class_si4703}{Si4703} s možnosťou nastaviť piny MCU a základné parametre rádia. 
+
+Konštruktor triedy \doxylink{class_si4703}{Si4703} – nastaví piny MCU a základné parametre rádia.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rst\+Pin} & GPIO pin MCU pripojený na reset (RST) \doxylink{class_si4703}{Si4703}. \\
+\hline
+{\em sdio\+Pin} & GPIO pin MCU pre I2C SDA (SDIO). \\
+\hline
+{\em sclk\+Pin} & GPIO pin MCU pre I2C SCL (SCLK). \\
+\hline
+{\em int\+Pin} & GPIO pin MCU pre STC/\+RDS interrupt (0 = nepoužitý). \\
+\hline
+{\em band} & Pásmo rádia (napr. BAND\+\_\+\+US\+\_\+\+EU, BAND\+\_\+\+JPW, BAND\+\_\+\+JP). \\
+\hline
+{\em space} & Rozstup kanálov (napr. SPACE\+\_\+100\+KHz). \\
+\hline
+{\em de} & De-\/emfáza (napr. DE\+\_\+75us, DE\+\_\+50us). \\
+\hline
+{\em skmode} & Režim seekovania (wrap/stop, SKMODE\+\_\+\+WRAP/ SKMODE\+\_\+\+STOP). \\
+\hline
+{\em seekth} & RSSI prah seekovania. \\
+\hline
+{\em skcnt} & Prah impulznej detekcie pri seeku (SKCNT\+\_\+\+MIN až SKCNT\+\_\+\+MAX). \\
+\hline
+{\em sksnr} & SNR prah seekovania (SKSNR\+\_\+\+MIN až SKSNR\+\_\+\+MAX). \\
+\hline
+{\em agcd} & AGC disable (0 = povolené, 1 = zakázané).\\
+\hline
+{\em rst\+Pin} & GPIO pin MCU pripojený na reset \doxylink{class_si4703}{Si4703}. \\
+\hline
+{\em sdio\+Pin} & GPIO pin MCU pre I2C dátovú linku (SDIO/\+SDA). \\
+\hline
+{\em sclk\+Pin} & GPIO pin MCU pre I2C hodinovú linku (SCLK/\+SCL). \\
+\hline
+{\em int\+Pin} & GPIO pin MCU pre STC/\+RDS interrupt (ak sa používa). \\
+\hline
+{\em band} & Pásmo (US/\+EU/\+JP) podľa konštánt BAND\+\_\+\texorpdfstring{$\ast$}{*}. \\
+\hline
+{\em space} & Rozstup kanálov podľa konštánt SPACE\+\_\+\texorpdfstring{$\ast$}{*}. \\
+\hline
+{\em de} & De-\/emfáza (50/75 μs). \\
+\hline
+{\em skmode} & Režim seekovania (wrap/stop). \\
+\hline
+{\em seekth} & RSSI prah pre seek. \\
+\hline
+{\em skcnt} & Prah impulznej detekcie pri seeku. \\
+\hline
+{\em sksnr} & SNR prah pre seek. \\
+\hline
+{\em agcd} & Nastavenie AGC (0 = povolené, 1 = zakázané). \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_si4703_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_si4703_a0862da0e911ae9f6b04165bcfcb4cbb7}\index{Si4703@{Si4703}!decChannel@{decChannel}}
+\index{decChannel@{decChannel}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{decChannel()}{decChannel()}}
+{\footnotesize\ttfamily \label{class_si4703_a0862da0e911ae9f6b04165bcfcb4cbb7} 
+int Si4703\+::dec\+Channel (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zníži frekvenciu o jeden krok pásma. 
+
+Zníži frekvenciu o jeden krok (\+\_\+band\+Spacing) s obehnutím na hornú hranicu.
+
+\begin{DoxyReturn}{Returns}
+Nová naladená frekvencia v k\+Hz. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_ad74b36eafa236a803c485b5e0291076d}\index{Si4703@{Si4703}!decVolume@{decVolume}}
+\index{decVolume@{decVolume}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{decVolume()}{decVolume()}}
+{\footnotesize\ttfamily \label{class_si4703_ad74b36eafa236a803c485b5e0291076d} 
+int Si4703\+::dec\+Volume (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zníži hlasitosť o jeden krok; vráti novú hodnotu. 
+
+Zníži hlasitosť o jeden krok.
+
+\begin{DoxyReturn}{Returns}
+Nová hodnota hlasitosti. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a3cd5fa99ce5f52f2ca83b71c4f592332}\index{Si4703@{Si4703}!getBandEnd@{getBandEnd}}
+\index{getBandEnd@{getBandEnd}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getBandEnd()}{getBandEnd()}}
+{\footnotesize\ttfamily \label{class_si4703_a3cd5fa99ce5f52f2ca83b71c4f592332} 
+int Si4703\+::get\+Band\+End (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Vráti koncovú frekvenciu pásma v MHz. 
+
+Vráti hornú hranicu aktuálne nastaveného pásma (v k\+Hz).
+
+\begin{DoxyReturn}{Returns}
+Horná hranica pásma v k\+Hz. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a16d2cbc024300c7666681818f09f98eb}\index{Si4703@{Si4703}!getBandSpace@{getBandSpace}}
+\index{getBandSpace@{getBandSpace}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getBandSpace()}{getBandSpace()}}
+{\footnotesize\ttfamily \label{class_si4703_a16d2cbc024300c7666681818f09f98eb} 
+int Si4703\+::get\+Band\+Space (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Vráti rozstup kanálov (spacing) v k\+Hz alebo MHz podľa konfigurácie. 
+
+Vráti rozstup kanálov (krok) v k\+Hz.
+
+\begin{DoxyReturn}{Returns}
+Hodnota \+\_\+band\+Spacing v k\+Hz. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a4794320e795b2bbe35cfcd0bebd2c815}\index{Si4703@{Si4703}!getBandStart@{getBandStart}}
+\index{getBandStart@{getBandStart}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getBandStart()}{getBandStart()}}
+{\footnotesize\ttfamily \label{class_si4703_a4794320e795b2bbe35cfcd0bebd2c815} 
+int Si4703\+::get\+Band\+Start (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Vráti počiatočnú frekvenciu pásma v MHz. 
+
+Vráti spodnú hranicu aktuálne nastaveného pásma (v k\+Hz).
+
+\begin{DoxyReturn}{Returns}
+Spodná hranica pásma v k\+Hz. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a8bc3951538eda5313bf8bbc143ce982d}\index{Si4703@{Si4703}!getChannel@{getChannel}}
+\index{getChannel@{getChannel}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getChannel()}{getChannel()}}
+{\footnotesize\ttfamily \label{class_si4703_a8bc3951538eda5313bf8bbc143ce982d} 
+int Si4703\+::get\+Channel (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Vráti aktuálny kanál (interné 3-\/miestne číslo). 
+
+Získa aktuálne naladenú frekvenciu na základe registra READCHAN.
+
+Výpočet\+:
+\begin{DoxyItemize}
+\item Freq = \+\_\+band\+Spacing \texorpdfstring{$\ast$}{*} READCHAN + \+\_\+band\+Start (v k\+Hz).
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Frekvencia v k\+Hz. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_ad46f8d835e15c509c3f669c26f4b72c0}\index{Si4703@{Si4703}!getDEV@{getDEV}}
+\index{getDEV@{getDEV}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getDEV()}{getDEV()}}
+{\footnotesize\ttfamily \label{class_si4703_ad46f8d835e15c509c3f669c26f4b72c0} 
+int Si4703\+::get\+DEV (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Získa typ zariadenia (DEV) z registra CHIPID. 
+
+Vráti typ zariadenia (DEV) z registra CHIPID.
+
+\begin{DoxyReturn}{Returns}
+Hodnota DEV. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a68acd9ffda2cb1ac33d083de5af9bbe4}\index{Si4703@{Si4703}!getFIRMWARE@{getFIRMWARE}}
+\index{getFIRMWARE@{getFIRMWARE}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getFIRMWARE()}{getFIRMWARE()}}
+{\footnotesize\ttfamily \label{class_si4703_a68acd9ffda2cb1ac33d083de5af9bbe4} 
+int Si4703\+::get\+FIRMWARE (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Získa verziu firmvéru z registra CHIPID. 
+
+Vráti verziu firmvéru z registra CHIPID.
+
+\begin{DoxyReturn}{Returns}
+Hodnota FIRMWARE. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_ae1b853737188d10ccc44c3e01b653de6}\index{Si4703@{Si4703}!getMFGID@{getMFGID}}
+\index{getMFGID@{getMFGID}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getMFGID()}{getMFGID()}}
+{\footnotesize\ttfamily \label{class_si4703_ae1b853737188d10ccc44c3e01b653de6} 
+int Si4703\+::get\+MFGID (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Získa Manufacturer ID z registra DEVICEID. 
+
+Vráti Manufacturer ID (MFGID) z registra DEVICEID.
+
+\begin{DoxyReturn}{Returns}
+Hodnota MFGID. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_af1e2c94de7b45e3f8524aac261997b56}\index{Si4703@{Si4703}!getMono@{getMono}}
+\index{getMono@{getMono}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getMono()}{getMono()}}
+{\footnotesize\ttfamily \label{class_si4703_af1e2c94de7b45e3f8524aac261997b56} 
+bool Si4703\+::get\+Mono (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zistí, či je rádio v mono režime. 
+
+Zistí, či je zapnutý mono režim.
+
+\begin{DoxyReturn}{Returns}
+true ak je rádio v mono režime, inak false. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_ace1eba55bcdd2286f8da0f2d3e7febf1}\index{Si4703@{Si4703}!getMute@{getMute}}
+\index{getMute@{getMute}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getMute()}{getMute()}}
+{\footnotesize\ttfamily \label{class_si4703_ace1eba55bcdd2286f8da0f2d3e7febf1} 
+bool Si4703\+::get\+Mute (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zistí aktuálny mute stav. 
+
+\begin{DoxyReturn}{Returns}
+true ak je DMUTE=1 (audio povolené), false ak je DMUTE=0. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_ab37227ef8401d94f625b856044cb6519}\index{Si4703@{Si4703}!getPN@{getPN}}
+\index{getPN@{getPN}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getPN()}{getPN()}}
+{\footnotesize\ttfamily \label{class_si4703_ab37227ef8401d94f625b856044cb6519} 
+int Si4703\+::get\+PN (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Získa číslo dielu (Part Number) z registra DEVICEID. 
+
+Vráti Part Number (PN) z registra DEVICEID.
+
+\begin{DoxyReturn}{Returns}
+Hodnota PN. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a9ffb458dbf00710e158308201a723778}\index{Si4703@{Si4703}!getREV@{getREV}}
+\index{getREV@{getREV}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getREV()}{getREV()}}
+{\footnotesize\ttfamily \label{class_si4703_a9ffb458dbf00710e158308201a723778} 
+int Si4703\+::get\+REV (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Získa verziu čipu (REV) z registra CHIPID. 
+
+Vráti revíziu čipu (REV) z registra CHIPID.
+
+\begin{DoxyReturn}{Returns}
+Hodnota REV. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a23cb4a52f1c26d6aa8051b31faed9d17}\index{Si4703@{Si4703}!getRSSI@{getRSSI}}
+\index{getRSSI@{getRSSI}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getRSSI()}{getRSSI()}}
+{\footnotesize\ttfamily \label{class_si4703_a23cb4a52f1c26d6aa8051b31faed9d17} 
+int Si4703\+::get\+RSSI (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Získa aktuálnu hodnotu RSSI (Received Signal Strength Indicator). 
+
+Vráti aktuálnu hodnotu RSSI (intenzita prijímaného signálu).
+
+\begin{DoxyReturn}{Returns}
+RSSI v jednotkách definovaných čipom (d\+BμV podľa dokumentácie). 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a05f876d5bc89796365c02eaad5c3994d}\index{Si4703@{Si4703}!getST@{getST}}
+\index{getST@{getST}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getST()}{getST()}}
+{\footnotesize\ttfamily \label{class_si4703_a05f876d5bc89796365c02eaad5c3994d} 
+bool Si4703\+::get\+ST (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zistí, či je príjem stereo (ST = 1). 
+
+Zistí, či je aktuálny príjem stereo (ST=1) alebo mono.
+
+\begin{DoxyReturn}{Returns}
+true ak je stereo, inak false. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_aa1f5035dcbf914f0c4e7ea1c575eb953}\index{Si4703@{Si4703}!getVolExt@{getVolExt}}
+\index{getVolExt@{getVolExt}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getVolExt()}{getVolExt()}}
+{\footnotesize\ttfamily \label{class_si4703_aa1f5035dcbf914f0c4e7ea1c575eb953} 
+bool Si4703\+::get\+Vol\+Ext (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zistí, či je rozšírený rozsah hlasitosti zapnutý. 
+
+Zistí, či je zapnutý rozšírený rozsah hlasitosti.
+
+\begin{DoxyReturn}{Returns}
+true ak je VOLEXT=1, inak false. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a097ee0476bdda9773b469fd763db2506}\index{Si4703@{Si4703}!getVolume@{getVolume}}
+\index{getVolume@{getVolume}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{getVolume()}{getVolume()}}
+{\footnotesize\ttfamily \label{class_si4703_a097ee0476bdda9773b469fd763db2506} 
+int Si4703\+::get\+Volume (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Získa aktuálnu hlasitosť (0–15). 
+
+Vráti aktuálnu nastavenú hlasitosť.
+
+\begin{DoxyReturn}{Returns}
+Hodnota v rozsahu 0–15. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a20f8c256348a4944be2bab61b38deaf3}\index{Si4703@{Si4703}!incChannel@{incChannel}}
+\index{incChannel@{incChannel}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{incChannel()}{incChannel()}}
+{\footnotesize\ttfamily \label{class_si4703_a20f8c256348a4944be2bab61b38deaf3} 
+int Si4703\+::inc\+Channel (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zvýši frekvenciu o jeden krok pásma. 
+
+Zvýši frekvenciu o jeden krok (\+\_\+band\+Spacing) s obehnutím na spodnú hranicu.
+
+\begin{DoxyReturn}{Returns}
+Nová naladená frekvencia v k\+Hz. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_ad5e235a6e289a0284ebc29141282501b}\index{Si4703@{Si4703}!incVolume@{incVolume}}
+\index{incVolume@{incVolume}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{incVolume()}{incVolume()}}
+{\footnotesize\ttfamily \label{class_si4703_ad5e235a6e289a0284ebc29141282501b} 
+int Si4703\+::inc\+Volume (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zvýši hlasitosť o jeden krok; vráti novú hodnotu. 
+
+Zvýši hlasitosť o jeden krok.
+
+\begin{DoxyReturn}{Returns}
+Nová hodnota hlasitosti. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a1181664a9cc5b1f4b1bc956c720c4144}\index{Si4703@{Si4703}!powerDown@{powerDown}}
+\index{powerDown@{powerDown}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{powerDown()}{powerDown()}}
+{\footnotesize\ttfamily \label{class_si4703_a1181664a9cc5b1f4b1bc956c720c4144} 
+void Si4703\+::power\+Down (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Vypne rádio kvôli úspore energie. 
+
+Vypne čip \doxylink{class_si4703}{Si4703} a nastaví audio výstupy do vysokej impedancie.
+
+Kroky\+:
+\begin{DoxyItemize}
+\item nastaví výstupy do Hi-\/Z,
+\item GPIO piny do Hi-\/Z,
+\item nastaví príznaky pre power-\/down a zapíše registre. 
+\end{DoxyItemize}\Hypertarget{class_si4703_ac0002cf7ef18b780b806a50cbed8d40a}\index{Si4703@{Si4703}!powerUp@{powerUp}}
+\index{powerUp@{powerUp}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{powerUp()}{powerUp()}}
+{\footnotesize\ttfamily \label{class_si4703_ac0002cf7ef18b780b806a50cbed8d40a} 
+void Si4703\+::power\+Up (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Zapne rádio (napájanie a základná inicializácia). 
+
+Zapne čip \doxylink{class_si4703}{Si4703} – najprv oscilátor, potom samotné rádio.
+
+Kroky\+:
+\begin{DoxyItemize}
+\item načíta registre do shadow,
+\item povolí kryštálový oscilátor (XOSCEN),
+\item po čakaní povolí napájanie rádia (ENABLE) a zruší MUTE (DMUTE). 
+\end{DoxyItemize}\Hypertarget{class_si4703_a9c00132f8913f12c9874f148d69ffad6}\index{Si4703@{Si4703}!readRDS@{readRDS}}
+\index{readRDS@{readRDS}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{readRDS()}{readRDS()}}
+{\footnotesize\ttfamily \label{class_si4703_a9c00132f8913f12c9874f148d69ffad6} 
+void Si4703\+::read\+RDS (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Prečíta RDS dáta z registrov a spracuje ich (napr. PS/\+RT). 
+
+Prečíta RDS dáta z registračných blokov.
+
+Funkcia je pripravená ako vstupný bod pre spracovanie RDS (PS, RT a pod.), aktuálne obsahuje len TODO. \Hypertarget{class_si4703_a567cad6cc687804a4f3308b26ff4715f}\index{Si4703@{Si4703}!seekDown@{seekDown}}
+\index{seekDown@{seekDown}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{seekDown()}{seekDown()}}
+{\footnotesize\ttfamily \label{class_si4703_a567cad6cc687804a4f3308b26ff4715f} 
+int Si4703\+::seek\+Down (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Seek smerom nadol; vráti naladený kanál alebo 0 pri neúspechu. 
+
+Seek smerom nadol s pokusom obehnúť pásmo pri neúspechu.
+
+\begin{DoxyReturn}{Returns}
+Naladená frekvencia v k\+Hz alebo 0 pri zlyhaní. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a4051c68f611cf6e43dc9ed3ec622bc60}\index{Si4703@{Si4703}!seekUp@{seekUp}}
+\index{seekUp@{seekUp}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{seekUp()}{seekUp()}}
+{\footnotesize\ttfamily \label{class_si4703_a4051c68f611cf6e43dc9ed3ec622bc60} 
+int Si4703\+::seek\+Up (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Seek smerom nahor; vráti naladený kanál alebo 0 pri neúspechu. 
+
+Seek smerom nahor s pokusom obehnúť pásmo pri neúspechu.
+
+\begin{DoxyReturn}{Returns}
+Naladená frekvencia v k\+Hz alebo 0, ak sa nenašla žiadna stanica. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_af9a30ea0699fbb207881e3e7ae2eef42}\index{Si4703@{Si4703}!setChannel@{setChannel}}
+\index{setChannel@{setChannel}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{setChannel()}{setChannel()}}
+{\footnotesize\ttfamily \label{class_si4703_af9a30ea0699fbb207881e3e7ae2eef42} 
+int Si4703\+::set\+Channel (\begin{DoxyParamCaption}\item[{int}]{freq}{}\end{DoxyParamCaption})}
+
+
+
+Nastaví kanál podaním frekvencie; vráti nastavený kanál. 
+
+Nastaví naladenú frekvenciu (v k\+Hz) v rámci aktuálneho pásma.
+
+Hodnota je orezaná na interval \texorpdfstring{$<$}{<}\+\_\+band\+Start, \+\_\+band\+End\texorpdfstring{$>$}{>}. Interný kanál sa vypočíta z rozdielu a rozstupu. Funkcia počká na dokončenie tuningu pomocou STC.
+
+
+\begin{DoxyParams}{Parameters}
+{\em freq} & Frekvencia v k\+Hz. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Skutočne naladená frekvencia v k\+Hz. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a0bdb79478d9938b0cd4e715f4c4d54f8}\index{Si4703@{Si4703}!setMono@{setMono}}
+\index{setMono@{setMono}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{setMono()}{setMono()}}
+{\footnotesize\ttfamily \label{class_si4703_a0bdb79478d9938b0cd4e715f4c4d54f8} 
+void Si4703\+::set\+Mono (\begin{DoxyParamCaption}\item[{bool}]{en}{}\end{DoxyParamCaption})}
+
+
+
+Nastaví nútený mono režim (true = mono). 
+
+Prepne rádio do mono režimu alebo späť do stereo.
+
+
+\begin{DoxyParams}{Parameters}
+{\em en} & true = mono, false = stereo. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_si4703_a297fb4fd569ab9ff35269873338afcf0}\index{Si4703@{Si4703}!setMute@{setMute}}
+\index{setMute@{setMute}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{setMute()}{setMute()}}
+{\footnotesize\ttfamily \label{class_si4703_a297fb4fd569ab9ff35269873338afcf0} 
+void Si4703\+::set\+Mute (\begin{DoxyParamCaption}\item[{bool}]{en}{}\end{DoxyParamCaption})}
+
+
+
+Nastaví mute (true = zvuk vypnutý). 
+
+Nastaví alebo zruší mute (vypnutie zvuku).
+
+
+\begin{DoxyParams}{Parameters}
+{\em en} & true = audio zapnuté (DMUTE=1), false = audio vypnuté. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_si4703_a69c56af25ece1c014f82e564bceac1a0}\index{Si4703@{Si4703}!setVolExt@{setVolExt}}
+\index{setVolExt@{setVolExt}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{setVolExt()}{setVolExt()}}
+{\footnotesize\ttfamily \label{class_si4703_a69c56af25ece1c014f82e564bceac1a0} 
+void Si4703\+::set\+Vol\+Ext (\begin{DoxyParamCaption}\item[{bool}]{en}{}\end{DoxyParamCaption})}
+
+
+
+Nastaví rozšírený rozsah hlasitosti (VOLEXT). 
+
+Povolenie alebo zakázanie rozšíreného rozsahu hlasitosti (VOLEXT).
+
+
+\begin{DoxyParams}{Parameters}
+{\em en} & true = rozšírený rozsah, false = normálny rozsah. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_si4703_adcf50bf10efcb2787593726a56735772}\index{Si4703@{Si4703}!setVolume@{setVolume}}
+\index{setVolume@{setVolume}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{setVolume()}{setVolume()}}
+{\footnotesize\ttfamily \label{class_si4703_adcf50bf10efcb2787593726a56735772} 
+int Si4703\+::set\+Volume (\begin{DoxyParamCaption}\item[{int}]{volume}{}\end{DoxyParamCaption})}
+
+
+
+Nastaví hlasitosť (0–15); vráti nastavenú hodnotu. 
+
+Nastaví hlasitosť na zadanú hodnotu v rozsahu 0–15.
+
+Hodnota sa orezáva do povoleného rozsahu. Po nastavení vráti aktuálnu hlasitosť načítanú z registra.
+
+
+\begin{DoxyParams}{Parameters}
+{\em volume} & Hodnota hlasitosti 0–15. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Skutočne nastavená hlasitosť. 
+\end{DoxyReturn}
+\Hypertarget{class_si4703_a8f00c9ce7499978dfff92793bdb98d11}\index{Si4703@{Si4703}!start@{start}}
+\index{start@{start}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily \label{class_si4703_a8f00c9ce7499978dfff92793bdb98d11} 
+void Si4703\+::start (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Spustí rádio (po power\+Up nastaví prevádzkové režimy). 
+
+Spustí rádio\+: nastaví I2C režim, zapne čip a vykoná základnú konfiguráciu.
+
+Robí\+:
+\begin{DoxyItemize}
+\item inicializáciu 2-\/wire rozhrania,
+\item power-\/up sekvenciu,
+\item nastavenie pásma, rozstupu, de-\/emfázy,
+\item konfiguráciu seeku, RDS, audio parametrov a GPIO,
+\item uloženie konfigurácie zápisom shadow registrov. 
+\end{DoxyItemize}\Hypertarget{class_si4703_ae55e12b48d6bc18119be8254aa53d4b6}\index{Si4703@{Si4703}!writeGPIO@{writeGPIO}}
+\index{writeGPIO@{writeGPIO}!Si4703@{Si4703}}
+\doxysubsubsection{\texorpdfstring{writeGPIO()}{writeGPIO()}}
+{\footnotesize\ttfamily \label{class_si4703_ae55e12b48d6bc18119be8254aa53d4b6} 
+void Si4703\+::write\+GPIO (\begin{DoxyParamCaption}\item[{int}]{GPIO}{, }\item[{int}]{val}{}\end{DoxyParamCaption})}
+
+
+
+Zapíše hodnotu na GPIO piny \doxylink{class_si4703}{Si4703}. 
+
+Nastaví režim zvoleného GPIO pinu \doxylink{class_si4703}{Si4703}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em GPIO} & Identifikátor pinu (GPIO1, GPIO2, GPIO3). \\
+\hline
+{\em val} & Režim pinu (GPIO\+\_\+Z, GPIO\+\_\+I, GPIO\+\_\+\+Low, GPIO\+\_\+\+High).\\
+\hline
+{\em GPIO} & Identifikátor pinu (GPIO1, GPIO2, GPIO3). \\
+\hline
+{\em val} & Režim pinu (GPIO\+\_\+Z, GPIO\+\_\+I, GPIO\+\_\+\+Low, GPIO\+\_\+\+High). \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_si4703_8h}{Si4703.\+h}}\item 
+Si4703.\+cpp\end{DoxyCompactItemize}

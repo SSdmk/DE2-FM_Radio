@@ -1,0 +1,89 @@
+\doxysection{Rotary\+Encoder.\+h File Reference}
+\hypertarget{_rotary_encoder_8h}{}\label{_rotary_encoder_8h}\index{RotaryEncoder.h@{RotaryEncoder.h}}
+
+
+Rozhranie pre obsluhu rotačného enkódera (otáčanie + tlačidlo).  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include "{}gpio.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_rotary_encoder}{Rotary\+Encoder}}
+\begin{DoxyCompactList}\small\item\em Trieda na obsluhu rotačného enkódera vrátane tlačidla. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{Encoder\+Event}} \{ {\bfseries EVENT\+\_\+\+NONE}
+, {\bfseries EVENT\+\_\+\+CW}
+, {\bfseries EVENT\+\_\+\+CCW}
+, {\bfseries EVENT\+\_\+\+BUTTON}
+ \}
+\begin{DoxyCompactList}\small\item\em Typ udalosti z enkódera. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+unsigned long \mbox{\hyperlink{_rotary_encoder_8h_a77fdf24910de9db4719daced3b996551}{timer\+\_\+millis}} ()
+\begin{DoxyCompactList}\small\item\em Externá funkcia vracajúca počet milisekúnd od štartu programu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Rozhranie pre obsluhu rotačného enkódera (otáčanie + tlačidlo). 
+
+
+
+\label{doc-enum-members}
+\Hypertarget{_rotary_encoder_8h_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}\index{RotaryEncoder.h@{RotaryEncoder.h}!EncoderEvent@{EncoderEvent}}
+\index{EncoderEvent@{EncoderEvent}!RotaryEncoder.h@{RotaryEncoder.h}}
+\doxysubsubsection{\texorpdfstring{EncoderEvent}{EncoderEvent}}
+{\footnotesize\ttfamily \label{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4} 
+enum \mbox{\hyperlink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{Encoder\+Event}}}
+
+
+
+Typ udalosti z enkódera. 
+
+Udalosti, ktoré môže enkóder generovať\+:
+\begin{DoxyItemize}
+\item EVENT\+\_\+\+NONE – žiadna zmena,
+\item EVENT\+\_\+\+CW – otočenie po smere hodinových ručičiek,
+\item EVENT\+\_\+\+CCW – otočenie proti smeru hodinových ručičiek,
+\item EVENT\+\_\+\+BUTTON – stlačenie tlačidla enkódera. 
+\end{DoxyItemize}
+
+\label{doc-func-members}
+\Hypertarget{_rotary_encoder_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{_rotary_encoder_8h_a77fdf24910de9db4719daced3b996551}\index{RotaryEncoder.h@{RotaryEncoder.h}!timer\_millis@{timer\_millis}}
+\index{timer\_millis@{timer\_millis}!RotaryEncoder.h@{RotaryEncoder.h}}
+\doxysubsubsection{\texorpdfstring{timer\_millis()}{timer\_millis()}}
+{\footnotesize\ttfamily \label{_rotary_encoder_8h_a77fdf24910de9db4719daced3b996551} 
+unsigned long timer\+\_\+millis (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Externá funkcia vracajúca počet milisekúnd od štartu programu. 
+
+Funkcia je implementovaná v {\ttfamily \doxylink{main_8cpp}{main.\+cpp}} a používa sa na meranie času (debounce tlačidla, obmedzenie frekvencie čítania otáčania a pod.).
+
+\begin{DoxyReturn}{Returns}
+Počet milisekúnd od spustenia programu.
+\end{DoxyReturn}
+Externá funkcia vracajúca počet milisekúnd od štartu programu.
+
+Globálna funkcia poskytujúca aktuálny čas v milisekundách.
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item dočasne zakáže prerušenia (CLI),
+\item prečíta \doxylink{main_8cpp_a4d4dce098fcf458ec5166f4e9413a5eb}{millis\+\_\+counter} do lokálnej premennej,
+\item obnoví stav registra SREG (povolenie prerušenia),
+\item vráti prečítanú hodnotu.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Aktuálny čas v milisekundách od štartu programu. 
+\end{DoxyReturn}

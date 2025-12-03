@@ -1,0 +1,183 @@
+\doxysection{main.\+cpp File Reference}
+\hypertarget{main_8cpp}{}\label{main_8cpp}\index{main.cpp@{main.cpp}}
+
+
+Hlavný program FM rádia s enkóderom, tlačidlami a OLED displejom.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include $<$util/delay.\+h$>$}\newline
+{\ttfamily \#include "{}timer.\+h"{}}\newline
+{\ttfamily \#include "{}gpio.\+h"{}}\newline
+{\ttfamily \#include "{}Button.\+h"{}}\newline
+{\ttfamily \#include "{}Rotary\+Encoder.\+h"{}}\newline
+{\ttfamily \#include "{}button\+\_\+function.\+h"{}}\newline
+{\ttfamily \#include "{}oled.\+h"{}}\newline
+{\ttfamily \#include "{}Si4703.\+h"{}}\newline
+{\ttfamily \#include "{}uart.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8cpp_a43bafb28b29491ec7f871319b5a3b2f8}\label{main_8cpp_a43bafb28b29491ec7f871319b5a3b2f8} 
+\#define {\bfseries F\+\_\+\+CPU}~16000000\+UL
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{main_8cpp_add2d7cdddfb682dcc0391e60cf42c7d6}{ISR}} (TIMER0\+\_\+\+OVF\+\_\+vect)
+\begin{DoxyCompactList}\small\item\em Obsluha prerušení overflowu časovača 0. \end{DoxyCompactList}\item 
+unsigned long \mbox{\hyperlink{main_8cpp_a77fdf24910de9db4719daced3b996551}{timer\+\_\+millis}} ()
+\begin{DoxyCompactList}\small\item\em Bezpečne vráti aktuálnu hodnotu milisekundového čítača. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8cpp_a840291bc02cba5474a4cb46a9b9566fe}{main}} (void)
+\begin{DoxyCompactList}\small\item\em Hlavná funkcia programu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+volatile unsigned long \mbox{\hyperlink{main_8cpp_a4d4dce098fcf458ec5166f4e9413a5eb}{millis\+\_\+counter}} = 0
+\begin{DoxyCompactList}\small\item\em Globálny čítač milisekúnd, inkrementovaný v prerušení TIMER0\+\_\+\+OVF. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_button}{Button}} Up\+Button \& \mbox{\hyperlink{main_8cpp_ae0cebe9c6de7d3722b7b7f636c7d281b}{DDRD}}
+\begin{DoxyCompactList}\small\item\em Tlačidlo „\+UP“ na porte D, pin 5. \end{DoxyCompactList}\item 
+\Hypertarget{main_8cpp_a06c8bac16d4093dd43e7a53eed6cf306}\label{main_8cpp_a06c8bac16d4093dd43e7a53eed6cf306} 
+\mbox{\hyperlink{class_button}{Button}} Right\+Button \& {\bfseries DDRB}
+\begin{DoxyCompactList}\small\item\em Tlačidlo „\+RIGHT“ na porte B, pin 0. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_si4703}{Si4703}} \mbox{\hyperlink{main_8cpp_ac2458fa75b330bf16e157ea7aa6102f1}{radio}}
+\begin{DoxyCompactList}\small\item\em Globálna inštancia FM tunera \doxylink{class_si4703}{Si4703} (definovaná v Si4703.\+cpp). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Hlavný program FM rádia s enkóderom, tlačidlami a OLED displejom. 
+
+Aplikácia beží na ATmega328P pri 16 MHz a využíva\+:
+\begin{DoxyItemize}
+\item Timer0 overflow interrupt na generovanie milisekundového čítača (\doxylink{_button_8h_a77fdf24910de9db4719daced3b996551}{timer\+\_\+millis}),
+\item knižnicu \doxylink{uart_8h}{uart.\+h} na debug výpisy cez UART,
+\item triedu \doxylink{class_button}{Button} na obsluhu štyroch tlačidiel,
+\item triedu \doxylink{class_rotary_encoder}{Rotary\+Encoder} na čítanie rotačného enkódera (otáčanie + klik),
+\item triedu \doxylink{class_si4703}{Si4703} na ovládanie FM tunera,
+\item funkcie z \doxylink{oled_8h}{oled.\+h} na vykresľovanie UI rádia na OLED displeji. 
+\end{DoxyItemize}
+
+\label{doc-func-members}
+\Hypertarget{main_8cpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8cpp_add2d7cdddfb682dcc0391e60cf42c7d6}\index{main.cpp@{main.cpp}!ISR@{ISR}}
+\index{ISR@{ISR}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{ISR()}{ISR()}}
+{\footnotesize\ttfamily \label{main_8cpp_add2d7cdddfb682dcc0391e60cf42c7d6} 
+ISR (\begin{DoxyParamCaption}\item[{TIMER0\+\_\+\+OVF\+\_\+vect}]{}{}\end{DoxyParamCaption})}
+
+
+
+Obsluha prerušení overflowu časovača 0. 
+
+ISR je vyvolaná pri každom pretečení Timer/\+Counter0 (TIMER0\+\_\+\+OVF\+\_\+vect) a inkrementuje \doxylink{main_8cpp_a4d4dce098fcf458ec5166f4e9413a5eb}{millis\+\_\+counter}. \Hypertarget{main_8cpp_a840291bc02cba5474a4cb46a9b9566fe}\index{main.cpp@{main.cpp}!main@{main}}
+\index{main@{main}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{main_8cpp_a840291bc02cba5474a4cb46a9b9566fe} 
+int main (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Hlavná funkcia programu. 
+
+Postup\+:
+\begin{DoxyItemize}
+\item inicializácia UART \doxylink{group__pfleury__uart_gac19a76bb7d446125734a67f9f4b68991}{uart\+\_\+init} pre debug (9600 baud),
+\item inicializácia OLED displeja \doxylink{oled_8cpp_ad95f850c4c6d949229270c8da88c02cb}{oled\+\_\+init},
+\item nastavenie časovača 0 na overflow každú 1 ms a povolenie prerušení,
+\item inicializácia tlačidiel \doxylink{class_button_a666adf00bc92a8b264758abfa655a6a4}{Button\+::begin},
+\item inicializácia enkódera \doxylink{class_rotary_encoder_a4e2829a93900546ec724e855a7f8c332}{Rotary\+Encoder\+::begin},
+\item globálne povolenie prerušení sei,
+\item inicializácia a nastavenie tunera \doxylink{class_si4703}{Si4703}\+:
+\begin{DoxyItemize}
+\item \doxylink{class_si4703_a8f00c9ce7499978dfff92793bdb98d11}{Si4703\+::start},
+\item \doxylink{class_si4703_af9a30ea0699fbb207881e3e7ae2eef42}{Si4703\+::set\+Channel} na 107.\+00 MHz,
+\item \doxylink{class_si4703_adcf50bf10efcb2787593726a56735772}{Si4703\+::set\+Volume} na hodnotu 10,
+\item \doxylink{class_si4703_a1181664a9cc5b1f4b1bc956c720c4144}{Si4703\+::power\+Down} a následne \doxylink{class_si4703_ac0002cf7ef18b780b806a50cbed8d40a}{Si4703\+::power\+Up},
+\end{DoxyItemize}
+\item nekonečná slučka\+:
+\begin{DoxyItemize}
+\item čítanie udalostí z tlačidiel a enkódera,
+\item mapovanie na UI udalosti cez \doxylink{button__function_8cpp_a33828acc326b9494c9a4b0c7446f3b72}{radio\+\_\+ui\+\_\+handle\+\_\+event},
+\item debug výpis smeru enkódera cez UART,
+\item čítanie aktuálneho stavu rádia (frekvencia, RSSI, hlasitosť, mute),
+\item prekreslenie hlavnej obrazovky rádia na OLED pomocou \doxylink{oled_8cpp_a73b1b0c88932700a241f54267bd1e202}{oled\+\_\+show\+\_\+radio\+\_\+screen}.
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+V praxi nikdy nevracia, formálne 0. 
+\end{DoxyReturn}
+\Hypertarget{main_8cpp_a77fdf24910de9db4719daced3b996551}\index{main.cpp@{main.cpp}!timer\_millis@{timer\_millis}}
+\index{timer\_millis@{timer\_millis}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{timer\_millis()}{timer\_millis()}}
+{\footnotesize\ttfamily \label{main_8cpp_a77fdf24910de9db4719daced3b996551} 
+unsigned long timer\+\_\+millis (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Bezpečne vráti aktuálnu hodnotu milisekundového čítača. 
+
+Externá funkcia vracajúca počet milisekúnd od štartu programu.
+
+Globálna funkcia poskytujúca aktuálny čas v milisekundách.
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item dočasne zakáže prerušenia (CLI),
+\item prečíta \doxylink{main_8cpp_a4d4dce098fcf458ec5166f4e9413a5eb}{millis\+\_\+counter} do lokálnej premennej,
+\item obnoví stav registra SREG (povolenie prerušenia),
+\item vráti prečítanú hodnotu.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Aktuálny čas v milisekundách od štartu programu. 
+\end{DoxyReturn}
+
+
+\label{doc-var-members}
+\Hypertarget{main_8cpp_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8cpp_ae0cebe9c6de7d3722b7b7f636c7d281b}\index{main.cpp@{main.cpp}!DDRD@{DDRD}}
+\index{DDRD@{DDRD}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{DDRD}{DDRD}}
+{\footnotesize\ttfamily \label{main_8cpp_ae0cebe9c6de7d3722b7b7f636c7d281b} 
+\mbox{\hyperlink{class_rotary_encoder}{Rotary\+Encoder}} encoder \& DDRD}
+
+
+
+Tlačidlo „\+UP“ na porte D, pin 5. 
+
+Globálna inštancia rotačného enkódera.
+
+Tlačidlo „\+LEFT“ na porte D, pin 7.
+
+Tlačidlo „\+DOWN“ na porte D, pin 6.
+
+Pripojenie\+:
+\begin{DoxyItemize}
+\item CLK\+: PD2,
+\item DT \+: PD3,
+\item SW \+: PC1 (A1). 
+\end{DoxyItemize}\Hypertarget{main_8cpp_a4d4dce098fcf458ec5166f4e9413a5eb}\index{main.cpp@{main.cpp}!millis\_counter@{millis\_counter}}
+\index{millis\_counter@{millis\_counter}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{millis\_counter}{millis\_counter}}
+{\footnotesize\ttfamily \label{main_8cpp_a4d4dce098fcf458ec5166f4e9413a5eb} 
+volatile unsigned long millis\+\_\+counter = 0}
+
+
+
+Globálny čítač milisekúnd, inkrementovaný v prerušení TIMER0\+\_\+\+OVF. 
+
+Každé pretečenie 8-\/bitového časovača 0 (pri nastavenom preskaleri) zodpovedá \texorpdfstring{$\sim$}{\string~}1 ms. Premenná sa používa v \doxylink{_button_8h_a77fdf24910de9db4719daced3b996551}{timer\+\_\+millis} a v debounce logike enkódera a tlačidiel. \Hypertarget{main_8cpp_ac2458fa75b330bf16e157ea7aa6102f1}\index{main.cpp@{main.cpp}!radio@{radio}}
+\index{radio@{radio}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{radio}{radio}}
+{\footnotesize\ttfamily \label{main_8cpp_ac2458fa75b330bf16e157ea7aa6102f1} 
+\mbox{\hyperlink{class_si4703}{Si4703}} radio\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Globálna inštancia FM tunera \doxylink{class_si4703}{Si4703} (definovaná v Si4703.\+cpp). 
+
+Globálna inštancia FM tunera \doxylink{class_si4703}{Si4703} (definovaná v Si4703.\+cpp). 

@@ -1,0 +1,457 @@
+\doxysection{UART knižnica \texorpdfstring{$<$}{<}uart.\+h\texorpdfstring{$>$}{>} }
+\hypertarget{group__pfleury__uart}{}\label{group__pfleury__uart}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+
+
+Prerušeniami riadená UART knižnica s kruhovými buffermi pre príjem a odosielanie.  
+
+
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_ga367ff7b5de225ed936a63239ad4adb0b}{UART\+\_\+\+BAUD\+\_\+\+SELECT}}(baud\+Rate,  xtal\+Cpu)
+\begin{DoxyCompactList}\small\item\em Výpočet hodnoty registra pre nastavenie baudrate v štandardnom režime. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_ga1a02d45130520cb651ab313e69039382}{UART\+\_\+\+BAUD\+\_\+\+SELECT\+\_\+\+DOUBLE\+\_\+\+SPEED}}(baud\+Rate,  xtal\+Cpu)
+\begin{DoxyCompactList}\small\item\em Výpočet hodnoty registra pre nastavenie baudrate v režime dvojnásobnej rýchlosti. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_ga5bdd6772c246436bb14377095de79b31}{UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE}}~64
+\begin{DoxyCompactList}\small\item\em Veľkosť kruhového prijímacieho bufferu v bajtoch (mocnina 2). \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_ga05f5d709605c6317c97e4974bec3402a}{UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE}}~64
+\begin{DoxyCompactList}\small\item\em Veľkosť kruhového vysielacieho bufferu v bajtoch (mocnina 2). \end{DoxyCompactList}\item 
+\Hypertarget{group__pfleury__uart_gabcdb1041d763560cd8f8e722370dfd37}\label{group__pfleury__uart_gabcdb1041d763560cd8f8e722370dfd37} 
+\#define {\bfseries UART\+\_\+\+FRAME\+\_\+\+ERROR}~0x1000
+\begin{DoxyCompactList}\small\item\em Príznak rámcovej chyby (framing error) prijímača UART. \end{DoxyCompactList}\item 
+\Hypertarget{group__pfleury__uart_ga3183177e3613d8785d8cc8516931beb6}\label{group__pfleury__uart_ga3183177e3613d8785d8cc8516931beb6} 
+\#define {\bfseries UART\+\_\+\+OVERRUN\+\_\+\+ERROR}~0x0800
+\begin{DoxyCompactList}\small\item\em Príznak pretečenia (overrun) vnútorného UART prijímača. \end{DoxyCompactList}\item 
+\Hypertarget{group__pfleury__uart_ga946e3d317937e003d2057bf19e96dd1d}\label{group__pfleury__uart_ga946e3d317937e003d2057bf19e96dd1d} 
+\#define {\bfseries UART\+\_\+\+PARITY\+\_\+\+ERROR}~0x0400
+\begin{DoxyCompactList}\small\item\em Príznak parity chyby prijatého bajtu. \end{DoxyCompactList}\item 
+\Hypertarget{group__pfleury__uart_ga94758f3dad6864703b7417d3e40f11df}\label{group__pfleury__uart_ga94758f3dad6864703b7417d3e40f11df} 
+\#define {\bfseries UART\+\_\+\+BUFFER\+\_\+\+OVERFLOW}~0x0200
+\begin{DoxyCompactList}\small\item\em Príznak pretečenia (overflow) softvérového prijímacieho kruhového bufferu. \end{DoxyCompactList}\item 
+\Hypertarget{group__pfleury__uart_ga77ba544d423ff42d400220a05303f268}\label{group__pfleury__uart_ga77ba544d423ff42d400220a05303f268} 
+\#define {\bfseries UART\+\_\+\+NO\+\_\+\+DATA}~0x0100
+\begin{DoxyCompactList}\small\item\em Príznak, že nie sú k dispozícii žiadne prijaté dáta. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_gae9e143569df2285379bc55f9f5595bf9}{uart\+\_\+puts\+\_\+P}}(\+\_\+\+\_\+s)
+\begin{DoxyCompactList}\small\item\em Pomocné makro pre odoslanie reťazca z programovej pamäte. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__pfleury__uart_gaabd7a5b0c15611ee9ecb2873cc9ee87a}{uart1\+\_\+puts\+\_\+P}}(\+\_\+\+\_\+s)
+\begin{DoxyCompactList}\small\item\em Pomocné makro pre odoslanie reťazca z programovej pamäte cez USART1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__pfleury__uart_gac19a76bb7d446125734a67f9f4b68991}{uart\+\_\+init}} (unsigned int baudrate)
+\begin{DoxyCompactList}\small\item\em Inicializuje UART a nastaví prenosovú rýchlosť (baudrate). \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{group__pfleury__uart_gaefaab30a8338ec46a6be35b99b1b4f09}{uart\+\_\+getc}} (void)
+\begin{DoxyCompactList}\small\item\em Získa prijatý bajt z prijímacieho kruhového bufferu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2}{uart\+\_\+putc}} (unsigned char data)
+\begin{DoxyCompactList}\small\item\em Zapíše jeden bajt do vysielacieho kruhového bufferu UART. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gae52facc0a56086a365bb0018160d8d71}{uart\+\_\+puts}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Zapíše textový reťazec z RAM do vysielacieho bufferu UART. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f}{uart\+\_\+puts\+\_\+p}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Zapíše textový reťazec z programovej pamäte (Flash) do vysielacieho bufferu UART. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga4db697cb5469fd70e794fa7df73a6d6a}{uart1\+\_\+init}} (unsigned int baudrate)
+\begin{DoxyCompactList}\small\item\em Inicializuje perifériu USART1 (len na vybraných mikrokontroléroch). \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{group__pfleury__uart_gaeb1405c641e5bc9b7224018f5e8d90de}{uart1\+\_\+getc}} (void)
+\begin{DoxyCompactList}\small\item\em Získa prijatý bajt z prijímacieho bufferu USART1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gab465f689d197fadfbacc374fc9411154}{uart1\+\_\+putc}} (unsigned char data)
+\begin{DoxyCompactList}\small\item\em Zapíše jeden bajt do vysielacieho bufferu USART1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga5568f8f3913b218fd4d0346af78831b2}{uart1\+\_\+puts}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Zapíše reťazec z RAM do vysielacieho bufferu USART1. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga1e8074d0a2d5922601c5db2f9777ba79}{uart1\+\_\+puts\+\_\+p}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Zapíše reťazec z programovej pamäte do vysielacieho bufferu USART1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Prerušeniami riadená UART knižnica s kruhovými buffermi pre príjem a odosielanie. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{uart_8h}{uart.h}}>}\ }
+
+\end{DoxyCode}
+
+
+Táto knižnica poskytuje funkcie na odosielanie a prijímanie dát cez vstavané UART/\+USART periférie mikrokontrolérov AVR. Na pozadí využíva prerušenia a kruhové buffery pre RX aj TX, takže hlavný program môže pracovať bez čakania na dokončenie prenosu.
+
+Pri prijme a odosielaní bajtov sa generujú prerušenia, v ktorých obslužné rutiny zapisujú/čítajú dáta do/z kruhových bufferov.
+
+Veľkosť kruhových bufferov je daná konštantami \doxylink{group__pfleury__uart_ga5bdd6772c246436bb14377095de79b31}{UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE} a \doxylink{group__pfleury__uart_ga05f5d709605c6317c97e4974bec3402a}{UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE}, ktoré musia byť mocninou 2. Tieto veľkosti je možné prispôsobiť projektu napríklad pridaním {\ttfamily CDEFS += -\/DUART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE=nn -\/DUART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE=nn} do Makefile.
+
+\begin{DoxyNote}{Note}
+Implementácia a pôvodná dokumentácia sú prevzaté z knižnice Petra Fleuryho (pozri hlavičku vyššie). Tento súbor je použitý ako súčasť projektu a môže obsahovať len minimálne úpravy konfigurácie alebo komentárov. 
+\end{DoxyNote}
+
+
+\label{doc-define-members}
+\Hypertarget{group__pfleury__uart_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{group__pfleury__uart_gaabd7a5b0c15611ee9ecb2873cc9ee87a}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart1\_puts\_P@{uart1\_puts\_P}}
+\index{uart1\_puts\_P@{uart1\_puts\_P}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart1\_puts\_P}{uart1\_puts\_P}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_gaabd7a5b0c15611ee9ecb2873cc9ee87a} 
+\#define uart1\+\_\+puts\+\_\+P(\begin{DoxyParamCaption}\item[{}]{\+\_\+\+\_\+s}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{group__pfleury__uart_ga1e8074d0a2d5922601c5db2f9777ba79}{uart1\_puts\_p}}(PSTR(\_\_s))}
+
+\end{DoxyCode}
+
+
+Pomocné makro pre odoslanie reťazca z programovej pamäte cez USART1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+\+\_\+s} & Textový literál (string constant), ktorý sa má odoslať. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__pfleury__uart_ga367ff7b5de225ed936a63239ad4adb0b}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!UART\_BAUD\_SELECT@{UART\_BAUD\_SELECT}}
+\index{UART\_BAUD\_SELECT@{UART\_BAUD\_SELECT}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{UART\_BAUD\_SELECT}{UART\_BAUD\_SELECT}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_ga367ff7b5de225ed936a63239ad4adb0b} 
+\#define UART\+\_\+\+BAUD\+\_\+\+SELECT(\begin{DoxyParamCaption}\item[{}]{baud\+Rate}{, }\item[{}]{xtal\+Cpu}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(((xtalCpu)\ +\ 8UL\ *\ (baudRate))\ /\ (16UL\ *\ (baudRate))\ -\/\ 1UL)}
+
+\end{DoxyCode}
+
+
+Výpočet hodnoty registra pre nastavenie baudrate v štandardnom režime. 
+
+\texorpdfstring{$<$}{<} Začiatok skupiny funkcií a makier UART knižnice. 
+
+Makro prepočíta požadovanú prenosovú rýchlosť (baudrate) a frekvenciu systémového oscilátora na hodnotu, ktorá sa má zapísať do baudrate registra (UBRR) pri bežnom (16×) vzorkovaní.
+
+
+\begin{DoxyParams}{Parameters}
+{\em xtal\+Cpu} & Frekvencia systémového oscilátora v Hz (napr. 4000000UL pre 4 MHz). \\
+\hline
+{\em baud\+Rate} & Požadovaná prenosová rýchlosť v bps (napr. 1200, 2400, 9600). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__pfleury__uart_ga1a02d45130520cb651ab313e69039382}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!UART\_BAUD\_SELECT\_DOUBLE\_SPEED@{UART\_BAUD\_SELECT\_DOUBLE\_SPEED}}
+\index{UART\_BAUD\_SELECT\_DOUBLE\_SPEED@{UART\_BAUD\_SELECT\_DOUBLE\_SPEED}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{UART\_BAUD\_SELECT\_DOUBLE\_SPEED}{UART\_BAUD\_SELECT\_DOUBLE\_SPEED}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_ga1a02d45130520cb651ab313e69039382} 
+\#define UART\+\_\+\+BAUD\+\_\+\+SELECT\+\_\+\+DOUBLE\+\_\+\+SPEED(\begin{DoxyParamCaption}\item[{}]{baud\+Rate}{, }\item[{}]{xtal\+Cpu}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\ ((((xtalCpu)\ +\ 4UL\ *\ (baudRate))\ /\ (8UL\ *\ (baudRate))\ -\/\ 1UL))\ |\ 0x8000)}
+
+\end{DoxyCode}
+
+
+Výpočet hodnoty registra pre nastavenie baudrate v režime dvojnásobnej rýchlosti. 
+
+Makro prepočíta hodnotu baudrate pre režim „double speed“ (U2X = 1), kde UART používa 8× vzorkovanie. Výsledkom je hodnota pre UBRR s nastaveným najvyšším bitom, ktorý indikuje použitie dvojnásobnej rýchlosti.
+
+
+\begin{DoxyParams}{Parameters}
+{\em xtal\+Cpu} & Frekvencia systémového oscilátora v Hz (napr. 4000000UL pre 4 MHz). \\
+\hline
+{\em baud\+Rate} & Požadovaná prenosová rýchlosť v bps (napr. 1200, 2400, 9600). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__pfleury__uart_gae9e143569df2285379bc55f9f5595bf9}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart\_puts\_P@{uart\_puts\_P}}
+\index{uart\_puts\_P@{uart\_puts\_P}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart\_puts\_P}{uart\_puts\_P}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_gae9e143569df2285379bc55f9f5595bf9} 
+\#define uart\+\_\+puts\+\_\+P(\begin{DoxyParamCaption}\item[{}]{\+\_\+\+\_\+s}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f}{uart\_puts\_p}}(PSTR(\_\_s))}
+
+\end{DoxyCode}
+
+
+Pomocné makro pre odoslanie reťazca z programovej pamäte. 
+
+Makro automaticky umiestni zadaný textový literál do programovej pamäte a zavolá funkciu \doxylink{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f}{uart\+\_\+puts\+\_\+p()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+\+\_\+s} & Textový literál (string constant), ktorý sa má odoslať. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__pfleury__uart_ga5bdd6772c246436bb14377095de79b31}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!UART\_RX\_BUFFER\_SIZE@{UART\_RX\_BUFFER\_SIZE}}
+\index{UART\_RX\_BUFFER\_SIZE@{UART\_RX\_BUFFER\_SIZE}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{UART\_RX\_BUFFER\_SIZE}{UART\_RX\_BUFFER\_SIZE}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_ga5bdd6772c246436bb14377095de79b31} 
+\#define UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE~64}
+
+
+
+Veľkosť kruhového prijímacieho bufferu v bajtoch (mocnina 2). 
+
+Ak veľkosť nevyhovuje potrebám aplikácie, je možné ju zmeniť pridaním prepínača {\ttfamily -\/DUART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE=nn} do Makefile (cez CDEFS). \Hypertarget{group__pfleury__uart_ga05f5d709605c6317c97e4974bec3402a}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!UART\_TX\_BUFFER\_SIZE@{UART\_TX\_BUFFER\_SIZE}}
+\index{UART\_TX\_BUFFER\_SIZE@{UART\_TX\_BUFFER\_SIZE}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{UART\_TX\_BUFFER\_SIZE}{UART\_TX\_BUFFER\_SIZE}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_ga05f5d709605c6317c97e4974bec3402a} 
+\#define UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE~64}
+
+
+
+Veľkosť kruhového vysielacieho bufferu v bajtoch (mocnina 2). 
+
+Ak veľkosť nevyhovuje potrebám aplikácie, je možné ju zmeniť pridaním prepínača {\ttfamily -\/DUART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE=nn} do Makefile (cez CDEFS). 
+
+\label{doc-func-members}
+\Hypertarget{group__pfleury__uart_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{group__pfleury__uart_gaeb1405c641e5bc9b7224018f5e8d90de}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart1\_getc@{uart1\_getc}}
+\index{uart1\_getc@{uart1\_getc}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart1\_getc()}{uart1\_getc()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_gaeb1405c641e5bc9b7224018f5e8d90de} 
+unsigned int uart1\+\_\+getc (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Získa prijatý bajt z prijímacieho bufferu USART1. 
+
+Správa sa rovnako ako \doxylink{group__pfleury__uart_gaefaab30a8338ec46a6be35b99b1b4f09}{uart\+\_\+getc()}, ale pre druhé rozhranie UART (USART1).
+
+\begin{DoxyReturn}{Returns}
+16-\/bitová hodnota so znakom v nižšom bajte a stavovým kódom vo vyššom bajte. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\doxylink{group__pfleury__uart_gaefaab30a8338ec46a6be35b99b1b4f09}{uart\+\_\+getc} 
+\end{DoxySeeAlso}
+\Hypertarget{group__pfleury__uart_ga4db697cb5469fd70e794fa7df73a6d6a}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart1\_init@{uart1\_init}}
+\index{uart1\_init@{uart1\_init}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart1\_init()}{uart1\_init()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_ga4db697cb5469fd70e794fa7df73a6d6a} 
+void uart1\+\_\+init (\begin{DoxyParamCaption}\item[{unsigned int}]{baudrate}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Inicializuje perifériu USART1 (len na vybraných mikrokontroléroch). 
+
+Funkcia nastaví druhé UART/\+USART rozhranie (USART1) podobne ako \doxylink{group__pfleury__uart_gac19a76bb7d446125734a67f9f4b68991}{uart\+\_\+init()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em baudrate} & Hodnota pre UBRR register, vypočítaná cez príslušné makro. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{group__pfleury__uart_gac19a76bb7d446125734a67f9f4b68991}{uart\+\_\+init} 
+\end{DoxySeeAlso}
+\Hypertarget{group__pfleury__uart_gab465f689d197fadfbacc374fc9411154}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart1\_putc@{uart1\_putc}}
+\index{uart1\_putc@{uart1\_putc}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart1\_putc()}{uart1\_putc()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_gab465f689d197fadfbacc374fc9411154} 
+void uart1\+\_\+putc (\begin{DoxyParamCaption}\item[{unsigned char}]{data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Zapíše jeden bajt do vysielacieho bufferu USART1. 
+
+Správa sa rovnako ako \doxylink{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2}{uart\+\_\+putc()}, ale pre druhé rozhranie UART (USART1).
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Bajt, ktorý sa má odoslať cez USART1. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2}{uart\+\_\+putc} 
+\end{DoxySeeAlso}
+\Hypertarget{group__pfleury__uart_ga5568f8f3913b218fd4d0346af78831b2}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart1\_puts@{uart1\_puts}}
+\index{uart1\_puts@{uart1\_puts}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart1\_puts()}{uart1\_puts()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_ga5568f8f3913b218fd4d0346af78831b2} 
+void uart1\+\_\+puts (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Zapíše reťazec z RAM do vysielacieho bufferu USART1. 
+
+Správa sa rovnako ako \doxylink{group__pfleury__uart_gae52facc0a56086a365bb0018160d8d71}{uart\+\_\+puts()}, ale pre druhé rozhranie UART (USART1).
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Nulou ukončený reťazec v RAM, ktorý sa má odoslať cez USART1. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{group__pfleury__uart_gae52facc0a56086a365bb0018160d8d71}{uart\+\_\+puts} 
+\end{DoxySeeAlso}
+\Hypertarget{group__pfleury__uart_ga1e8074d0a2d5922601c5db2f9777ba79}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart1\_puts\_p@{uart1\_puts\_p}}
+\index{uart1\_puts\_p@{uart1\_puts\_p}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart1\_puts\_p()}{uart1\_puts\_p()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_ga1e8074d0a2d5922601c5db2f9777ba79} 
+void uart1\+\_\+puts\+\_\+p (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Zapíše reťazec z programovej pamäte do vysielacieho bufferu USART1. 
+
+Správa sa rovnako ako \doxylink{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f}{uart\+\_\+puts\+\_\+p()}, ale pre druhé rozhranie UART (USART1).
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Ukazovateľ na reťazec v programovej pamäti (PROGMEM). \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f}{uart\+\_\+puts\+\_\+p} 
+\end{DoxySeeAlso}
+\Hypertarget{group__pfleury__uart_gaefaab30a8338ec46a6be35b99b1b4f09}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart\_getc@{uart\_getc}}
+\index{uart\_getc@{uart\_getc}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart\_getc()}{uart\_getc()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_gaefaab30a8338ec46a6be35b99b1b4f09} 
+unsigned int uart\+\_\+getc (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Získa prijatý bajt z prijímacieho kruhového bufferu. 
+
+Funkcia vracia 16-\/bitovú hodnotu, kde\+:
+\begin{DoxyItemize}
+\item v {\bfseries{nižšom bajte}} je prijatý znak,
+\item vo {\bfseries{vyššom bajte}} je stavový kód poslednej chyby prijímača.
+\end{DoxyItemize}
+
+Ak nie sú k dispozícii žiadne dáta, je vrátený kód \doxylink{group__pfleury__uart_ga77ba544d423ff42d400220a05303f268}{UART\+\_\+\+NO\+\_\+\+DATA}.
+
+\begin{DoxyReturn}{Returns}
+16-\/bitová hodnota\+:
+\begin{DoxyItemize}
+\item nižší bajt\+: prijatý znak,
+\item vyšší bajt\+: stav prijímača\+:
+\begin{DoxyItemize}
+\item 0 – prijatie prebehlo bez chyby,
+\item \doxylink{group__pfleury__uart_ga77ba544d423ff42d400220a05303f268}{UART\+\_\+\+NO\+\_\+\+DATA} – nie sú k dispozícii žiadne prijaté dáta,
+\item \doxylink{group__pfleury__uart_ga94758f3dad6864703b7417d3e40f11df}{UART\+\_\+\+BUFFER\+\_\+\+OVERFLOW} – softvérový prijímací buffer pretečie,
+\item \doxylink{group__pfleury__uart_ga3183177e3613d8785d8cc8516931beb6}{UART\+\_\+\+OVERRUN\+\_\+\+ERROR} – hardvérový prijímač UART pretečie (dáta neboli včas prečítané),
+\item \doxylink{group__pfleury__uart_gabcdb1041d763560cd8f8e722370dfd37}{UART\+\_\+\+FRAME\+\_\+\+ERROR} – rámcová chyba (nesprávny formát alebo dĺžka rámca).
+\end{DoxyItemize}
+\end{DoxyItemize}
+\end{DoxyReturn}
+Získa prijatý bajt z prijímacieho kruhového bufferu.
+
+Ak sú dáta k dispozícii, vráti sa 16-\/bitová hodnota, kde\+:
+\begin{DoxyItemize}
+\item nižší bajt obsahuje prijatý znak,
+\item vyšší bajt obsahuje stav prijímača (chybové príznaky).
+\end{DoxyItemize}
+
+Ak nie sú k dispozícii žiadne dáta, vráti sa kód \doxylink{group__pfleury__uart_ga77ba544d423ff42d400220a05303f268}{UART\+\_\+\+NO\+\_\+\+DATA}.
+
+\begin{DoxyReturn}{Returns}
+16-\/bitová hodnota\+:
+\begin{DoxyItemize}
+\item nižší bajt\+: prijatý znak,
+\item vyšší bajt\+: chybový kód alebo 0, ak prijatie prebehlo bez chyby. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+\Hypertarget{group__pfleury__uart_gac19a76bb7d446125734a67f9f4b68991}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart\_init@{uart\_init}}
+\index{uart\_init@{uart\_init}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart\_init()}{uart\_init()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_gac19a76bb7d446125734a67f9f4b68991} 
+void uart\+\_\+init (\begin{DoxyParamCaption}\item[{unsigned int}]{baudrate}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Inicializuje UART a nastaví prenosovú rýchlosť (baudrate). 
+
+Funkcia nastaví UART perifériu podľa parametra {\ttfamily baudrate}. Hodnota parametra sa typicky získa pomocou makra \doxylink{group__pfleury__uart_ga367ff7b5de225ed936a63239ad4adb0b}{UART\+\_\+\+BAUD\+\_\+\+SELECT()} alebo \doxylink{group__pfleury__uart_ga1a02d45130520cb651ab313e69039382}{UART\+\_\+\+BAUD\+\_\+\+SELECT\+\_\+\+DOUBLE\+\_\+\+SPEED()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em baudrate} & Hodnota pre UBRR register, vypočítaná cez príslušné makro.\\
+\hline
+\end{DoxyParams}
+Inicializuje UART a nastaví prenosovú rýchlosť (baudrate).
+
+Funkcia nastaví interné indexy kruhových bufferov, konfiguruje rýchlosť podľa parametra {\ttfamily baudrate} (vypočítaného pomocou makra \doxylink{group__pfleury__uart_ga367ff7b5de225ed936a63239ad4adb0b}{UART\+\_\+\+BAUD\+\_\+\+SELECT()} alebo \doxylink{group__pfleury__uart_ga1a02d45130520cb651ab313e69039382}{UART\+\_\+\+BAUD\+\_\+\+SELECT\+\_\+\+DOUBLE\+\_\+\+SPEED()}) a povolí prijímač, vysielač a prerušenie pri dokončení prijmu.
+
+
+\begin{DoxyParams}{Parameters}
+{\em baudrate} & Hodnota pre UBRR register, získaná cez výpočtové makro. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart\_putc@{uart\_putc}}
+\index{uart\_putc@{uart\_putc}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart\_putc()}{uart\_putc()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2} 
+void uart\+\_\+putc (\begin{DoxyParamCaption}\item[{unsigned char}]{data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Zapíše jeden bajt do vysielacieho kruhového bufferu UART. 
+
+Funkcia vloží bajt {\ttfamily data} do TX bufferu. Skutočné odoslanie prebieha na pozadí pomocou prerušení. Ak je buffer plný, funkcia môže blokovať, kým sa neuvoľní miesto.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Bajt, ktorý sa má odoslať cez UART.\\
+\hline
+\end{DoxyParams}
+Zapíše jeden bajt do vysielacieho kruhového bufferu UART.
+
+Funkcia čaká, kým je vo vysielacom buffere voľné miesto, následne uloží bajt {\ttfamily data} a povolí prerušenie UDRE, ktoré spustí odosielanie.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Bajt, ktorý sa má odoslať cez UART0. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__pfleury__uart_gae52facc0a56086a365bb0018160d8d71}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart\_puts@{uart\_puts}}
+\index{uart\_puts@{uart\_puts}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart\_puts()}{uart\_puts()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_gae52facc0a56086a365bb0018160d8d71} 
+void uart\+\_\+puts (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Zapíše textový reťazec z RAM do vysielacieho bufferu UART. 
+
+Funkcia prechádza znakovým reťazcom {\ttfamily s}, ukladá jeho znaky do TX kruhového bufferu a odosielanie prebieha postupne v prerušení. Ak sa celý reťazec nezmestí naraz, funkcia môže blokovať, pokým sa v buffere neuvoľní miesto.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Nulou ukončený reťazec v RAM, ktorý sa má odoslať.\\
+\hline
+\end{DoxyParams}
+Zapíše textový reťazec z RAM do vysielacieho bufferu UART.
+
+Reťazec {\ttfamily s} sa postupne prechádza a každý znak sa odošle cez funkciu \doxylink{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2}{uart\+\_\+putc()}. Odosielanie samotné prebieha na pozadí pomocou prerušení, funkcia sa stará len o napĺňanie TX buffera.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Ukazovateľ na nulou ukončený reťazec v RAM. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f}\index{UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}!uart\_puts\_p@{uart\_puts\_p}}
+\index{uart\_puts\_p@{uart\_puts\_p}!UART knižnica $<$uart.h$>$@{UART knižnica $<$uart.h$>$}}
+\doxysubsubsection{\texorpdfstring{uart\_puts\_p()}{uart\_puts\_p()}}
+{\footnotesize\ttfamily \label{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f} 
+void uart\+\_\+puts\+\_\+p (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{progmem\+\_\+s}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Zapíše textový reťazec z programovej pamäte (Flash) do vysielacieho bufferu UART. 
+
+Reťazec je uložený v programovej pamäti (PROGMEM). Funkcia postupne prenáša znaky do TX kruhového bufferu a odosielanie vykonáva UART pomocou prerušení. Ak sa celý reťazec nezmestí naraz, funkcia môže blokovať, pokým sa v buffere neuvoľní miesto.
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Ukazovateľ na reťazec v programovej pamäti (PROGMEM).\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\doxylink{group__pfleury__uart_gae52facc0a56086a365bb0018160d8d71}{uart\+\_\+puts}
+\end{DoxySeeAlso}
+Zapíše textový reťazec z programovej pamäte (Flash) do vysielacieho bufferu UART.
+
+Reťazec {\ttfamily progmem\+\_\+s} je uložený vo Flash pamäti. Funkcia ho postupne číta pomocou \#pgm\+\_\+read\+\_\+byte() a jednotlivé znaky odosiela cez \doxylink{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2}{uart\+\_\+putc()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em progmem\+\_\+s} & Ukazovateľ na reťazec v programovej pamäti. \\
+\hline
+\end{DoxyParams}

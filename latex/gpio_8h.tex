@@ -1,0 +1,20 @@
+\doxysection{gpio.\+h File Reference}
+\hypertarget{gpio_8h}{}\label{gpio_8h}\index{gpio.h@{gpio.h}}
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__fryza__gpio_ga67245684611d6a62494cd100c9731f8e}{gpio\+\_\+mode\+\_\+output}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Nastaví jeden pin ako výstupný. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__gpio_ga92d8842507a7a60233e172c7665cd448}{gpio\+\_\+mode\+\_\+input\+\_\+pullup}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Nastaví jeden pin ako vstupný s povoleným interným pull-\/up rezistorom. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__gpio_ga8f9f18909c674d02f76e514221b505b2}{gpio\+\_\+write\+\_\+low}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Zapíše na daný pin logickú úroveň LOW. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__gpio_ga7bb32a27f42d2d93b8cd3e48597674ad}{gpio\+\_\+write\+\_\+high}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Zapíše na daný pin logickú úroveň HIGH. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__gpio_gab48bdf6775e5ebb50f349c5182238231}{gpio\+\_\+read}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Prečíta logickú hodnotu zo vstupného pinu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__gpio_ga2c33ba6b22fba1079e6665bc134919b9}{gpio\+\_\+mode\+\_\+input\+\_\+nopull}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Nastaví pin ako vstupný bez interného pull-\/upu. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__gpio_ga898c950bb2b5b6b1c158cf7ad18ea84e}{gpio\+\_\+toggle}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}reg, uint8\+\_\+t pin)
+\begin{DoxyCompactList}\small\item\em Preklopí (toggle) logickú hodnotu na danom pine. \end{DoxyCompactList}\end{DoxyCompactItemize}

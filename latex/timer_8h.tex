@@ -1,0 +1,65 @@
+\doxysection{timer.\+h File Reference}
+\hypertarget{timer_8h}{}\label{timer_8h}\index{timer.h@{timer.h}}
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{Indent}\textbf{ Makrá pre 16-\/bitový Timer/\+Counter1}\par
+{\em \begin{DoxyNote}{Note}
+Čas pretečenia\+: $ t_{OVF} = \frac{1}{F_{CPU}} \cdot \text{prescaler} \cdot 2^{16} $, kde F\+\_\+\+CPU = 16 MHz. 
+\end{DoxyNote}
+}\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gac7fe8fa6e7d978a01c857dc32c1cdd44}{tim1\+\_\+stop}}()
+\begin{DoxyCompactList}\small\item\em Zastaví Timer1 (prescaler = 0, časovač stojí). \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gacd637b282a0cd5fec9bbaaa0d50d1de4}{tim1\+\_\+ovf\+\_\+4ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každé 4 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gae356989c9434cd5797dee7f0c23f7104}{tim1\+\_\+ovf\+\_\+33ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každých 33 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gadd51272a969a158bb26b641b036f7eb1}{tim1\+\_\+ovf\+\_\+262ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každých 262 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaf81b3545a8171e699a18235450ba565b}{tim1\+\_\+ovf\+\_\+1sec}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každú 1 sekundu. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga8e4257a7c3525380b262b23e84fddf25}{tim1\+\_\+ovf\+\_\+4sec}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer1 tak, aby pretečenie nastalo približne každé 4 sekundy. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga85b064ac152cdf8ea01f837276f384bc}{tim1\+\_\+ovf\+\_\+enable}}()
+\begin{DoxyCompactList}\small\item\em Povolenie prerušenia pri pretečení Timer1. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga10e5de82299abd3952a37c50fa5bda90}{tim1\+\_\+ovf\+\_\+disable}}()
+\begin{DoxyCompactList}\small\item\em Zakázanie prerušenia pri pretečení Timer1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Makrá pre 8-\/bitový Timer/\+Counter0}\par
+{\em \begin{DoxyNote}{Note}
+Čas pretečenia\+: $ t_{OVF} = \frac{1}{F_{CPU}} \cdot \text{prescaler} \cdot 2^{8} $, kde F\+\_\+\+CPU = 16 MHz. 
+\end{DoxyNote}
+}\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga6484f15611180337aa61403326f924d1}{tim0\+\_\+stop}}()
+\begin{DoxyCompactList}\small\item\em Zastaví Timer0 (prescaler = 0, časovač stojí). \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga2c8afeb802c5d22bfd00c14e9a2f8215}{tim0\+\_\+ovf\+\_\+16us}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každých 16 µs. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaa46b7e021525c70c9ff9673195993c76}{tim0\+\_\+ovf\+\_\+128us}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každých 128 µs. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gab94c86f5efc59e34734d22b4b7c6f776}{tim0\+\_\+ovf\+\_\+1ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každých 1 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaee5866da7aea112e8f08efe088604711}{tim0\+\_\+ovf\+\_\+4ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každé 4 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga22c9a7162498d32fd58bc649a136045f}{tim0\+\_\+ovf\+\_\+16ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer0 tak, aby pretečenie nastalo približne každých 16 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga385ca3024038fdac8303511287bd1222}{tim0\+\_\+ovf\+\_\+enable}}()
+\begin{DoxyCompactList}\small\item\em Povolenie prerušenia pri pretečení Timer0. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gad3b76ead823ef633a9afd01050387cdd}{tim0\+\_\+ovf\+\_\+disable}}()
+\begin{DoxyCompactList}\small\item\em Zakázanie prerušenia pri pretečení Timer0. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}\textbf{ Makrá pre 8-\/bitový Timer/\+Counter2}\par
+{\em \begin{DoxyNote}{Note}
+Čas pretečenia\+: $ t_{OVF} = \frac{1}{F_{CPU}} \cdot \text{prescaler} \cdot 2^{8} $, kde F\+\_\+\+CPU = 16 MHz. 
+\end{DoxyNote}
+}\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaaf7091ca0c4c12b4049b2ef5b305fa59}{tim2\+\_\+stop}}()
+\begin{DoxyCompactList}\small\item\em Zastaví Timer2 (prescaler = 0, časovač stojí). \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaf6b0c2da350233bf541988387e0ac4af}{tim2\+\_\+ovf\+\_\+16ms}}()
+\begin{DoxyCompactList}\small\item\em Nastaví Timer2 tak, aby pretečenie nastalo približne každých 16 ms. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_gaab0c29e35e8532596fed18342d7d505c}{tim2\+\_\+ovf\+\_\+enable}}()
+\begin{DoxyCompactList}\small\item\em Povolenie prerušenia pri pretečení Timer2. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__timer_ga1f7e43561be4d016c806ef42aa2c89b5}{tim2\+\_\+ovf\+\_\+disable}}()
+\begin{DoxyCompactList}\small\item\em Zakázanie prerušenia pri pretečení Timer2. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}

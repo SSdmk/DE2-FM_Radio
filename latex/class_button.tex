@@ -1,0 +1,137 @@
+\doxysection{Button Class Reference}
+\hypertarget{class_button}{}\label{class_button}\index{Button@{Button}}
+
+
+Trieda na obsluhu jedného tlačidla s debouncingom a detekciou dĺžky stlačenia.  
+
+
+
+
+{\ttfamily \#include $<$Button.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_button_afa0cc454e253146f65fdc9f4bc5e59be}{Button}} (volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}ddr, volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}pin\+Reg, uint8\+\_\+t bit)
+\begin{DoxyCompactList}\small\item\em Konštruktor tlačidla. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_button_a666adf00bc92a8b264758abfa655a6a4}{begin}} ()
+\begin{DoxyCompactList}\small\item\em Inicializácia pinu tlačidla. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{Button\+Event}} \mbox{\hyperlink{class_button_ab31f5a23eae0b5cdc8e76dddf13a7499}{check\+Event}} ()
+\begin{DoxyCompactList}\small\item\em Hlavná funkcia na spracovanie stavu tlačidla. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Trieda na obsluhu jedného tlačidla s debouncingom a detekciou dĺžky stlačenia. 
+
+Trieda zapuzdruje\+:
+\begin{DoxyItemize}
+\item informácie o konkrétnom pine (DDR, PIN register, bit),
+\item vnútorné premenné pre debouncing (stabilný stav, posledný nestabilný stav, čas poslednej zmeny),
+\item časovanie stlačenia (začiatok stlačenia, príznak dlhého stlačenia).
+\end{DoxyItemize}
+
+Metóda \doxylink{class_button_ab31f5a23eae0b5cdc8e76dddf13a7499}{Button\+::check\+Event()} sa volá periodicky v hlavnej slučke a podľa aktuálneho stavu vráti jednu z udalostí \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{Button\+Event}. 
+
+\label{doc-constructors}
+\Hypertarget{class_button_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_button_afa0cc454e253146f65fdc9f4bc5e59be}\index{Button@{Button}!Button@{Button}}
+\index{Button@{Button}!Button@{Button}}
+\doxysubsubsection{\texorpdfstring{Button()}{Button()}}
+{\footnotesize\ttfamily \label{class_button_afa0cc454e253146f65fdc9f4bc5e59be} 
+Button\+::\+Button (\begin{DoxyParamCaption}\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{ddr}{, }\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{pin\+Reg}{, }\item[{uint8\+\_\+t}]{bit}{}\end{DoxyParamCaption})}
+
+
+
+Konštruktor tlačidla. 
+
+Uloží ukazovatele na registre DDR a PIN, ako aj číslo bitu pinu. Samotná inicializácia smeru pinu sa vykonáva v \doxylink{class_button_a666adf00bc92a8b264758abfa655a6a4}{Button\+::begin()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ddr} & Adresa registra smeru portu (DDR), napr. \&DDRD \\
+\hline
+{\em pin\+Reg} & Adresa vstupného registra portu (PINx), napr. \&PIND \\
+\hline
+{\em bit} & Číslo pinu v intervale 0 až 7\\
+\hline
+\end{DoxyParams}
+Uloží adresy registrov a bit konkrétneho pinu a nastaví východzie hodnoty pre debouncing a časovanie stlačenia.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ddr} & Adresa registra smeru portu (DDR), napr. \&DDRD \\
+\hline
+{\em pin\+Reg} & Adresa vstupného registra portu (PINx), napr. \&PIND \\
+\hline
+{\em bit} & Číslo pinu v intervale 0 až 7 \\
+\hline
+\end{DoxyParams}
+
+
+\label{doc-func-members}
+\Hypertarget{class_button_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_button_a666adf00bc92a8b264758abfa655a6a4}\index{Button@{Button}!begin@{begin}}
+\index{begin@{begin}!Button@{Button}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily \label{class_button_a666adf00bc92a8b264758abfa655a6a4} 
+void Button\+::begin (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializácia pinu tlačidla. 
+
+Nastaví pin ako vstup s interným pull-\/up rezistorom pomocou \doxylink{group__fryza__gpio_ga92d8842507a7a60233e172c7665cd448}{gpio\+\_\+mode\+\_\+input\+\_\+pullup}. Zároveň inicializuje vnútorné premenné pre debouncing a časovanie stlačení.
+
+Nastaví pin ako vstup s interným pull-\/up rezistorom a načíta počiatočný stabilný stav vstupu. \Hypertarget{class_button_ab31f5a23eae0b5cdc8e76dddf13a7499}\index{Button@{Button}!checkEvent@{checkEvent}}
+\index{checkEvent@{checkEvent}!Button@{Button}}
+\doxysubsubsection{\texorpdfstring{checkEvent()}{checkEvent()}}
+{\footnotesize\ttfamily \label{class_button_ab31f5a23eae0b5cdc8e76dddf13a7499} 
+\mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{Button\+Event}} Button\+::check\+Event (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Hlavná funkcia na spracovanie stavu tlačidla. 
+
+Spracovanie stavu tlačidla, debouncing a detekcia udalostí.
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item vykoná debouncing vstupného signálu,
+\item sleduje dĺžku stlačenia,
+\item podľa dĺžky stlačenia vracia\+:
+\begin{DoxyItemize}
+\item \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba90ee54fe2a8b4aacdd0f17d685f5cf7b}{BTN\+\_\+\+EVENT\+\_\+\+SHORT} – krátke stlačenie,
+\item \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba4c030c8a536c4361a9027ed1a9b33a44}{BTN\+\_\+\+EVENT\+\_\+\+LONG} – dlhé stlačenie,
+\item \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba7b71507b179d796e8483189782349b15}{BTN\+\_\+\+EVENT\+\_\+\+NONE} – žiadna nová udalosť.
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+Funkciu je potrebné volať pravidelne v hlavnej nekonečnej slučke.
+
+\begin{DoxyReturn}{Returns}
+Udalosť typu \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{Button\+Event} podľa aktuálneho stavu tlačidla.
+\end{DoxyReturn}
+Funkciu je potrebné pravidelne volať v hlavnej slučke. Interné kroky\+:
+\begin{DoxyItemize}
+\item vykoná softvérový debouncing (cca 50 ms),
+\item sleduje dĺžku stlačenia,
+\item pri uvoľnení tlačidla môže vrátiť krátke stlačenie,
+\item pri dlhom držaní vráti dlhé stlačenie (len raz).
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Typ udalosti podľa aktuálneho stavu tlačidla\+:
+\begin{DoxyItemize}
+\item \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba90ee54fe2a8b4aacdd0f17d685f5cf7b}{BTN\+\_\+\+EVENT\+\_\+\+SHORT} – krátke stlačenie (\texorpdfstring{$<$}{<} 2500 ms),
+\item \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba4c030c8a536c4361a9027ed1a9b33a44}{BTN\+\_\+\+EVENT\+\_\+\+LONG} – dlhé stlačenie (\texorpdfstring{$>$}{>} 3000 ms),
+\item \doxylink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba7b71507b179d796e8483189782349b15}{BTN\+\_\+\+EVENT\+\_\+\+NONE} – žiadna nová udalosť. 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_button_8h}{Button.\+h}}\item 
+Button.\+cpp\end{DoxyCompactItemize}

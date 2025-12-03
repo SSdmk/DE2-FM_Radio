@@ -1,0 +1,236 @@
+\doxysection{button\+\_\+function.\+h File Reference}
+\hypertarget{button__function_8h}{}\label{button__function_8h}\index{button\_function.h@{button\_function.h}}
+
+
+Deklarácie UI udalostí a rozhrania pre obsluhu tlačidiel a enkódera rádia.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t}} \{ \newline
+\mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3acca80441a89a48dec7f4c7d7791c37ba}{UI\+\_\+\+EVENT\+\_\+\+NONE}} = 0
+, \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a62e15cbdcfc8d7f8f94417e787e01e88}{UI\+\_\+\+BTN\+\_\+\+LEFT}}
+, \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3addae4aa1fcb1020fa7787856b901d317}{UI\+\_\+\+BTN\+\_\+\+RIGHT}}
+, \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3ace1253db2e3bc034d8ecbace51b7d4d4}{UI\+\_\+\+BTN\+\_\+\+UP\+\_\+\+SHORT}}
+, \newline
+\mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a9e2c200af1c0e57e32bd5a883bd9c37d}{UI\+\_\+\+BTN\+\_\+\+UP\+\_\+\+LONG}}
+, \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3ac9dc45979f82c991e8fa4061951ac666}{UI\+\_\+\+BTN\+\_\+\+DOWN\+\_\+\+SHORT}}
+, \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a1db2239c058d70a7f8008c867f8c537b}{UI\+\_\+\+BTN\+\_\+\+DOWN\+\_\+\+LONG}}
+, \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3afe7efbe6fd319ac0ef8e678b516e559f}{UI\+\_\+\+ENC\+\_\+\+STEP\+\_\+\+CW}}
+, \newline
+\mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3aaaa13dd8dec7a0f7b2393705bb2e39d3}{UI\+\_\+\+ENC\+\_\+\+STEP\+\_\+\+CCW}}
+, \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a748caf37549b8201f9eb848a680baa43}{UI\+\_\+\+ENC\+\_\+\+CLICK}}
+ \}
+\begin{DoxyCompactList}\small\item\em Výčtový typ reprezentujúci všetky možné udalosti z UI. \end{DoxyCompactList}\item 
+enum \mbox{\hyperlink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3a}{radio\+\_\+mode\+\_\+t}} \{ \mbox{\hyperlink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc}{RADIO\+\_\+\+MODE\+\_\+\+VOLUME}} = 0
+, \mbox{\hyperlink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa7504508d74a219515a3af27983750d7f}{RADIO\+\_\+\+MODE\+\_\+\+TUNE}}
+ \}
+\begin{DoxyCompactList}\small\item\em Režim, v ktorom aktuálne pracuje rotačný enkóder. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{button__function_8h_a9bb915e59a2e1c88e40cb592e0fc0750}{radio\+\_\+ui\+\_\+is\+\_\+on}} (void)
+\begin{DoxyCompactList}\small\item\em Zistí, či je rádio podľa UI logiky aktuálne zapnuté. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{button__function_8h_a9c6c9f481691a3ce294327c24397b5fe}{radio\+\_\+ui\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializácia UI vrstvy rádia. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3a}{radio\+\_\+mode\+\_\+t}} \mbox{\hyperlink{button__function_8h_a31d1166b6bd1053660eb90098e8e3a34}{radio\+\_\+ui\+\_\+get\+\_\+mode}} (void)
+\begin{DoxyCompactList}\small\item\em Získa aktuálny režim enkódera. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{button__function_8h_a33828acc326b9494c9a4b0c7446f3b72}{radio\+\_\+ui\+\_\+handle\+\_\+event}} (\mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t}} ev)
+\begin{DoxyCompactList}\small\item\em Spracuje jednu udalosť z tlačidiel alebo enkódera. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Deklarácie UI udalostí a rozhrania pre obsluhu tlačidiel a enkódera rádia. 
+
+Tento modul definuje\+:
+\begin{DoxyItemize}
+\item typy udalostí z používateľského rozhrania (tlačidlá, enkóder),
+\item režimy práce enkódera (hlasitosť, ladenie),
+\item API funkcie na inicializáciu a spracovanie udalostí,
+\item pomocnú funkciu na zistenie ON/\+OFF stavu rádia z pohľadu UI vrstvy. 
+\end{DoxyItemize}
+
+\label{doc-enum-members}
+\Hypertarget{button__function_8h_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3a}\index{button\_function.h@{button\_function.h}!radio\_mode\_t@{radio\_mode\_t}}
+\index{radio\_mode\_t@{radio\_mode\_t}!button\_function.h@{button\_function.h}}
+\doxysubsubsection{\texorpdfstring{radio\_mode\_t}{radio\_mode\_t}}
+{\footnotesize\ttfamily \label{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3a} 
+enum \mbox{\hyperlink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3a}{radio\+\_\+mode\+\_\+t}}}
+
+
+
+Režim, v ktorom aktuálne pracuje rotačný enkóder. 
+
+
+\begin{DoxyItemize}
+\item \doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc}{RADIO\+\_\+\+MODE\+\_\+\+VOLUME} – enkóder mení hlasitosť rádia,
+\item \doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa7504508d74a219515a3af27983750d7f}{RADIO\+\_\+\+MODE\+\_\+\+TUNE} – enkóder mení naladenú frekvenciu. 
+\end{DoxyItemize}\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RADIO\_MODE\_VOLUME@{RADIO\_MODE\_VOLUME}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!RADIO\_MODE\_VOLUME@{RADIO\_MODE\_VOLUME}}}\Hypertarget{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc}\label{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc} 
+RADIO\+\_\+\+MODE\+\_\+\+VOLUME&Enkóder ovláda hlasitosť. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{RADIO\_MODE\_TUNE@{RADIO\_MODE\_TUNE}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!RADIO\_MODE\_TUNE@{RADIO\_MODE\_TUNE}}}\Hypertarget{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa7504508d74a219515a3af27983750d7f}\label{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa7504508d74a219515a3af27983750d7f} 
+RADIO\+\_\+\+MODE\+\_\+\+TUNE&Enkóder ovláda naladený kanál/frekvenciu. \\
+\hline
+
+\end{DoxyEnumFields}
+\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}\index{button\_function.h@{button\_function.h}!ui\_event\_t@{ui\_event\_t}}
+\index{ui\_event\_t@{ui\_event\_t}!button\_function.h@{button\_function.h}}
+\doxysubsubsection{\texorpdfstring{ui\_event\_t}{ui\_event\_t}}
+{\footnotesize\ttfamily \label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3} 
+enum \mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t}}}
+
+
+
+Výčtový typ reprezentujúci všetky možné udalosti z UI. 
+
+Zastrešuje udalosti z\+:
+\begin{DoxyItemize}
+\item štyroch tlačidiel (LEFT, RIGHT, UP, DOWN) s rozlíšením krátkeho/dlhého stlačenia,
+\item rotačného enkódera (kroky CW/\+CCW + klik). 
+\end{DoxyItemize}\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_EVENT\_NONE@{UI\_EVENT\_NONE}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_EVENT\_NONE@{UI\_EVENT\_NONE}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3acca80441a89a48dec7f4c7d7791c37ba}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3acca80441a89a48dec7f4c7d7791c37ba} 
+UI\+\_\+\+EVENT\+\_\+\+NONE&Žiadna udalosť. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_BTN\_LEFT@{UI\_BTN\_LEFT}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_BTN\_LEFT@{UI\_BTN\_LEFT}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a62e15cbdcfc8d7f8f94417e787e01e88}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a62e15cbdcfc8d7f8f94417e787e01e88} 
+UI\+\_\+\+BTN\+\_\+\+LEFT&Krátke stlačenie ľavého tlačidla. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_BTN\_RIGHT@{UI\_BTN\_RIGHT}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_BTN\_RIGHT@{UI\_BTN\_RIGHT}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3addae4aa1fcb1020fa7787856b901d317}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3addae4aa1fcb1020fa7787856b901d317} 
+UI\+\_\+\+BTN\+\_\+\+RIGHT&Krátke stlačenie pravého tlačidla. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_BTN\_UP\_SHORT@{UI\_BTN\_UP\_SHORT}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_BTN\_UP\_SHORT@{UI\_BTN\_UP\_SHORT}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3ace1253db2e3bc034d8ecbace51b7d4d4}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3ace1253db2e3bc034d8ecbace51b7d4d4} 
+UI\+\_\+\+BTN\+\_\+\+UP\+\_\+\+SHORT&Krátke stlačenie horného tlačidla. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_BTN\_UP\_LONG@{UI\_BTN\_UP\_LONG}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_BTN\_UP\_LONG@{UI\_BTN\_UP\_LONG}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a9e2c200af1c0e57e32bd5a883bd9c37d}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a9e2c200af1c0e57e32bd5a883bd9c37d} 
+UI\+\_\+\+BTN\+\_\+\+UP\+\_\+\+LONG&Dlhé stlačenie horného tlačidla. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_BTN\_DOWN\_SHORT@{UI\_BTN\_DOWN\_SHORT}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_BTN\_DOWN\_SHORT@{UI\_BTN\_DOWN\_SHORT}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3ac9dc45979f82c991e8fa4061951ac666}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3ac9dc45979f82c991e8fa4061951ac666} 
+UI\+\_\+\+BTN\+\_\+\+DOWN\+\_\+\+SHORT&Krátke stlačenie dolného tlačidla. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_BTN\_DOWN\_LONG@{UI\_BTN\_DOWN\_LONG}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_BTN\_DOWN\_LONG@{UI\_BTN\_DOWN\_LONG}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a1db2239c058d70a7f8008c867f8c537b}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a1db2239c058d70a7f8008c867f8c537b} 
+UI\+\_\+\+BTN\+\_\+\+DOWN\+\_\+\+LONG&Dlhé stlačenie dolného tlačidla. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_ENC\_STEP\_CW@{UI\_ENC\_STEP\_CW}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_ENC\_STEP\_CW@{UI\_ENC\_STEP\_CW}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3afe7efbe6fd319ac0ef8e678b516e559f}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3afe7efbe6fd319ac0ef8e678b516e559f} 
+UI\+\_\+\+ENC\+\_\+\+STEP\+\_\+\+CW&Enkóder otočený doprava (clockwise). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_ENC\_STEP\_CCW@{UI\_ENC\_STEP\_CCW}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_ENC\_STEP\_CCW@{UI\_ENC\_STEP\_CCW}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3aaaa13dd8dec7a0f7b2393705bb2e39d3}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3aaaa13dd8dec7a0f7b2393705bb2e39d3} 
+UI\+\_\+\+ENC\+\_\+\+STEP\+\_\+\+CCW&Enkóder otočený doľava (counter-\/clockwise). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UI\_ENC\_CLICK@{UI\_ENC\_CLICK}!button\_function.h@{button\_function.h}}\index{button\_function.h@{button\_function.h}!UI\_ENC\_CLICK@{UI\_ENC\_CLICK}}}\Hypertarget{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a748caf37549b8201f9eb848a680baa43}\label{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a748caf37549b8201f9eb848a680baa43} 
+UI\+\_\+\+ENC\+\_\+\+CLICK&Krátke stlačenie tlačidla enkódera. \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\label{doc-func-members}
+\Hypertarget{button__function_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{button__function_8h_a31d1166b6bd1053660eb90098e8e3a34}\index{button\_function.h@{button\_function.h}!radio\_ui\_get\_mode@{radio\_ui\_get\_mode}}
+\index{radio\_ui\_get\_mode@{radio\_ui\_get\_mode}!button\_function.h@{button\_function.h}}
+\doxysubsubsection{\texorpdfstring{radio\_ui\_get\_mode()}{radio\_ui\_get\_mode()}}
+{\footnotesize\ttfamily \label{button__function_8h_a31d1166b6bd1053660eb90098e8e3a34} 
+\mbox{\hyperlink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3a}{radio\+\_\+mode\+\_\+t}} radio\+\_\+ui\+\_\+get\+\_\+mode (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Získa aktuálny režim enkódera. 
+
+\begin{DoxyReturn}{Returns}
+Aktuálny režim enkódera, napr. \doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc}{RADIO\+\_\+\+MODE\+\_\+\+VOLUME} alebo \doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa7504508d74a219515a3af27983750d7f}{RADIO\+\_\+\+MODE\+\_\+\+TUNE}.
+\end{DoxyReturn}
+Získa aktuálny režim enkódera.
+
+\begin{DoxyReturn}{Returns}
+Aktuálny režim enkódera (\doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc}{RADIO\+\_\+\+MODE\+\_\+\+VOLUME} alebo \doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa7504508d74a219515a3af27983750d7f}{RADIO\+\_\+\+MODE\+\_\+\+TUNE}). 
+\end{DoxyReturn}
+\Hypertarget{button__function_8h_a33828acc326b9494c9a4b0c7446f3b72}\index{button\_function.h@{button\_function.h}!radio\_ui\_handle\_event@{radio\_ui\_handle\_event}}
+\index{radio\_ui\_handle\_event@{radio\_ui\_handle\_event}!button\_function.h@{button\_function.h}}
+\doxysubsubsection{\texorpdfstring{radio\_ui\_handle\_event()}{radio\_ui\_handle\_event()}}
+{\footnotesize\ttfamily \label{button__function_8h_a33828acc326b9494c9a4b0c7446f3b72} 
+void radio\+\_\+ui\+\_\+handle\+\_\+event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t}}}]{ev}{}\end{DoxyParamCaption})}
+
+
+
+Spracuje jednu udalosť z tlačidiel alebo enkódera. 
+
+Túto funkciu volaj vždy, keď vstupná vrstva (Button/\+Rotary\+Encoder) deteguje niektorý z typov \doxylink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t} a chceš ho premietnuť do akcie v UI (zmena hlasitosti, ladenia, prepínanie režimov, mute, power on/off a pod.).
+
+Typické použitie v hlavnej slučke\+:
+\begin{DoxyItemize}
+\item prečítať stav tlačidiel a enkódera,
+\item preložiť ho na \doxylink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t},
+\item odovzdať sem na spracovanie.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em ev} & Udalosť z používateľského rozhrania, ktorú chceš spracovať.\\
+\hline
+\end{DoxyParams}
+Spracuje jednu udalosť z tlačidiel alebo enkódera.
+
+Podľa hodnoty {\ttfamily ev} vykoná\+:
+\begin{DoxyItemize}
+\item krok seeku hore/dole (ľavé/pravé tlačidlo),
+\item naladenie/uloženie obľúbenej frekvencie (horné tlačidlo),
+\item prepnutie mute, resp. zapnutie/vypnutie rádia (dolné tlačidlo),
+\item zmenu hlasitosti alebo frekvencie (otáčanie enkódera),
+\item prepnutie režimu enkódera VOLUME/\+TUNE (klik na enkóder).
+\end{DoxyItemize}
+
+Funkcia predstavuje čistú UI logiku nad globálnym objektom {\ttfamily \doxylink{button__function_8cpp_ac2458fa75b330bf16e157ea7aa6102f1}{radio}} (\doxylink{class_si4703}{Si4703} tuner) a OLED displejom.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ev} & Udalosť prijatá z vrstvy vstupu (tlačidlá/enkóder). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{button__function_8h_a9c6c9f481691a3ce294327c24397b5fe}\index{button\_function.h@{button\_function.h}!radio\_ui\_init@{radio\_ui\_init}}
+\index{radio\_ui\_init@{radio\_ui\_init}!button\_function.h@{button\_function.h}}
+\doxysubsubsection{\texorpdfstring{radio\_ui\_init()}{radio\_ui\_init()}}
+{\footnotesize\ttfamily \label{button__function_8h_a9c6c9f481691a3ce294327c24397b5fe} 
+void radio\+\_\+ui\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializácia UI vrstvy rádia. 
+
+Zavolaj raz v {\ttfamily \doxylink{main_8cpp_a840291bc02cba5474a4cb46a9b9566fe}{main()}} po inicializácii rádia (a prípadne ďalších periférií), aby sa pripravili interné štruktúry pre obsluhu tlačidiel a enkódera (prednastavenie režimu, defaultný stav ON/\+OFF a pod.).
+
+Inicializácia UI vrstvy rádia.
+
+Nastaví predvolený režim enkódera na \doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc}{RADIO\+\_\+\+MODE\+\_\+\+VOLUME} a označí rádio ako zapnuté (predpokladá sa, že v {\ttfamily setup()} bolo zavolané {\ttfamily radio.\+start()} alebo ekvivalentná inicializácia tunera). \Hypertarget{button__function_8h_a9bb915e59a2e1c88e40cb592e0fc0750}\index{button\_function.h@{button\_function.h}!radio\_ui\_is\_on@{radio\_ui\_is\_on}}
+\index{radio\_ui\_is\_on@{radio\_ui\_is\_on}!button\_function.h@{button\_function.h}}
+\doxysubsubsection{\texorpdfstring{radio\_ui\_is\_on()}{radio\_ui\_is\_on()}}
+{\footnotesize\ttfamily \label{button__function_8h_a9bb915e59a2e1c88e40cb592e0fc0750} 
+bool radio\+\_\+ui\+\_\+is\+\_\+on (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zistí, či je rádio podľa UI logiky aktuálne zapnuté. 
+
+Funkcia nečítá priamo HW stav, ale vracia vnútorný stav, ktorý udržiava UI vrstva (napr. po volaní {\ttfamily radio.\+power\+Up()} / {\ttfamily radio.\+power\+Down()} cez \doxylink{button__function_8cpp_a33828acc326b9494c9a4b0c7446f3b72}{radio\+\_\+ui\+\_\+handle\+\_\+event}).
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} ak je rádio v stave ON, {\ttfamily false} ak je rádio vypnuté (power\+Down).
+\end{DoxyReturn}
+Funkcia vracia vnútorný stav s\+\_\+radio\+\_\+on, ktorý sa mení najmä v rámci \doxylink{button__function_8cpp_a33828acc326b9494c9a4b0c7446f3b72}{radio\+\_\+ui\+\_\+handle\+\_\+event} pri udalosti \doxylink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a1db2239c058d70a7f8008c867f8c537b}{UI\+\_\+\+BTN\+\_\+\+DOWN\+\_\+\+LONG}.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} ak je rádio ON, {\ttfamily false} ak je vypnuté (po {\ttfamily radio.\+power\+Down()}). 
+\end{DoxyReturn}

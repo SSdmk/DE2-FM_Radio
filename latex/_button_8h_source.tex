@@ -1,0 +1,47 @@
+\doxysection{Button.\+h}
+\hypertarget{_button_8h_source}{}\label{_button_8h_source}\mbox{\hyperlink{_button_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ BUTTON\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ BUTTON\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{gpio_8h}{gpio.h}}"{}}\ }
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{ButtonEvent}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba7b71507b179d796e8483189782349b15}{BTN\_EVENT\_NONE}},\ \ \ }
+\DoxyCodeLine{00024\ \ \ \ \ \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba90ee54fe2a8b4aacdd0f17d685f5cf7b}{BTN\_EVENT\_SHORT}},\ \ }
+\DoxyCodeLine{00025\ \ \ \ \ \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0dba4c030c8a536c4361a9027ed1a9b33a44}{BTN\_EVENT\_LONG}}\ \ \ \ }
+\DoxyCodeLine{00026\ \};}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_button_afa0cc454e253146f65fdc9f4bc5e59be}{Button}}\ \{}
+\DoxyCodeLine{00040\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *\_ddr;}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *\_pinReg;}
+\DoxyCodeLine{00046\ \ \ \ \ uint8\_t\ \_bit;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00053\ \ \ \ \ uint8\_t\ \_stableState;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00060\ \ \ \ \ uint8\_t\ \_lastFlickerableState;}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \_lastDebounceTime;}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \_pressStartTime;}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_isPressed;}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_longPressReported;}
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{class_button_afa0cc454e253146f65fdc9f4bc5e59be}{Button}}(\textcolor{keyword}{volatile}\ uint8\_t\ *ddr,\ \textcolor{keyword}{volatile}\ uint8\_t\ *pinReg,\ uint8\_t\ bit);}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_button_a666adf00bc92a8b264758abfa655a6a4}{begin}}();}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00131\ \ \ \ \ \mbox{\hyperlink{_button_8h_a0c77398f416844d1f79e0a06ff20d0db}{ButtonEvent}}\ \mbox{\hyperlink{class_button_ab31f5a23eae0b5cdc8e76dddf13a7499}{checkEvent}}();}
+\DoxyCodeLine{00132\ \};}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00142\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{_button_8h_a77fdf24910de9db4719daced3b996551}{timer\_millis}}();\ }
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

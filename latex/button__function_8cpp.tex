@@ -1,0 +1,116 @@
+\doxysection{button\+\_\+function.\+cpp File Reference}
+\hypertarget{button__function_8cpp}{}\label{button__function_8cpp}\index{button\_function.cpp@{button\_function.cpp}}
+
+
+Implementácia obsluhy UI udalostí (tlačidlá + enkóder) pre FM rádio.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}button\+\_\+function.\+h"{}}\newline
+{\ttfamily \#include "{}oled.\+h"{}}\newline
+{\ttfamily \#include "{}Si4703.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{button__function_8cpp_a9c6c9f481691a3ce294327c24397b5fe}{radio\+\_\+ui\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializuje interný stav UI logiky pre rádio. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3a}{radio\+\_\+mode\+\_\+t}} \mbox{\hyperlink{button__function_8cpp_a31d1166b6bd1053660eb90098e8e3a34}{radio\+\_\+ui\+\_\+get\+\_\+mode}} (void)
+\begin{DoxyCompactList}\small\item\em Vráti aktuálny režim enkódera. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{button__function_8cpp_a9bb915e59a2e1c88e40cb592e0fc0750}{radio\+\_\+ui\+\_\+is\+\_\+on}} (void)
+\begin{DoxyCompactList}\small\item\em Zistí, či je rádio podľa UI logiky aktuálne zapnuté. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{button__function_8cpp_a33828acc326b9494c9a4b0c7446f3b72}{radio\+\_\+ui\+\_\+handle\+\_\+event}} (\mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t}} ev)
+\begin{DoxyCompactList}\small\item\em Spracuje jednu udalosť z používateľského rozhrania. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{button__function_8cpp_ac2458fa75b330bf16e157ea7aa6102f1}\label{button__function_8cpp_ac2458fa75b330bf16e157ea7aa6102f1} 
+\mbox{\hyperlink{class_si4703}{Si4703}} {\bfseries radio}
+\begin{DoxyCompactList}\small\item\em Globálny objekt FM rádia (deklarovaný inde). \end{DoxyCompactList}\item 
+\Hypertarget{button__function_8cpp_adf2180846aa35ad4210d6c754f1c0f15}\label{button__function_8cpp_adf2180846aa35ad4210d6c754f1c0f15} 
+int {\bfseries current\+\_\+freq\+\_\+khz}
+\begin{DoxyCompactList}\small\item\em Aktuálna frekvencia rádia v k\+Hz (deklarovaná inde). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementácia obsluhy UI udalostí (tlačidlá + enkóder) pre FM rádio. 
+
+Tento modul\+:
+\begin{DoxyItemize}
+\item drží interný stav rádia (zapnuté/vypnuté, obľúbená stanica, režim enkódera),
+\item mapuje udalosti z UI ({\ttfamily \doxylink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t}}) na konkrétne akcie nad objektom {\ttfamily \doxylink{class_si4703}{Si4703}},
+\item pri niektorých akciách aktualizuje OLED (napr. uloženie obľúbenej stanice). 
+\end{DoxyItemize}
+
+\label{doc-func-members}
+\Hypertarget{button__function_8cpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{button__function_8cpp_a31d1166b6bd1053660eb90098e8e3a34}\index{button\_function.cpp@{button\_function.cpp}!radio\_ui\_get\_mode@{radio\_ui\_get\_mode}}
+\index{radio\_ui\_get\_mode@{radio\_ui\_get\_mode}!button\_function.cpp@{button\_function.cpp}}
+\doxysubsubsection{\texorpdfstring{radio\_ui\_get\_mode()}{radio\_ui\_get\_mode()}}
+{\footnotesize\ttfamily \label{button__function_8cpp_a31d1166b6bd1053660eb90098e8e3a34} 
+\mbox{\hyperlink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3a}{radio\+\_\+mode\+\_\+t}} radio\+\_\+ui\+\_\+get\+\_\+mode (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Vráti aktuálny režim enkódera. 
+
+Získa aktuálny režim enkódera.
+
+\begin{DoxyReturn}{Returns}
+Aktuálny režim enkódera (\doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc}{RADIO\+\_\+\+MODE\+\_\+\+VOLUME} alebo \doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa7504508d74a219515a3af27983750d7f}{RADIO\+\_\+\+MODE\+\_\+\+TUNE}). 
+\end{DoxyReturn}
+\Hypertarget{button__function_8cpp_a33828acc326b9494c9a4b0c7446f3b72}\index{button\_function.cpp@{button\_function.cpp}!radio\_ui\_handle\_event@{radio\_ui\_handle\_event}}
+\index{radio\_ui\_handle\_event@{radio\_ui\_handle\_event}!button\_function.cpp@{button\_function.cpp}}
+\doxysubsubsection{\texorpdfstring{radio\_ui\_handle\_event()}{radio\_ui\_handle\_event()}}
+{\footnotesize\ttfamily \label{button__function_8cpp_a33828acc326b9494c9a4b0c7446f3b72} 
+void radio\+\_\+ui\+\_\+handle\+\_\+event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3}{ui\+\_\+event\+\_\+t}}}]{ev}{}\end{DoxyParamCaption})}
+
+
+
+Spracuje jednu udalosť z používateľského rozhrania. 
+
+Spracuje jednu udalosť z tlačidiel alebo enkódera.
+
+Podľa hodnoty {\ttfamily ev} vykoná\+:
+\begin{DoxyItemize}
+\item krok seeku hore/dole (ľavé/pravé tlačidlo),
+\item naladenie/uloženie obľúbenej frekvencie (horné tlačidlo),
+\item prepnutie mute, resp. zapnutie/vypnutie rádia (dolné tlačidlo),
+\item zmenu hlasitosti alebo frekvencie (otáčanie enkódera),
+\item prepnutie režimu enkódera VOLUME/\+TUNE (klik na enkóder).
+\end{DoxyItemize}
+
+Funkcia predstavuje čistú UI logiku nad globálnym objektom {\ttfamily \doxylink{button__function_8cpp_ac2458fa75b330bf16e157ea7aa6102f1}{radio}} (\doxylink{class_si4703}{Si4703} tuner) a OLED displejom.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ev} & Udalosť prijatá z vrstvy vstupu (tlačidlá/enkóder). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{button__function_8cpp_a9c6c9f481691a3ce294327c24397b5fe}\index{button\_function.cpp@{button\_function.cpp}!radio\_ui\_init@{radio\_ui\_init}}
+\index{radio\_ui\_init@{radio\_ui\_init}!button\_function.cpp@{button\_function.cpp}}
+\doxysubsubsection{\texorpdfstring{radio\_ui\_init()}{radio\_ui\_init()}}
+{\footnotesize\ttfamily \label{button__function_8cpp_a9c6c9f481691a3ce294327c24397b5fe} 
+void radio\+\_\+ui\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializuje interný stav UI logiky pre rádio. 
+
+Inicializácia UI vrstvy rádia.
+
+Nastaví predvolený režim enkódera na \doxylink{button__function_8h_a02da137ef2e7e2a8ff5592e35e3b0f3aa35cc7396b45ac29edb463460171a23cc}{RADIO\+\_\+\+MODE\+\_\+\+VOLUME} a označí rádio ako zapnuté (predpokladá sa, že v {\ttfamily setup()} bolo zavolané {\ttfamily radio.\+start()} alebo ekvivalentná inicializácia tunera). \Hypertarget{button__function_8cpp_a9bb915e59a2e1c88e40cb592e0fc0750}\index{button\_function.cpp@{button\_function.cpp}!radio\_ui\_is\_on@{radio\_ui\_is\_on}}
+\index{radio\_ui\_is\_on@{radio\_ui\_is\_on}!button\_function.cpp@{button\_function.cpp}}
+\doxysubsubsection{\texorpdfstring{radio\_ui\_is\_on()}{radio\_ui\_is\_on()}}
+{\footnotesize\ttfamily \label{button__function_8cpp_a9bb915e59a2e1c88e40cb592e0fc0750} 
+bool radio\+\_\+ui\+\_\+is\+\_\+on (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Zistí, či je rádio podľa UI logiky aktuálne zapnuté. 
+
+Funkcia vracia vnútorný stav s\+\_\+radio\+\_\+on, ktorý sa mení najmä v rámci \doxylink{button__function_8cpp_a33828acc326b9494c9a4b0c7446f3b72}{radio\+\_\+ui\+\_\+handle\+\_\+event} pri udalosti \doxylink{button__function_8h_a9a99e204659fdc9573b3dc140ffeedd3a1db2239c058d70a7f8008c867f8c537b}{UI\+\_\+\+BTN\+\_\+\+DOWN\+\_\+\+LONG}.
+
+\begin{DoxyReturn}{Returns}
+{\ttfamily true} ak je rádio ON, {\ttfamily false} ak je vypnuté (po {\ttfamily radio.\+power\+Down()}). 
+\end{DoxyReturn}

@@ -1,0 +1,83 @@
+\doxysection{uart.\+c File Reference}
+\hypertarget{uart_8c}{}\label{uart_8c}\index{uart.c@{uart.c}}
+
+
+Implementácia prerušeniami riadenej UART knižnice s kruhovými buffermi.  
+
+
+{\ttfamily \#include $<$avr/io.\+h$>$}\newline
+{\ttfamily \#include $<$avr/interrupt.\+h$>$}\newline
+{\ttfamily \#include $<$avr/pgmspace.\+h$>$}\newline
+{\ttfamily \#include "{}uart.\+h"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{uart_8c_a07b20e76327f35ec90e49111cb13164d}\label{uart_8c_a07b20e76327f35ec90e49111cb13164d} 
+\#define {\bfseries UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+MASK}~( \mbox{\hyperlink{group__pfleury__uart_ga5bdd6772c246436bb14377095de79b31}{UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE}} -\/ 1)
+\item 
+\Hypertarget{uart_8c_a7ddb8c271caedb7c17167749946b543d}\label{uart_8c_a7ddb8c271caedb7c17167749946b543d} 
+\#define {\bfseries UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+MASK}~( \mbox{\hyperlink{group__pfleury__uart_ga05f5d709605c6317c97e4974bec3402a}{UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE}} -\/ 1)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{uart_8c_a69856cc389c8b76c8cf8c45ea5a33bc7}{ISR}} (UART0\+\_\+\+RECEIVE\+\_\+\+INTERRUPT)
+\begin{DoxyCompactList}\small\item\em Prerušovacia rutina\+: UART0 prijal znak (Receive Complete). \end{DoxyCompactList}\item 
+\mbox{\hyperlink{uart_8c_a1352d957b6ae35391ae1fc5ff015fbba}{ISR}} (UART0\+\_\+\+TRANSMIT\+\_\+\+INTERRUPT)
+\begin{DoxyCompactList}\small\item\em Prerušovacia rutina\+: UART0 pripravený odoslať ďalší bajt (Data Register Empty). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gac19a76bb7d446125734a67f9f4b68991}{uart\+\_\+init}} (unsigned int baudrate)
+\begin{DoxyCompactList}\small\item\em Inicializuje UART0 a nastaví prenosovú rýchlosť. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{group__pfleury__uart_gaefaab30a8338ec46a6be35b99b1b4f09}{uart\+\_\+getc}} (void)
+\begin{DoxyCompactList}\small\item\em Získa bajt z prijímacieho kruhového bufferu UART0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gad975221bc08b901e4c7ad69f9c9a97e2}{uart\+\_\+putc}} (unsigned char data)
+\begin{DoxyCompactList}\small\item\em Zapíše bajt do vysielacieho kruhového bufferu UART0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_gae52facc0a56086a365bb0018160d8d71}{uart\+\_\+puts}} (const char \texorpdfstring{$\ast$}{*}s)
+\begin{DoxyCompactList}\small\item\em Odošle nulou ukončený reťazec z RAM cez UART0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__pfleury__uart_ga6d78b6744db6232f52b4616402036c2f}{uart\+\_\+puts\+\_\+p}} (const char \texorpdfstring{$\ast$}{*}progmem\+\_\+s)
+\begin{DoxyCompactList}\small\item\em Odošle reťazec uložený v programovej pamäti (PROGMEM) cez UART0. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementácia prerušeniami riadenej UART knižnice s kruhovými buffermi. 
+
+Tento súbor obsahuje implementáciu funkcií deklarovaných v \doxylink{uart_8h}{uart.\+h}. Prijímanie aj odosielanie dát prebieha cez prerušenia a údaje sa ukladajú do kruhových bufferov v SRAM. Hlavný program tak nemusí čakať na dokončenie prenosu – vystačí si s čítaním/zápisom z/do bufferov.
+
+Veľkosť prijímacieho a vysielacieho bufferu je určená konštantami \doxylink{group__pfleury__uart_ga5bdd6772c246436bb14377095de79b31}{UART\+\_\+\+RX\+\_\+\+BUFFER\+\_\+\+SIZE} a \doxylink{group__pfleury__uart_ga05f5d709605c6317c97e4974bec3402a}{UART\+\_\+\+TX\+\_\+\+BUFFER\+\_\+\+SIZE}, ktoré musia byť mocninou 2.
+
+Implementácia vychádza z aplikačnej poznámky Atmel AVR306 a knižnice Petra Fleuryho. V projekte je tento súbor použitý bez zásahu do logiky kódu, iba s doplnenými/slovenskými komentármi. 
+
+\label{doc-func-members}
+\Hypertarget{uart_8c_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{uart_8c_a69856cc389c8b76c8cf8c45ea5a33bc7}\index{uart.c@{uart.c}!ISR@{ISR}}
+\index{ISR@{ISR}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{ISR()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{uart_8c_a69856cc389c8b76c8cf8c45ea5a33bc7} 
+ISR (\begin{DoxyParamCaption}\item[{UART0\+\_\+\+RECEIVE\+\_\+\+INTERRUPT}]{}{}\end{DoxyParamCaption})}
+
+
+
+Prerušovacia rutina\+: UART0 prijal znak (Receive Complete). 
+
+ISR sa vyvolá pri prijatí bajtu na rozhraní UART0. Rutina\+:
+\begin{DoxyItemize}
+\item prečíta stavový register a prijaté dáta,
+\item extrahuje príznaky chýb (frame, overrun, parity),
+\item uloží prijatý bajt do kruhového prijímacieho bufferu,
+\item pri pretečení buffera nastaví chybový príznak. 
+\end{DoxyItemize}\Hypertarget{uart_8c_a1352d957b6ae35391ae1fc5ff015fbba}\index{uart.c@{uart.c}!ISR@{ISR}}
+\index{ISR@{ISR}!uart.c@{uart.c}}
+\doxysubsubsection{\texorpdfstring{ISR()}{ISR()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{uart_8c_a1352d957b6ae35391ae1fc5ff015fbba} 
+ISR (\begin{DoxyParamCaption}\item[{UART0\+\_\+\+TRANSMIT\+\_\+\+INTERRUPT}]{}{}\end{DoxyParamCaption})}
+
+
+
+Prerušovacia rutina\+: UART0 pripravený odoslať ďalší bajt (Data Register Empty). 
+
+ISR sa vyvolá, keď je vysielací register UART0 prázdny a je možné zapísať ďalší bajt. Rutina\+:
+\begin{DoxyItemize}
+\item skontroluje, či sú v TX buffere ešte dáta,
+\item ak áno, odčíta ďalší bajt a odošle ho,
+\item ak nie, zakáže prerušovanie UDRE (aby ISR nebežalo zbytočne). 
+\end{DoxyItemize}

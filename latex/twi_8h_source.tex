@@ -1,0 +1,85 @@
+\doxysection{twi.\+h}
+\hypertarget{twi_8h_source}{}\label{twi_8h_source}\mbox{\hyperlink{twi_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ TWI\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#\ define\ TWI\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00005\ \textcolor{keyword}{extern}\ \textcolor{stringliteral}{"{}C"{}}\ \{}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00007\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ *\ I2C/TWI\ library\ for\ AVR-\/GCC.}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ *\ (c)\ 2018-\/2024\ Tomas\ Fryza,\ MIT\ license}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ *\ Developed\ using\ PlatformIO\ and\ AVR\ 8-\/bit\ Toolchain\ 3.6.2.}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ *\ Tested\ on\ Arduino\ Uno\ board\ and\ ATmega328P,\ 16\ MHz.}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{//\ -\/-\/\ Includes\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <avr/io.h>}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{//\ -\/-\/\ Defines\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#ifndef\ F\_CPU}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#\ define\ F\_CPU\ 16000000\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ F\_SCL\ 100000\ }\textcolor{preprocessor}{}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ TWI\_BIT\_RATE\_REG\ ((F\_CPU/F\_SCL\ -\/\ 16)\ /\ 2)\ }\textcolor{preprocessor}{}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ TWI\_PORT\ PORTC}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ TWI\_SDA\_PIN\ 4}}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#define\ TWI\_SCL\_PIN\ 5}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#define\ TWI\_WRITE\ 0}}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#define\ TWI\_READ\ 1}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#define\ TWI\_ACK\ 0}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#define\ TWI\_NACK\ 1}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00101\ \textcolor{preprocessor}{\#define\ DDR(\_x)\ (*(\&\_x\ -\/\ 1))}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#define\ PIN(\_x)\ (*(\&\_x\ -\/\ 2))}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \textcolor{comment}{//\ -\/-\/\ Function\ prototypes\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00124\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group__fryza__twi_ga16f0e6b2fa5a26eadbf4086ab6d54467}{twi\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00135\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group__fryza__twi_gaf37269da7f6b1b22438b78d2f965f274}{twi\_start}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00156\ uint8\_t\ \mbox{\hyperlink{group__fryza__twi_ga129b8a79f75189c3801cb7082e6b8340}{twi\_write}}(uint8\_t\ data);}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00170\ uint8\_t\ \mbox{\hyperlink{group__fryza__twi_gae9f84b771b4acdedd2106e91cb03cc78}{twi\_read}}(uint8\_t\ ack);}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00181\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group__fryza__twi_gacf52d6c93df110dee6d402b389e5042e}{twi\_stop}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00197\ uint8\_t\ \mbox{\hyperlink{group__fryza__twi_gae830c20b3544c9619c2c316b9a578ab2}{twi\_test\_address}}(uint8\_t\ addr);}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00218\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{group__fryza__twi_gacf2027b11accf8c8a40502c60dd1b76f}{twi\_readfrom\_mem\_into}}(uint8\_t\ addr,\ uint8\_t\ memaddr,\ \textcolor{keyword}{volatile}\ uint8\_t\ *buf,\ uint8\_t\ nbytes);}
+\DoxyCodeLine{00219\ \ \ \textcolor{comment}{/*\ koniec\ skupiny\ fryza\_twi\ */}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \textcolor{preprocessor}{\#ifdef\ \_\_cplusplus}}
+\DoxyCodeLine{00224\ \}}
+\DoxyCodeLine{00225\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

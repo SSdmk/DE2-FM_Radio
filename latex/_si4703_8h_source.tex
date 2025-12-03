@@ -1,0 +1,446 @@
+\doxysection{Si4703.\+h}
+\hypertarget{_si4703_8h_source}{}\label{_si4703_8h_source}\mbox{\hyperlink{_si4703_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*\ }}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ \ Muthanna\ Alwahash\ 2020/21}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ Si4703\_h}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ Si4703\_h}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{gpio_8h}{gpio.h}}"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00036\ \textcolor{keyword}{using\ }\mbox{\hyperlink{_si4703_8h_a3eca60932ee4119828944ccd69a6272b}{byte}}\ =\ uint8\_t;}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00039\ \textcolor{comment}{//\ Konštanty\ pre\ nastavenie\ pásma\ (band)}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00042\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ BAND\_US\_EU\ =\ 0b00;}
+\DoxyCodeLine{00044\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ BAND\_JPW\ \ \ =\ 0b01;}
+\DoxyCodeLine{00046\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ BAND\_JP\ \ \ \ =\ 0b10;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{comment}{//\ De-\/emphasis}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ DE\_75us\ =\ 0b0;}
+\DoxyCodeLine{00053\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ DE\_50us\ =\ 0b1;}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{comment}{//\ Channel\ Spacing}}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00058\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SPACE\_200KHz\ =\ 0b00;}
+\DoxyCodeLine{00060\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SPACE\_100KHz\ =\ 0b01;}
+\DoxyCodeLine{00062\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SPACE\_50KHz\ \ =\ 0b10;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{comment}{//\ GPIO1-\/3\ Pins}}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ GPIO1\ =\ 1;}
+\DoxyCodeLine{00069\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ GPIO2\ =\ 2;}
+\DoxyCodeLine{00071\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ GPIO3\ =\ 3;}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{comment}{//\ GPIO1-\/3\ Possible\ Values}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00076\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ GPIO\_Z\ \ \ \ =\ 0b00;}
+\DoxyCodeLine{00078\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ GPIO\_I\ \ \ \ =\ 0b01;}
+\DoxyCodeLine{00080\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ GPIO\_Low\ \ =\ 0b10;}
+\DoxyCodeLine{00082\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ GPIO\_High\ =\ 0b11;}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \textcolor{comment}{//\ Seek\ Mode}}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00087\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SKMODE\_WRAP\ =\ 0b0;}
+\DoxyCodeLine{00089\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SKMODE\_STOP\ =\ 0b1;}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{comment}{//\ Seek\ SNR\ Threshold}}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SKSNR\_DIS\ =\ 0x0;}
+\DoxyCodeLine{00096\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SKSNR\_MIN\ =\ 0x1;}
+\DoxyCodeLine{00098\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SKSNR\_MAX\ =\ 0xF;}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{comment}{//\ Seek\ FM\ Impulse\ Detection\ Threshold}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00103\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SKCNT\_DIS\ =\ 0x0;}
+\DoxyCodeLine{00105\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SKCNT\_MAX\ =\ 0x1;}
+\DoxyCodeLine{00107\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SKCNT\_MIN\ =\ 0xF;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \textcolor{comment}{//\ Softmute\ Attenuation}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00112\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SMA\_16dB\ =\ 0b00;}
+\DoxyCodeLine{00114\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SMA\_14dB\ =\ 0b01;}
+\DoxyCodeLine{00116\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SMA\_12dB\ =\ 0b10;}
+\DoxyCodeLine{00118\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SMA\_10dB\ =\ 0b11;}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{comment}{//\ Softmute\ Attack/Recover\ Rate}}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00123\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SMRR\_Fastest\ =\ 0b00;}
+\DoxyCodeLine{00125\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SMRR\_Fast\ \ \ \ =\ 0b01;}
+\DoxyCodeLine{00127\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SMRR\_Slow\ \ \ \ =\ 0b10;}
+\DoxyCodeLine{00129\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ SMRR\_Slowest\ =\ 0b11;}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{comment}{//\ Stereo/Mono\ Blend\ Level\ Adjustment}}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ BLA\_31\_49\ =\ 0b00;}
+\DoxyCodeLine{00136\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ BLA\_37\_55\ =\ 0b01;}
+\DoxyCodeLine{00138\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ BLA\_19\_37\ =\ 0b10;}
+\DoxyCodeLine{00140\ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint8\_t\ BLA\_25\_43\ =\ 0b11;}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00160\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_si4703_ab89b6b8489f38955343e4e68e1ed4d69}{Si4703}}}
+\DoxyCodeLine{00161\ \{}
+\DoxyCodeLine{00162\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00163\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00180\ \ \ \ \ \mbox{\hyperlink{class_si4703_ab89b6b8489f38955343e4e68e1ed4d69}{Si4703}}(\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ MCU\ Pins\ Selection}}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ rstPin\ \ \ \ =\ PD4,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Reset\ Pin}}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ sdioPin\ \ \ =\ PC4,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ I2C\ Data\ IO\ Pin}}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ sclkPin\ \ \ =\ PC5,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ I2C\ Clock\ Pin}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ intPin\ \ \ \ =\ 0,\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Seek/Tune\ Complete\ and\ RDS\ interrupt\ Pin}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Band\ Settings}}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ band\ \ \ \ =\ BAND\_US\_EU,\ \ \ \textcolor{comment}{//\ Band\ Range}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ space\ \ \ =\ SPACE\_100KHz,\ \textcolor{comment}{//\ Band\ Spacing}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ de\ \ \ \ \ \ =\ DE\_75us,\ \ \ \ \ \ \textcolor{comment}{//\ De-\/Emphasis}}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ RDS\ Settings}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Tune\ Settings}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Seek\ Settings}}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ skmode\ \ =\ SKMODE\_STOP,\ \ \textcolor{comment}{//\ Seek\ Mode}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ seekth\ \ =\ 24,\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Seek\ Threshold}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ skcnt\ \ \ =\ SKSNR\_MAX,\ \ \ \ \textcolor{comment}{//\ Seek\ Clicks\ Number\ Threshold}}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ sksnr\ \ \ =\ SKCNT\_MIN,\ \ \ \ \textcolor{comment}{//\ Seek\ Signal/Noise\ Ratio}}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ agcd\ \ \ \ =\ 0\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ AGC\ disable}}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00205\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{class_si4703_ac0002cf7ef18b780b806a50cbed8d40a}{powerUp}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{class_si4703_a1181664a9cc5b1f4b1bc956c720c4144}{powerDown}}();\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{class_si4703_a8f00c9ce7499978dfff92793bdb98d11}{start}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_ab37227ef8401d94f625b856044cb6519}{getPN}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00214\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_ae1b853737188d10ccc44c3e01b653de6}{getMFGID}}();\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a9ffb458dbf00710e158308201a723778}{getREV}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_ad46f8d835e15c509c3f669c26f4b72c0}{getDEV}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a68acd9ffda2cb1ac33d083de5af9bbe4}{getFIRMWARE}}();\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a4794320e795b2bbe35cfcd0bebd2c815}{getBandStart}}();\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a3cd5fa99ce5f52f2ca83b71c4f592332}{getBandEnd}}();\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a16d2cbc024300c7666681818f09f98eb}{getBandSpace}}();\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a23cb4a52f1c26d6aa8051b31faed9d17}{getRSSI}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a8bc3951538eda5313bf8bbc143ce982d}{getChannel}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ }
+\DoxyCodeLine{00235\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_af9a30ea0699fbb207881e3e7ae2eef42}{setChannel}}(\textcolor{keywordtype}{int}\ freq);\ \ \ }
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a20f8c256348a4944be2bab61b38deaf3}{incChannel}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ }
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a0862da0e911ae9f6b04165bcfcb4cbb7}{decChannel}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ }
+\DoxyCodeLine{00240\ \ \ \ \ }
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a4051c68f611cf6e43dc9ed3ec622bc60}{seekUp}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a567cad6cc687804a4f3308b26ff4715f}{seekDown}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{class_si4703_a0bdb79478d9938b0cd4e715f4c4d54f8}{setMono}}(\textcolor{keywordtype}{bool}\ en);\ \ \ \ \ \ \ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{class_si4703_af1e2c94de7b45e3f8524aac261997b56}{getMono}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00251\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{class_si4703_a05f876d5bc89796365c02eaad5c3994d}{getST}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{class_si4703_a297fb4fd569ab9ff35269873338afcf0}{setMute}}(\textcolor{keywordtype}{bool}\ en);\ \ \ \ \ \ \ }
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{class_si4703_ace1eba55bcdd2286f8da0f2d3e7febf1}{getMute}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{class_si4703_a69c56af25ece1c014f82e564bceac1a0}{setVolExt}}(\textcolor{keywordtype}{bool}\ en);\ \ \ \ \ }
+\DoxyCodeLine{00260\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{class_si4703_aa1f5035dcbf914f0c4e7ea1c575eb953}{getVolExt}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_a097ee0476bdda9773b469fd763db2506}{getVolume}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_adcf50bf10efcb2787593726a56735772}{setVolume}}(\textcolor{keywordtype}{int}\ volume);\ \ }
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_ad5e235a6e289a0284ebc29141282501b}{incVolume}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \mbox{\hyperlink{class_si4703_ad74b36eafa236a803c485b5e0291076d}{decVolume}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{class_si4703_a9c00132f8913f12c9874f148d69ffad6}{readRDS}}(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \mbox{\hyperlink{class_si4703_ae55e12b48d6bc18119be8254aa53d4b6}{writeGPIO}}(\textcolor{keywordtype}{int}\ GPIO,}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ val);}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00283\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{comment}{//\ MCU\ Pines\ Selection}}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keywordtype}{int}\ \_rstPin;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{keywordtype}{int}\ \_sdioPin;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keywordtype}{int}\ \_sclkPin;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordtype}{int}\ \_intPin;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{comment}{//\ Band\ Settings}}
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keywordtype}{int}\ \_band;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keywordtype}{int}\ \_space;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00293\ \ \ \ \ \textcolor{keywordtype}{int}\ \_de;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keywordtype}{int}\ \_bandStart;\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00295\ \ \ \ \ \textcolor{keywordtype}{int}\ \_bandEnd;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordtype}{int}\ \_bandSpacing;\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{comment}{//\ RDS\ Settings}}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{comment}{//\ (miesto\ pre\ budúce\ nastavenia\ RDS,\ ak\ budú\ doplnené)}}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{comment}{//\ Tune\ Settings}}
+\DoxyCodeLine{00302\ \ \ \ \ \textcolor{comment}{//\ (miesto\ pre\ vlastné\ parametre\ ladenia)}}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{comment}{//\ Seek\ Settings}}
+\DoxyCodeLine{00305\ \ \ \ \ \textcolor{keywordtype}{int}\ \_skmode;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00306\ \ \ \ \ \textcolor{keywordtype}{int}\ \_seekth;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keywordtype}{int}\ \_skcnt;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00308\ \ \ \ \ \textcolor{keywordtype}{int}\ \_sksnr;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00309\ \ \ \ \ \textcolor{keywordtype}{int}\ \_agcd;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \textcolor{comment}{//\ Private\ Functions}}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ getShadow();\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keywordtype}{byte}\ \ \ \ putShadow();\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00318\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ bus3Wire(\textcolor{keywordtype}{void});\ \ \ \ \ }
+\DoxyCodeLine{00320\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ bus2Wire(\textcolor{keywordtype}{void});\ \ \ \ \ }
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ setRegion(\textcolor{keywordtype}{int}\ band,\ \textcolor{comment}{//\ Band\ Range}}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ space,\textcolor{comment}{//\ Band\ Spacing}}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ de);\ \ \textcolor{comment}{//\ De-\/Emphasis}}
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ getSTC(\textcolor{keywordtype}{void});\ \ \ \ \ \ \ }
+\DoxyCodeLine{00328\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ seek(\textcolor{keywordtype}{byte}\ seekDir);\ }
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{comment}{//\ I2C\ interface}}
+\DoxyCodeLine{00332\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ I2C\_ADDR\ \ \ \ \ \ \ \ =\ 0x10;}
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint16\_t\ \ \ I2C\_FAIL\_MAX\ \ \ \ =\ 10;\ \ \ }
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00337\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint16\_t\ \ \ SEEK\_DOWN\ \ \ \ \ \ \ =\ 0;\ \ \ \ }
+\DoxyCodeLine{00339\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ uint16\_t\ \ \ SEEK\_UP\ \ \ \ \ \ \ \ \ =\ 1;}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{//\ Registers\ shadow}}
+\DoxyCodeLine{00342\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00346\ \ \ \ \ \textcolor{keyword}{union\ }DEVICEID\_t}
+\DoxyCodeLine{00347\ \ \ \ \ \{}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;\ \ \ }
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_d_e_v_i_c_e_i_d__t_1_1bits}{bits}}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_d_e_v_i_c_e_i_d__t_1_1bits_a82edd9f3a1b48af634a48d8c4a4ef0a6}{MFGID}}\ \ \ :12;\ \ \ \ }
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_d_e_v_i_c_e_i_d__t_1_1bits_a51bf14f74839bd08ad87c723407acd0c}{PN}}\ \ \ \ \ \ :4;\ \ \ \ \ }
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_d_e_v_i_c_e_i_d__t_1_1bits}{bits}};}
+\DoxyCodeLine{00355\ \ \ \ \ \};}
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00360\ \ \ \ \ \textcolor{keyword}{union\ }CHIPID\_t}
+\DoxyCodeLine{00361\ \ \ \ \ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_c_h_i_p_i_d__t_1_1bits}{bits}}}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_c_h_i_p_i_d__t_1_1bits_a0dbc99cebc8ae4473b0aaed701ff2be9}{FIRMWARE}}:6;\ \ \ \ \ }
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_c_h_i_p_i_d__t_1_1bits_a24ab2db83aeb1f5125fd652a46945725}{DEV}}\ \ \ \ \ :4;\ \ \ \ \ }
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_c_h_i_p_i_d__t_1_1bits_ade49c6549c20069764753929d8c3cda8}{REV}}\ \ \ \ \ :6;\ \ \ \ \ }
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_c_h_i_p_i_d__t_1_1bits}{bits}};}
+\DoxyCodeLine{00370\ \ \ \ \ \};}
+\DoxyCodeLine{00371\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00375\ \ \ \ \ \textcolor{keyword}{union\ }POWERCFG\_t}
+\DoxyCodeLine{00376\ \ \ \ \ \{}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits}{bits}}}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_a8766422acd559775c29968efbfd231bd}{ENABLE}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :5;\ \ \ \ \ }
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_ac3c052775974d0872c2b65141d997b76}{DISABLE}}\ :1;\ \ \ \ \ }
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_aea05218522b36a18d80de3e00bbc3dd8}{SEEK}}\ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_af1ffdd9d6a839bf89c1dc08eb833c6ba}{SEEKUP}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_a30159803e28fa237b41984a2feb0838c}{SKMODE}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_afd67893f268f609346a868a53fd72e18}{RDSM}}\ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_a537c88c00e192621e3eae7d2153ef9f9}{MONO}}\ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_adccce056c13fcd4ac0c7b8e36d83c375}{DMUTE}}\ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits_a2e86b61f688df044c759301b125d6f47}{DSMUTE}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_p_o_w_e_r_c_f_g__t_1_1bits}{bits}};}
+\DoxyCodeLine{00394\ \ \ \ \ \};}
+\DoxyCodeLine{00395\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00399\ \ \ \ \ \textcolor{keyword}{union\ }CHANNEL\_t}
+\DoxyCodeLine{00400\ \ \ \ \ \{}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_c_h_a_n_n_e_l__t_1_1bits}{bits}}}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_c_h_a_n_n_e_l__t_1_1bits_a0ff72e52a22136e0ae7fb5ad9eb6898e}{CHAN}}\ \ \ \ :10;\ \ \ \ }
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :5;\ \ \ \ \ }
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_c_h_a_n_n_e_l__t_1_1bits_af262778c639f59301d86a5b819981c5d}{TUNE}}\ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_c_h_a_n_n_e_l__t_1_1bits}{bits}};}
+\DoxyCodeLine{00409\ \ \ \ \ \};}
+\DoxyCodeLine{00410\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00414\ \ \ \ \ \textcolor{keyword}{union\ }SYSCONFIG1\_t}
+\DoxyCodeLine{00415\ \ \ \ \ \{}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits}{bits}}}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_ac58db8769914098b1da74eb784a3891a}{GPIO1}}\ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_aa208528812445eef50369e84a4db9736}{GPIO2}}\ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_a04f0f4773f4b71d20d762e5940fae95e}{GPIO3}}\ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_a2e428fdb546c0d625f230c9d4db61b7b}{BLNDADJ}}\ :2;\ \ \ \ \ }
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_aebc45fff3eead53aab275d7c0d69f0e9}{AGCD}}\ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_ac2bb3d0c2e607ae3ff3ab9df09edb857}{DE}}\ \ \ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_a00375ff315975bcb423972e60fc52fa6}{RDS}}\ \ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_a56db47d4818e1da0a350425fa4f0a378}{STCIEN}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits_a14a0022d3c95e8ad87db3ddb90148ec9}{RDSIEN}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g1__t_1_1bits}{bits}};}
+\DoxyCodeLine{00432\ \ \ \ \ \};}
+\DoxyCodeLine{00433\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00437\ \ \ \ \ \textcolor{keyword}{union\ }SYSCONFIG2\_t}
+\DoxyCodeLine{00438\ \ \ \ \ \{}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00440\ }
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g2__t_1_1bits}{bits}}}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g2__t_1_1bits_abe2c9e34f86a666505dd9d3db5130b56}{VOLUME}}\ \ :4;\ \ \ \ \ }
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g2__t_1_1bits_a8f7f7e078da438ec32611515984b2f9e}{SPACE}}\ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g2__t_1_1bits_a6e03503e9acba41c3fb4146fe928015b}{BAND}}\ \ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g2__t_1_1bits_a590150e875663d5bcf544fadec6ed102}{SEEKTH}}\ \ :8;\ \ \ \ \ }
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g2__t_1_1bits}{bits}};}
+\DoxyCodeLine{00448\ \ \ \ \ \};}
+\DoxyCodeLine{00449\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00453\ \ \ \ \ \textcolor{keyword}{union\ }SYSCONFIG3\_t}
+\DoxyCodeLine{00454\ \ \ \ \ \{}
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g3__t_1_1bits}{bits}}}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g3__t_1_1bits_a1c9b22c799b82d390c288fdff178f9b5}{SKCNT}}\ \ \ :4;\ \ \ \ \ }
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g3__t_1_1bits_a9db83cb73e487871526b0363c3e9ce40}{SKSNR}}\ \ \ :4;\ \ \ \ \ }
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g3__t_1_1bits_ad7743d5aa35bfc33cc267df536f5f4cb}{VOLEXT}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :3;\ \ \ \ \ }
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g3__t_1_1bits_a73969b3713f11b9e7c64dfd8dc0b6839}{SMUTEA}}\ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g3__t_1_1bits_a115413ba15ba57d08631d14c9b421c9b}{SMUTER}}\ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_y_s_c_o_n_f_i_g3__t_1_1bits}{bits}};}
+\DoxyCodeLine{00466\ \ \ \ \ \};}
+\DoxyCodeLine{00467\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00471\ \ \ \ \ \textcolor{keyword}{union\ }TEST1\_t}
+\DoxyCodeLine{00472\ \ \ \ \ \{}
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00474\ }
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_t_e_s_t1__t_1_1bits}{bits}}}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :14;\ \ \ \ }
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_t_e_s_t1__t_1_1bits_a7ce9659f92163e9793065d424762f83f}{AHIZEN}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_t_e_s_t1__t_1_1bits_a752c778ff843d2b6630becc2211ee908}{XOSCEN}}\ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_t_e_s_t1__t_1_1bits}{bits}};}
+\DoxyCodeLine{00481\ \ \ \ \ \};}
+\DoxyCodeLine{00482\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00486\ \ \ \ \ \textcolor{keyword}{union\ }TEST2\_t}
+\DoxyCodeLine{00487\ \ \ \ \ \{}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_t_e_s_t2__t_1_1bits}{bits}}}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :16;\ \ \ \ }
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_t_e_s_t2__t_1_1bits}{bits}};}
+\DoxyCodeLine{00494\ \ \ \ \ \};}
+\DoxyCodeLine{00495\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00499\ \ \ \ \ \textcolor{keyword}{union\ }BOOTCONFIG\_t}
+\DoxyCodeLine{00500\ \ \ \ \ \{}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00502\ }
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_b_o_o_t_c_o_n_f_i_g__t_1_1bits}{bits}}}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \ \ \ \ \ \ \ \ :16;\ \ \ \ }
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_b_o_o_t_c_o_n_f_i_g__t_1_1bits}{bits}};}
+\DoxyCodeLine{00507\ \ \ \ \ \};}
+\DoxyCodeLine{00508\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00512\ \ \ \ \ \textcolor{keyword}{union\ }STATUSRSSI\_t}
+\DoxyCodeLine{00513\ \ \ \ \ \{}
+\DoxyCodeLine{00514\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits}{bits}}}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits_a29649d1c091492abc2917a746c52cd41}{RSSI}}\ \ \ \ :8;\ \ \ \ \ }
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits_a9fefc3e20718018973f37a3330df5b07}{ST}}\ \ \ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00520\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits_a05cd2ab966f68003863bbef2aba81dfd}{BLERA}}\ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits_a7c711ab1528b305f960e21cf299ca0ef}{RDSS}}\ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits_ac68a9dd6d173dc428f060f67dfb7b764}{AFCRL}}\ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits_a3431ca7a2a91069fbea7b60d4165def7}{SFBL}}\ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00524\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits_aa552e197207aceb5a2901e61b77df4d3}{STC}}\ \ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits_a4becc8100df9681b2350cd669dd55423}{RDSR}}\ \ \ \ :1;\ \ \ \ \ }
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_s_t_a_t_u_s_r_s_s_i__t_1_1bits}{bits}};}
+\DoxyCodeLine{00527\ \ \ \ \ \};}
+\DoxyCodeLine{00528\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00532\ \ \ \ \ \textcolor{keyword}{union\ }READCHAN\_t}
+\DoxyCodeLine{00533\ \ \ \ \ \{}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00535\ }
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_r_e_a_d_c_h_a_n__t_1_1bits}{bits}}}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_e_a_d_c_h_a_n__t_1_1bits_ac3a551e13d93c5ff65eabdc4ebe6736e}{READCHAN}}\ :10;\ \ \ }
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_e_a_d_c_h_a_n__t_1_1bits_a3839e0349dc3f99a08c9f0250927ba2a}{BLERD}}\ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_e_a_d_c_h_a_n__t_1_1bits_ad054d4508127319982bcd06ec5fdda2c}{BLERC}}\ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_e_a_d_c_h_a_n__t_1_1bits_a67cd522a9db1bf7a5d711ef46ec2a1b1}{BLERB}}\ \ \ :2;\ \ \ \ \ }
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_e_a_d_c_h_a_n__t_1_1bits}{bits}};}
+\DoxyCodeLine{00543\ \ \ \ \ \};}
+\DoxyCodeLine{00544\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00548\ \ \ \ \ \textcolor{keyword}{union\ }RDSA\_t}
+\DoxyCodeLine{00549\ \ \ \ \ \{}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00551\ }
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_r_d_s_a__t_1_1bits}{bits}}}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_d_s_a__t_1_1bits_ac5c4b80dd310cb0c547804f5218e6bbd}{RDSA}}\ \ \ \ :16;\ \ \ \ }
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_d_s_a__t_1_1bits}{bits}};}
+\DoxyCodeLine{00556\ \ \ \ \ \};}
+\DoxyCodeLine{00557\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00561\ \ \ \ \ \textcolor{keyword}{union\ }RDSB\_t}
+\DoxyCodeLine{00562\ \ \ \ \ \{}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00564\ }
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_r_d_s_b__t_1_1bits}{bits}}}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_d_s_b__t_1_1bits_a8f1fa9db84720c6b07efe9fe057e7a17}{RDSB}}\ \ \ \ :16;\ \ \ \ }
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_d_s_b__t_1_1bits}{bits}};}
+\DoxyCodeLine{00569\ \ \ \ \ \};}
+\DoxyCodeLine{00570\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00574\ \ \ \ \ \textcolor{keyword}{union\ }RDSC\_t}
+\DoxyCodeLine{00575\ \ \ \ \ \{}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00577\ }
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_r_d_s_c__t_1_1bits}{bits}}}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_d_s_c__t_1_1bits_a143952001777439260fbe627c3567b6e}{RDSC}}\ \ \ \ :16;\ \ \ \ }
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_d_s_c__t_1_1bits}{bits}};}
+\DoxyCodeLine{00582\ \ \ \ \ \};}
+\DoxyCodeLine{00583\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00587\ \ \ \ \ \textcolor{keyword}{union\ }RDSD\_t}
+\DoxyCodeLine{00588\ \ \ \ \ \{}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word;}
+\DoxyCodeLine{00590\ }
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1_r_d_s_d__t_1_1bits}{bits}}}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_d_s_d__t_1_1bits_a952f331d68e306dc6d838de05a23fc6e}{RDSD}}\ \ \ \ :16;\ \ \ \ }
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1_r_d_s_d__t_1_1bits}{bits}};}
+\DoxyCodeLine{00595\ \ \ \ \ \};}
+\DoxyCodeLine{00596\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00604\ \ \ \ \ \textcolor{keyword}{union\ }shadow\_t}
+\DoxyCodeLine{00605\ \ \ \ \ \{}
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ uint16\_t\ \ \ \ word[16];\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00607\ }
+\DoxyCodeLine{00608\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_si4703_1_1shadow__t_1_1reg}{reg}}}
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \ \ \ \ STATUSRSSI\_t\ \ \ \ STATUSRSSI;\ \textcolor{comment}{//\ Register\ 0x0A\ -\/\ 00}}
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ READCHAN\_t\ \ \ \ \ \ READCHAN;\ \ \ \textcolor{comment}{//\ Register\ 0x0B\ -\/\ 01}}
+\DoxyCodeLine{00612\ \ \ \ \ \ \ \ \ \ \ \ \ RDSA\_t\ \ \ \ \ \ \ \ \ \ RDSA;\ \ \ \ \ \ \ \textcolor{comment}{//\ Register\ 0x0C\ -\/\ 02}}
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ \ \ \ \ RDSB\_t\ \ \ \ \ \ \ \ \ \ RDSB;\ \ \ \ \ \ \ \textcolor{comment}{//\ Register\ 0x0D\ -\/\ 03}}
+\DoxyCodeLine{00614\ \ \ \ \ \ \ \ \ \ \ \ \ RDSC\_t\ \ \ \ \ \ \ \ \ \ RDSC;\ \ \ \ \ \ \ \textcolor{comment}{//\ Register\ 0x0E\ -\/\ 04}}
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \ \ \ \ RDSD\_t\ \ \ \ \ \ \ \ \ \ RDSD;\ \ \ \ \ \ \ \textcolor{comment}{//\ Register\ 0x0F\ -\/\ 05}}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \ \ \ \ DEVICEID\_t\ \ \ \ \ \ DEVICEID;\ \ \ \textcolor{comment}{//\ Register\ 0x00\ -\/\ 06}}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \ \ \ \ CHIPID\_t\ \ \ \ \ \ \ \ CHIPID;\ \ \ \ \ \textcolor{comment}{//\ Register\ 0x01\ -\/\ 07}}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \ \ \ \ POWERCFG\_t\ \ \ \ \ \ POWERCFG;\ \ \ \textcolor{comment}{//\ Register\ 0x02\ -\/\ 08}}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \ \ \ \ CHANNEL\_t\ \ \ \ \ \ \ CHANNEL;\ \ \ \ \textcolor{comment}{//\ Register\ 0x03\ -\/\ 09}}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \ \ \ \ SYSCONFIG1\_t\ \ \ \ SYSCONFIG1;\ \textcolor{comment}{//\ Register\ 0x04\ -\/\ 10}}
+\DoxyCodeLine{00622\ \ \ \ \ \ \ \ \ \ \ \ \ SYSCONFIG2\_t\ \ \ \ SYSCONFIG2;\ \textcolor{comment}{//\ Register\ 0x05\ -\/\ 11}}
+\DoxyCodeLine{00623\ \ \ \ \ \ \ \ \ \ \ \ \ SYSCONFIG3\_t\ \ \ \ SYSCONFIG3;\ \textcolor{comment}{//\ Register\ 0x06\ -\/\ 12}}
+\DoxyCodeLine{00624\ \ \ \ \ \ \ \ \ \ \ \ \ TEST1\_t\ \ \ \ \ \ \ \ \ TEST1;\ \ \ \ \ \ \textcolor{comment}{//\ Register\ 0x07\ -\/\ 13}}
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \ \ \ \ TEST2\_t\ \ \ \ \ \ \ \ \ TEST2;\ \ \ \ \ \ \textcolor{comment}{//\ Register\ 0x08\ -\/\ 14}}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \ \ \ \ BOOTCONFIG\_t\ \ \ \ BOOTCONFIG;\ \textcolor{comment}{//\ Register\ 0x09\ -\/\ 15}}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_si4703_1_1shadow__t_1_1reg}{reg}};}
+\DoxyCodeLine{00628\ \ \ \ \ \}\ shadow;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Kópia\ všetkých\ 16\ registrov\ po\ 16\ bitoch;}}
+\DoxyCodeLine{00629\ \};}
+\DoxyCodeLine{00630\ }
+\DoxyCodeLine{00631\ }
+\DoxyCodeLine{00632\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

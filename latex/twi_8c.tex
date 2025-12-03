@@ -1,0 +1,40 @@
+\doxysection{twi.\+c File Reference}
+\hypertarget{twi_8c}{}\label{twi_8c}\index{twi.c@{twi.c}}
+
+
+Implementácia knižnice pre I2\+C/\+TWI komunikáciu.  
+
+
+{\ttfamily \#include $<$twi.\+h$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__fryza__twi_ga16f0e6b2fa5a26eadbf4086ab6d54467}{twi\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializuje TWI jednotku, zapne interné pull-\/upy a nastaví frekvenciu SCL. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_gaf37269da7f6b1b22438b78d2f965f274}{twi\+\_\+start}} (void)
+\begin{DoxyCompactList}\small\item\em Vygeneruje podmienku Start na I2\+C/\+TWI zbernici. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_ga129b8a79f75189c3801cb7082e6b8340}{twi\+\_\+write}} (uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Zapíše jeden bajt na I2\+C/\+TWI zbernicu. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_gae9f84b771b4acdedd2106e91cb03cc78}{twi\+\_\+read}} (uint8\+\_\+t ack)
+\begin{DoxyCompactList}\small\item\em Prečíta jeden bajt z I2\+C/\+TWI zbernice a potvrdí ho ACK alebo NACK. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_gacf52d6c93df110dee6d402b389e5042e}{twi\+\_\+stop}} (void)
+\begin{DoxyCompactList}\small\item\em Vygeneruje podmienku Stop na I2\+C/\+TWI zbernici. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_gae830c20b3544c9619c2c316b9a578ab2}{twi\+\_\+test\+\_\+address}} (uint8\+\_\+t addr)
+\begin{DoxyCompactList}\small\item\em Otestuje prítomnosť jedného I2C zariadenia na zbernici. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_gacf2027b11accf8c8a40502c60dd1b76f}{twi\+\_\+readfrom\+\_\+mem\+\_\+into}} (uint8\+\_\+t addr, uint8\+\_\+t memaddr, volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}buf, uint8\+\_\+t nbytes)
+\begin{DoxyCompactList}\small\item\em Prečíta blok dát z pamäte periférie do bufferu, počnúc danou adresou. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementácia knižnice pre I2\+C/\+TWI komunikáciu. 
+
+Súbor obsahuje implementáciu základných funkcií pre prácu s TWI (I2C) na mikrokontroléroch AVR\+:
+\begin{DoxyItemize}
+\item inicializáciu TWI jednotky,
+\item generovanie START/\+STOP podmienok,
+\item zápis a čítanie jedného bajtu,
+\item test prítomnosti zariadenia na zbernici,
+\item čítanie bloku dát z pamäte periférie.
+\end{DoxyItemize}
+
+Funkcie používajú vnútorný TWI modul mikrokontroléra a predpokladajú vhodne nastavené konštanty F\+\_\+\+CPU, F\+\_\+\+SCL a TWI\+\_\+\+BIT\+\_\+\+RATE\+\_\+\+REG (pozri \doxylink{twi_8h}{twi.\+h}). 

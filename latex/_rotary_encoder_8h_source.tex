@@ -1,0 +1,54 @@
+\doxysection{Rotary\+Encoder.\+h}
+\hypertarget{_rotary_encoder_8h_source}{}\label{_rotary_encoder_8h_source}\mbox{\hyperlink{_rotary_encoder_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ ROTARY\_ENCODER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ ROTARY\_ENCODER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdint.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{gpio_8h}{gpio.h}}"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00022\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{EncoderEvent}}\ \{}
+\DoxyCodeLine{00023\ \ \ \ \ EVENT\_NONE,}
+\DoxyCodeLine{00024\ \ \ \ \ EVENT\_CW,}
+\DoxyCodeLine{00025\ \ \ \ \ EVENT\_CCW,}
+\DoxyCodeLine{00026\ \ \ \ \ EVENT\_BUTTON}
+\DoxyCodeLine{00027\ \};}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00041\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_rotary_encoder_a364b4fb0108ebc77472e19a7aefcbb40}{RotaryEncoder}}\ \{}
+\DoxyCodeLine{00042\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *\_ddrCLK;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *\_pinRegCLK;}
+\DoxyCodeLine{00046\ \ \ \ \ uint8\_t\ \_bitCLK;}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *\_ddrDT;}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *\_pinRegDT;}
+\DoxyCodeLine{00051\ \ \ \ \ uint8\_t\ \_bitDT;}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *\_ddrSW;}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *\_pinRegSW;}
+\DoxyCodeLine{00056\ \ \ \ \ uint8\_t\ \_bitSW;}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00059\ \ \ \ \ uint8\_t\ \_lastCLKState;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \_lastButtonPress;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \_lastRotaryEvent;}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00081\ \ \ \ \ \mbox{\hyperlink{class_rotary_encoder_a364b4fb0108ebc77472e19a7aefcbb40}{RotaryEncoder}}(}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *ddrCLK,\ \textcolor{keyword}{volatile}\ uint8\_t\ *pinRegCLK,\ uint8\_t\ bitCLK,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *ddrDT,\ \ \textcolor{keyword}{volatile}\ uint8\_t\ *pinRegDT,\ \ uint8\_t\ bitDT,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keyword}{volatile}\ uint8\_t\ *ddrSW,\ \ \textcolor{keyword}{volatile}\ uint8\_t\ *pinRegSW,\ \ uint8\_t\ bitSW}
+\DoxyCodeLine{00085\ \ \ \ \ );}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_rotary_encoder_a4e2829a93900546ec724e855a7f8c332}{begin}}();}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{_rotary_encoder_8h_a7c1129f8df4eb901ed5b4f413a8817b4}{EncoderEvent}}\ \mbox{\hyperlink{class_rotary_encoder_a3e1b29e2997aedd554bd2d00bdefc53f}{checkEvent}}();}
+\DoxyCodeLine{00106\ \};}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00116\ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{_rotary_encoder_8h_a77fdf24910de9db4719daced3b996551}{timer\_millis}}();}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

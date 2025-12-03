@@ -1,0 +1,417 @@
+\doxysection{TWI knižnica \texorpdfstring{$<$}{<}twi.\+h\texorpdfstring{$>$}{>} }
+\hypertarget{group__fryza__twi}{}\label{group__fryza__twi}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+
+
+Knižnica pre I2\+C/\+TWI komunikáciu pre AVR-\/\+GCC.  
+
+
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{group__fryza__twi_ga16f0e6b2fa5a26eadbf4086ab6d54467}{twi\+\_\+init}} (void)
+\begin{DoxyCompactList}\small\item\em Inicializuje TWI jednotku, zapne interné pull-\/up rezistory a nastaví frekvenciu SCL. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_gaf37269da7f6b1b22438b78d2f965f274}{twi\+\_\+start}} (void)
+\begin{DoxyCompactList}\small\item\em Vygeneruje podmienku Start na I2\+C/\+TWI zbernici. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_ga129b8a79f75189c3801cb7082e6b8340}{twi\+\_\+write}} (uint8\+\_\+t data)
+\begin{DoxyCompactList}\small\item\em Zapíše jeden bajt na I2\+C/\+TWI zbernicu. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_gae9f84b771b4acdedd2106e91cb03cc78}{twi\+\_\+read}} (uint8\+\_\+t ack)
+\begin{DoxyCompactList}\small\item\em Prečíta jeden bajt z I2\+C/\+TWI zbernice a potvrdí ho ACK alebo NACK. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_gacf52d6c93df110dee6d402b389e5042e}{twi\+\_\+stop}} (void)
+\begin{DoxyCompactList}\small\item\em Vygeneruje podmienku Stop na I2\+C/\+TWI zbernici. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{group__fryza__twi_gae830c20b3544c9619c2c316b9a578ab2}{twi\+\_\+test\+\_\+address}} (uint8\+\_\+t addr)
+\begin{DoxyCompactList}\small\item\em Otestuje prítomnosť I2C zariadenia na zbernici. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{group__fryza__twi_gacf2027b11accf8c8a40502c60dd1b76f}{twi\+\_\+readfrom\+\_\+mem\+\_\+into}} (uint8\+\_\+t addr, uint8\+\_\+t memaddr, volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}buf, uint8\+\_\+t nbytes)
+\begin{DoxyCompactList}\small\item\em Prečíta blok dát z pamäte periférie do bufferu, počnúc danou adresou. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Definícia frekvencií}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{group__fryza__twi_ga43bafb28b29491ec7f871319b5a3b2f8}\label{group__fryza__twi_ga43bafb28b29491ec7f871319b5a3b2f8} 
+\#define {\bfseries F\+\_\+\+CPU}~16000000
+\begin{DoxyCompactList}\small\item\em Frekvencia CPU v Hz, potrebná pre výpočet TWI\+\_\+\+BIT\+\_\+\+RATE\+\_\+\+REG. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__twi_ga7a1c522bed64982971384489ee477bd3}\label{group__fryza__twi_ga7a1c522bed64982971384489ee477bd3} 
+\#define {\bfseries F\+\_\+\+SCL}~100000
+\begin{DoxyCompactList}\small\item\em I2\+C/\+TWI bitová rýchlosť v Hz. Musí byť väčšia ako približne 31 k\+Hz. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__twi_ga801c158406ca2334b446e442a2debe37}{TWI\+\_\+\+BIT\+\_\+\+RATE\+\_\+\+REG}}~((\mbox{\hyperlink{group__fryza__twi_ga43bafb28b29491ec7f871319b5a3b2f8}{F\+\_\+\+CPU}}/\mbox{\hyperlink{group__fryza__twi_ga7a1c522bed64982971384489ee477bd3}{F\+\_\+\+SCL}} -\/ 16) / 2)
+\begin{DoxyCompactList}\small\item\em Hodnota registra rýchlosti TWI (TWBR) podľa vzťahu $ f_{SCL} = \frac{f_{CPU}}{16 + 2 \cdot TWBR} $. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Definícia portov a pinov}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{group__fryza__twi_ga762c164f4acd04d3ce3627fe73e7c018}{TWI\+\_\+\+PORT}}~PORTC
+\begin{DoxyCompactList}\small\item\em Port, na ktorom sú piny TWI (SDA, SCL). \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__twi_ga3f14ed8491293d0dda1372cceaa39851}\label{group__fryza__twi_ga3f14ed8491293d0dda1372cceaa39851} 
+\#define {\bfseries TWI\+\_\+\+SDA\+\_\+\+PIN}~4
+\begin{DoxyCompactList}\small\item\em Pin SDA linky TWI na porte \doxylink{group__fryza__twi_ga762c164f4acd04d3ce3627fe73e7c018}{TWI\+\_\+\+PORT}. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__twi_gac0ad8b33f1be48e211f1eeae2dd65cee}\label{group__fryza__twi_gac0ad8b33f1be48e211f1eeae2dd65cee} 
+\#define {\bfseries TWI\+\_\+\+SCL\+\_\+\+PIN}~5
+\begin{DoxyCompactList}\small\item\em Pin SCL linky TWI na porte \doxylink{group__fryza__twi_ga762c164f4acd04d3ce3627fe73e7c018}{TWI\+\_\+\+PORT}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Ďalšie definície}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{group__fryza__twi_ga3b68e8e777b71520f9dbfac733774d5f}\label{group__fryza__twi_ga3b68e8e777b71520f9dbfac733774d5f} 
+\#define {\bfseries TWI\+\_\+\+WRITE}~0
+\begin{DoxyCompactList}\small\item\em Režim zápisu na I2\+C/\+TWI zbernicu. Používa sa pri SLA+W. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__twi_gaaf9a8abccd811954f9cc316f2b2f87b3}\label{group__fryza__twi_gaaf9a8abccd811954f9cc316f2b2f87b3} 
+\#define {\bfseries TWI\+\_\+\+READ}~1
+\begin{DoxyCompactList}\small\item\em Režim čítania z I2\+C/\+TWI zbernice. Používa sa pri SLA+R. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__twi_ga00dcb08e2effea903c22763e0aeeb3cb}\label{group__fryza__twi_ga00dcb08e2effea903c22763e0aeeb3cb} 
+\#define {\bfseries TWI\+\_\+\+ACK}~0
+\begin{DoxyCompactList}\small\item\em Hodnota ACK pri odpovedi na prijatý bajt na I2\+C/\+TWI zbernici. \end{DoxyCompactList}\item 
+\Hypertarget{group__fryza__twi_gaaf28e960d6d1c0553791faf52ebd8ef6}\label{group__fryza__twi_gaaf28e960d6d1c0553791faf52ebd8ef6} 
+\#define {\bfseries TWI\+\_\+\+NACK}~1
+\begin{DoxyCompactList}\small\item\em Hodnota NACK pri odpovedi na prijatý bajt na I2\+C/\+TWI zbernici. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__twi_ga6c0346728feb274834cad94daca316ee}{DDR}}(\+\_\+x)
+\begin{DoxyCompactList}\small\item\em Makro na získanie adresy registra smeru portu (DDR) z jeho PORT registra. \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{group__fryza__twi_ga740f9eb9c9f9e33500ee61ec53945f6a}{PIN}}(\+\_\+x)
+\begin{DoxyCompactList}\small\item\em Makro na získanie adresy vstupného registra portu (PIN) z jeho PORT registra. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Knižnica pre I2\+C/\+TWI komunikáciu pre AVR-\/\+GCC. 
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{twi_8h}{twi.h}}>}\ }
+
+\end{DoxyCode}
+
+
+Táto knižnica definuje funkcie pre komunikáciu cez TWI (I2C) z pohľadu Master zariadenia. Funkcie využívajú vnútorný TWI modul mikrokontroléra AVR a umožňujú jednoducho komunikovať so Slave perifériami na I2\+C/\+TWI zbernici.
+
+Implementované sú režimy Master transmit a Master receive podľa dokumentácie mikrokontrolérov ATmega16 a ATmega328P.
+
+\begin{DoxyNote}{Note}
+Knižnica predpokladá použitie vnútorného TWI modulu a vhodné pull-\/up rezistory na SDA a SCL. Konštanty F\+\_\+\+CPU a F\+\_\+\+SCL určujú výslednú bitovú rýchlosť. 
+\end{DoxyNote}
+\begin{DoxyCopyright}{Copyright}
+(c) 2018-\/2024 Tomas Fryza, MIT license 
+\end{DoxyCopyright}
+
+
+\label{doc-define-members}
+\Hypertarget{group__fryza__twi_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{group__fryza__twi_ga6c0346728feb274834cad94daca316ee}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!DDR@{DDR}}
+\index{DDR@{DDR}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{DDR}{DDR}}
+{\footnotesize\ttfamily \label{group__fryza__twi_ga6c0346728feb274834cad94daca316ee} 
+\#define DDR(\begin{DoxyParamCaption}\item[{}]{\+\_\+x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(*(\&\_x\ -\/\ 1))}
+
+\end{DoxyCode}
+
+
+Makro na získanie adresy registra smeru portu (DDR) z jeho PORT registra. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+x} & PORT register, napr. PORTC. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__fryza__twi_ga740f9eb9c9f9e33500ee61ec53945f6a}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!PIN@{PIN}}
+\index{PIN@{PIN}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{PIN}{PIN}}
+{\footnotesize\ttfamily \label{group__fryza__twi_ga740f9eb9c9f9e33500ee61ec53945f6a} 
+\#define PIN(\begin{DoxyParamCaption}\item[{}]{\+\_\+x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(*(\&\_x\ -\/\ 2))}
+
+\end{DoxyCode}
+
+
+Makro na získanie adresy vstupného registra portu (PIN) z jeho PORT registra. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+x} & PORT register, napr. PORTC. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{group__fryza__twi_ga801c158406ca2334b446e442a2debe37}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!TWI\_BIT\_RATE\_REG@{TWI\_BIT\_RATE\_REG}}
+\index{TWI\_BIT\_RATE\_REG@{TWI\_BIT\_RATE\_REG}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{TWI\_BIT\_RATE\_REG}{TWI\_BIT\_RATE\_REG}}
+{\footnotesize\ttfamily \label{group__fryza__twi_ga801c158406ca2334b446e442a2debe37} 
+\#define TWI\+\_\+\+BIT\+\_\+\+RATE\+\_\+\+REG~((\mbox{\hyperlink{group__fryza__twi_ga43bafb28b29491ec7f871319b5a3b2f8}{F\+\_\+\+CPU}}/\mbox{\hyperlink{group__fryza__twi_ga7a1c522bed64982971384489ee477bd3}{F\+\_\+\+SCL}} -\/ 16) / 2)}
+
+
+
+Hodnota registra rýchlosti TWI (TWBR) podľa vzťahu $ f_{SCL} = \frac{f_{CPU}}{16 + 2 \cdot TWBR} $. 
+
+Hodnota pre TWI bit rate register. \Hypertarget{group__fryza__twi_ga762c164f4acd04d3ce3627fe73e7c018}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!TWI\_PORT@{TWI\_PORT}}
+\index{TWI\_PORT@{TWI\_PORT}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{TWI\_PORT}{TWI\_PORT}}
+{\footnotesize\ttfamily \label{group__fryza__twi_ga762c164f4acd04d3ce3627fe73e7c018} 
+\#define TWI\+\_\+\+PORT~PORTC}
+
+
+
+Port, na ktorom sú piny TWI (SDA, SCL). 
+
+Pre väčšinu ATmega328P je to port C (PC4 = SDA, PC5 = SCL). 
+
+\label{doc-func-members}
+\Hypertarget{group__fryza__twi_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{group__fryza__twi_ga16f0e6b2fa5a26eadbf4086ab6d54467}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!twi\_init@{twi\_init}}
+\index{twi\_init@{twi\_init}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{twi\_init()}{twi\_init()}}
+{\footnotesize\ttfamily \label{group__fryza__twi_ga16f0e6b2fa5a26eadbf4086ab6d54467} 
+void twi\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Inicializuje TWI jednotku, zapne interné pull-\/up rezistory a nastaví frekvenciu SCL. 
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item zapne interné pull-\/up rezistory na pinoch \doxylink{group__fryza__twi_ga3f14ed8491293d0dda1372cceaa39851}{TWI\+\_\+\+SDA\+\_\+\+PIN} a \doxylink{group__fryza__twi_gac0ad8b33f1be48e211f1eeae2dd65cee}{TWI\+\_\+\+SCL\+\_\+\+PIN},
+\item nastaví bitovú rýchlosť TWI podľa \doxylink{group__fryza__twi_ga801c158406ca2334b446e442a2debe37}{TWI\+\_\+\+BIT\+\_\+\+RATE\+\_\+\+REG} a konštánt F\+\_\+\+CPU a F\+\_\+\+SCL,
+\item povolí TWI modul mikrokontroléra.
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Funkcia nevracia žiadnu hodnotu.
+\end{DoxyReturn}
+Inicializuje TWI jednotku, zapne interné pull-\/up rezistory a nastaví frekvenciu SCL.
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item nastaví piny SDA a SCL ako vstupy s internými pull-\/up rezistormi,
+\item nastaví pred-\/deľič TWI a hodnotu registra TWBR podľa \doxylink{group__fryza__twi_ga801c158406ca2334b446e442a2debe37}{TWI\+\_\+\+BIT\+\_\+\+RATE\+\_\+\+REG}, čím určí výslednú frekvenciu TWI zbernice (SCL).
+\end{DoxyItemize}
+
+\begin{DoxyReturn}{Returns}
+Funkcia nevracia žiadnu hodnotu. 
+\end{DoxyReturn}
+\Hypertarget{group__fryza__twi_gae9f84b771b4acdedd2106e91cb03cc78}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!twi\_read@{twi\_read}}
+\index{twi\_read@{twi\_read}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{twi\_read()}{twi\_read()}}
+{\footnotesize\ttfamily \label{group__fryza__twi_gae9f84b771b4acdedd2106e91cb03cc78} 
+uint8\+\_\+t twi\+\_\+read (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{ack}{}\end{DoxyParamCaption})}
+
+
+
+Prečíta jeden bajt z I2\+C/\+TWI zbernice a potvrdí ho ACK alebo NACK. 
+
+Po prijatí bajtu z I2\+C/\+TWI zbernice odošle Master buď ACK (ak chce čítať ďalšie dáta), alebo NACK (ak ide o posledný prijímaný bajt).
+
+
+\begin{DoxyParams}{Parameters}
+{\em ack} & Hodnota ACK/\+NACK, ktorá sa odošle po prijatí bajtu. Použi \doxylink{group__fryza__twi_ga00dcb08e2effea903c22763e0aeeb3cb}{TWI\+\_\+\+ACK} alebo \doxylink{group__fryza__twi_gaaf28e960d6d1c0553791faf52ebd8ef6}{TWI\+\_\+\+NACK}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Prijatý dátový bajt.
+\end{DoxyReturn}
+Funkcia pripraví TWI modul na prijatie jedného bajtu a po jeho prijatí odošle buď ACK (ak chce Master čítať ďalej), alebo NACK (ak ide o posledný bajt).
+
+
+\begin{DoxyParams}{Parameters}
+{\em ack} & Hodnota ACK/\+NACK, ktorá sa má odoslať po prijatí bajtu. Použi \doxylink{group__fryza__twi_ga00dcb08e2effea903c22763e0aeeb3cb}{TWI\+\_\+\+ACK} alebo \doxylink{group__fryza__twi_gaaf28e960d6d1c0553791faf52ebd8ef6}{TWI\+\_\+\+NACK}.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Prijatý bajt z I2\+C/\+TWI zbernice. 
+\end{DoxyReturn}
+\Hypertarget{group__fryza__twi_gacf2027b11accf8c8a40502c60dd1b76f}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!twi\_readfrom\_mem\_into@{twi\_readfrom\_mem\_into}}
+\index{twi\_readfrom\_mem\_into@{twi\_readfrom\_mem\_into}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{twi\_readfrom\_mem\_into()}{twi\_readfrom\_mem\_into()}}
+{\footnotesize\ttfamily \label{group__fryza__twi_gacf2027b11accf8c8a40502c60dd1b76f} 
+void twi\+\_\+readfrom\+\_\+mem\+\_\+into (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{addr}{, }\item[{uint8\+\_\+t}]{memaddr}{, }\item[{volatile uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{buf}{, }\item[{uint8\+\_\+t}]{nbytes}{}\end{DoxyParamCaption})}
+
+
+
+Prečíta blok dát z pamäte periférie do bufferu, počnúc danou adresou. 
+
+Funkcia vykoná typickú sekvenciu čítania z „register-\/based“ I2C zariadenia\+:
+\begin{DoxyItemize}
+\item odošle SLA+W a po ňom počiatočnú adresu {\ttfamily memaddr},
+\item opätovne odošle Start a SLA+R,
+\item prečíta {\ttfamily nbytes} bajtov do {\ttfamily buf}.
+\end{DoxyItemize}
+
+Používa sa napríklad pri čítaní z pamäťových zariadení, senzorov s vnútornými registrami a podobne.
+
+
+\begin{DoxyParams}{Parameters}
+{\em addr} & Slave adresa zariadenia. \\
+\hline
+{\em memaddr} & Počiatočná vnútorná adresa (register) v zariadení, odkiaľ sa má čítať. \\
+\hline
+{\em buf} & Ukazovateľ na buffer, do ktorého sa majú zapisovať prijaté dáta. \\
+\hline
+{\em nbytes} & Počet bajtov, ktoré sa majú prečítať.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Funkcia nevracia žiadnu hodnotu.
+\end{DoxyReturn}
+Typické použitie pri zariadeniach, ktoré majú vnútorné registre alebo pamäť (napr. senzory, EEPROM)\+:
+\begin{DoxyItemize}
+\item odošle sa SLA+W a počiatočná adresa {\ttfamily memaddr},
+\item odošle sa opakovaný START a SLA+R,
+\item prečíta sa {\ttfamily nbytes} bajtov do {\ttfamily buf}.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em addr} & Slave adresa zariadenia. \\
+\hline
+{\em memaddr} & Počiatočná vnútorná adresa (register/pamäť), odkiaľ sa má čítať. \\
+\hline
+{\em buf} & Ukazovateľ na buffer, do ktorého sa budú ukladať prijaté dáta. \\
+\hline
+{\em nbytes} & Počet bajtov, ktoré sa majú prečítať.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Funkcia nevracia žiadnu hodnotu. 
+\end{DoxyReturn}
+\Hypertarget{group__fryza__twi_gaf37269da7f6b1b22438b78d2f965f274}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!twi\_start@{twi\_start}}
+\index{twi\_start@{twi\_start}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{twi\_start()}{twi\_start()}}
+{\footnotesize\ttfamily \label{group__fryza__twi_gaf37269da7f6b1b22438b78d2f965f274} 
+void twi\+\_\+start (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Vygeneruje podmienku Start na I2\+C/\+TWI zbernici. 
+
+Funkcia odošle Start podmienku na zbernicu a čaká, kým je prenos dokončený (TWI nastaví príslušný stav v TWSR).
+
+\begin{DoxyReturn}{Returns}
+Funkcia nevracia žiadnu hodnotu.
+\end{DoxyReturn}
+Funkcia nastaví bity v registri TWCR tak, aby TWI modul vyslal Start podmienku na zbernicu a čaká, kým je operácia dokončená (nastaví sa TWINT).
+
+\begin{DoxyReturn}{Returns}
+Funkcia nevracia žiadnu hodnotu. 
+\end{DoxyReturn}
+\Hypertarget{group__fryza__twi_gacf52d6c93df110dee6d402b389e5042e}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!twi\_stop@{twi\_stop}}
+\index{twi\_stop@{twi\_stop}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{twi\_stop()}{twi\_stop()}}
+{\footnotesize\ttfamily \label{group__fryza__twi_gacf52d6c93df110dee6d402b389e5042e} 
+void twi\+\_\+stop (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Vygeneruje podmienku Stop na I2\+C/\+TWI zbernici. 
+
+Funkcia odošle Stop podmienku, čím uvoľní zbernicu. Po vykonaní Stop môže iný Master zariadenie prevziať kontrolu nad I2\+C/\+TWI zbernicou.
+
+\begin{DoxyReturn}{Returns}
+Funkcia nevracia žiadnu hodnotu.
+\end{DoxyReturn}
+Funkcia odošle Stop podmienku (TWSTO) a tým uvoľní zbernicu. Stop sa odošle po ukončení prenosu dát alebo po chybe.
+
+\begin{DoxyReturn}{Returns}
+Funkcia nevracia žiadnu hodnotu. 
+\end{DoxyReturn}
+\Hypertarget{group__fryza__twi_gae830c20b3544c9619c2c316b9a578ab2}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!twi\_test\_address@{twi\_test\_address}}
+\index{twi\_test\_address@{twi\_test\_address}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{twi\_test\_address()}{twi\_test\_address()}}
+{\footnotesize\ttfamily \label{group__fryza__twi_gae830c20b3544c9619c2c316b9a578ab2} 
+uint8\+\_\+t twi\+\_\+test\+\_\+address (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{addr}{}\end{DoxyParamCaption})}
+
+
+
+Otestuje prítomnosť I2C zariadenia na zbernici. 
+
+Funkcia odošle na zbernicu slave adresu {\ttfamily addr} (spolu s bitom W) a sleduje, či zariadenie odpovie ACK. Vhodné napríklad na zisťovanie, či je daná periféria pripojená a pripravená na komunikáciu.
+
+
+\begin{DoxyParams}{Parameters}
+{\em addr} & Slave adresa zariadenia (7-\/bitová adresa v horných bitoch).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ACK/\+NACK od zariadenia\+: 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & ACK bol prijatý – zariadenie odpovedá \\
+\hline
+{\em 1} & NACK bol prijatý – zariadenie neodpovedá\\
+\hline
+\end{DoxyRetVals}
+Otestuje prítomnosť I2C zariadenia na zbernici.
+
+Funkcia\+:
+\begin{DoxyItemize}
+\item vygeneruje START podmienku,
+\item odošle SLA+W (adresu zariadenia s bitom zápisu),
+\item sleduje, či zariadenie odpovie ACK,
+\item vygeneruje STOP podmienku.
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em addr} & 7-\/bitová slave adresa zariadenia (bez R/W bitu).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ACK/\+NACK od zariadenia\+: 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & ACK bol prijatý – zariadenie odpovedá \\
+\hline
+{\em 1} & NACK bol prijatý – zariadenie neodpovedá \\
+\hline
+\end{DoxyRetVals}
+\Hypertarget{group__fryza__twi_ga129b8a79f75189c3801cb7082e6b8340}\index{TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}!twi\_write@{twi\_write}}
+\index{twi\_write@{twi\_write}!TWI knižnica $<$twi.h$>$@{TWI knižnica $<$twi.h$>$}}
+\doxysubsubsection{\texorpdfstring{twi\_write()}{twi\_write()}}
+{\footnotesize\ttfamily \label{group__fryza__twi_ga129b8a79f75189c3801cb7082e6b8340} 
+uint8\+\_\+t twi\+\_\+write (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{data}{}\end{DoxyParamCaption})}
+
+
+
+Zapíše jeden bajt na I2\+C/\+TWI zbernicu. 
+
+Funkcia odošle bajt {\ttfamily data} na I2\+C/\+TWI zbernicu (typicky SLA+\+R/\+SLA+W alebo dátový bajt) a následne čaká na dokončenie prenosu. Výsledkom je hodnota, ktorá indikuje, či bol od Slave zariadenia prijatý ACK alebo NACK.
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Bajt, ktorý sa má odoslať na I2\+C/\+TWI zbernicu.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ACK/\+NACK od Slave zariadenia\+: 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & ACK bol prijatý \\
+\hline
+{\em 1} & NACK bol prijatý\\
+\hline
+\end{DoxyRetVals}
+\begin{DoxyNote}{Note}
+Funkcia vracia 0, ak je detegovaný stavový kód TWI 0x18, 0x28 alebo 0x40\+:
+\begin{DoxyItemize}
+\item 0x18\+: SLA+W bol odoslaný a ACK prijatý~\newline
+
+\item 0x28\+: Dátový bajt bol odoslaný a ACK prijatý~\newline
+
+\item 0x40\+: SLA+R bol odoslaný a ACK prijatý~\newline
+ Funkcia odošle bajt {\ttfamily data} (SLA+W, SLA+R alebo obyčajný dátový bajt) na TWI zbernicu a po dokončení prenosu skontroluje stavový register TWSR.
+\end{DoxyItemize}
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Bajt, ktorý sa má odoslať na zbernicu.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ACK/\+NACK od Slave zariadenia\+: 
+\end{DoxyReturn}
+
+\begin{DoxyRetVals}{Return values}
+{\em 0} & ACK bol prijatý (úspešný zápis) \\
+\hline
+{\em 1} & NACK bol prijatý (zariadenie nepotvrdilo prenos) \\
+\hline
+\end{DoxyRetVals}
