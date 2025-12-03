@@ -77,3 +77,14 @@ This section explains how to control the FM Radio receiver using the buttons and
 ### Control Logic Flowchart
 Below is the logic diagram showing how user inputs are processed.
 <img width="956" height="443" alt="Výkres 3" src="https://github.com/user-attachments/assets/6d446190-c761-4fb4-85e6-d05a0ced022b" />
+## 5. Conclusion & Future Improvements
+
+### Conclusion
+This project successfully demonstrates the design and implementation of a digitally controlled FM receiver. We managed to integrate the **Si4703 tuner** with an **Arduino Uno** and created a user-friendly interface using an OLED display, tactile buttons, and a rotary encoder. The final device provides audio reception, tuning, and essential features like RDS decoding and station memory, meeting all the initial requirements.
+
+### Future Improvements
+Although the project is fully functional, there is room for further enhancements:
+* **3D Printed Enclosure:** Designing a custom case to house the components and make the device portable.
+* **Battery Operation:** Adding a Li-Po battery and charging circuit for true portability.
+* **Multiple Favorites:** Expanding the software to save a list of favorite stations into the EEPROM memory, not just one.
+* **Better Antenna:** Replacing the headphone wire antenna with a dedicated telescopic antenna for better signal reception.
