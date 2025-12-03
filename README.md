@@ -41,7 +41,7 @@ A list of the main components required for the build.
 Below is the photos of our actual hardware setup and wiring connections.
 
 ![DE2_hradware](https://github.com/user-attachments/assets/150adc52-20e1-42d6-8283-6ac59b0839c0)
-<br> <img src="https://github.com/user-attachments/assets/94885ea9-99bd-45c6-85d3-8da7ae0e0862" width="700">
+<br> <img src="https://github.com/user-attachments/assets/0630c92d-c7ba-4f1d-84e8-c9cbde90afc1" width="700">
 
 
 ## 3. Software Logic 
