@@ -22,7 +22,6 @@ Our solution uses a microcontroller (**Arduino Uno**) as the control unit, which
 
 The result is a compact, accurate, and user-friendly FM receiver.
 
----
 
 ## 2. Hardware Components
 
@@ -42,14 +41,21 @@ A list of the main components required for the build.
 Below is the photos of our actual hardware setup and wiring connections.
 
 ![DE2_hradware](https://github.com/user-attachments/assets/150adc52-20e1-42d6-8283-6ac59b0839c0)
-![zapojenie](https://github.com/user-attachments/assets/a37a5ced-9b3b-4971-9c7e-e3ed2ae64850)
+<br> <img src="https://github.com/user-attachments/assets/94885ea9-99bd-45c6-85d3-8da7ae0e0862" width="700">
 
 
+## 3. Software Logic 
 
+The firmware operates in a continuous polling loop, handling user inputs and updating system states.
 
-## 3. Software Design
+* **Initialization:** Configures I2C communication, initializes the OLED display, and sets up the Si4703 tuner.
+* **Input Processing:** Detects interactions from buttons and the rotary encoder:
+    * *Short vs. Long Press:* Differentiates actions (e.g., Short Up loads a favorite station, Long Up saves it).
+    * *Rotary Encoder:* Adjusts Volume or Frequency based on the selected mode (toggled by the encoder button).
+    * *Navigation:* Buttons manage Seek (Left/Right), Mute, and Power control.
+* **System Update:**
+    * Executes the requested action.
+    * Reads real-time data from Si4703 (Channel, RSSI, Volume).
+    * Refreshes the OLED display with current status.
 
-This section describes the high-level logic and flow of the program.
-
-### System Block Diagram
-The diagram illustrates the flow of signals and data between components.
+### Software Flowchart
