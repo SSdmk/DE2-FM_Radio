@@ -3,16 +3,32 @@
  *
  */
 
-
 #include "Si4703.h"
 #include "gpio.h"
 #include <util/delay.h>
 #include "twi.h"
 
 Si4703 radio;
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Si4703 Class Initialization
+// Inicializácia triedy Si4703 – uloženie parametrov a nastavení
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Konštruktor triedy Si4703 – nastaví piny MCU a základné parametre rádia.
+ *
+ * @param rstPin  GPIO pin MCU pripojený na reset Si4703.
+ * @param sdioPin GPIO pin MCU pre I2C dátovú linku (SDIO/SDA).
+ * @param sclkPin GPIO pin MCU pre I2C hodinovú linku (SCLK/SCL).
+ * @param intPin  GPIO pin MCU pre STC/RDS interrupt (ak sa používa).
+ * @param band    Pásmo (US/EU/JP) podľa konštánt BAND_*.
+ * @param space   Rozstup kanálov podľa konštánt SPACE_*.
+ * @param de      De-emfáza (50/75 μs).
+ * @param skmode  Režim seekovania (wrap/stop).
+ * @param seekth  RSSI prah pre seek.
+ * @param skcnt   Prah impulznej detekcie pri seeku.
+ * @param sksnr   SNR prah pre seek.
+ * @param agcd    Nastavenie AGC (0 = povolené, 1 = zakázané).
+ */
 Si4703::Si4703(
     int rstPin,
     int sdioPin,
@@ -27,260 +43,328 @@ Si4703::Si4703(
     int sksnr,
     int agcd
 )
-
 {
-  // MCU Pins Selection
-  _rstPin   = rstPin;   // Reset Pin
-  _sdioPin  = sdioPin;  // I2C Data IO Pin
-  _sclkPin  = sclkPin;  // I2C Clock Pin
-  _intPin   = intPin;   // Seek/Tune Complete Pin
+  // Výber pinov MCU
+  _rstPin   = rstPin;   // Reset pin Si4703
+  _sdioPin  = sdioPin;  // I2C dátová linka
+  _sclkPin  = sclkPin;  // I2C hodinová linka
+  _intPin   = intPin;   // Pin pre STC/RDS interrupt
 
-  // Band Settings
-  _band     = band;	    // Band Range
-  _space    = space;    // Band Spacing
-  _de       =	de;	      // De-Emphasis
+  // Nastavenia pásma
+  _band     = band;	    // Kód pásma
+  _space    = space;    // Rozstup kanálov
+  _de       =	de;	    // De-emfáza
 
-  // RDS Settings
+  // RDS nastavenia (rezervované pre ďalšie úpravy)
 
-  // Tune Settings
+  // Tune nastavenia (rezervované pre ďalšie úpravy)
 
-  // Seek Settings
-  _skmode   =	skmode;   // Seek Mode Wrap/Stop
-	_seekth   =	seekth;   // Seek Threshold
-	_skcnt    =	skcnt;    // Seek Clicks Number Threshold
-	_sksnr    =	sksnr;	  // Seek Signal/Noise Ratio
-  _agcd     = agcd;     // AGC disable
+  // Nastavenia seeku
+  _skmode   =	skmode;  // Režim seekovania (wrap/stop)
+  _seekth   =	seekth;  // RSSI prah pre seek
+  _skcnt    =	skcnt;   // Prah impulznej detekcie
+  _sksnr    =	sksnr;	// SNR prah pre seek
+  _agcd     = agcd;     // AGC disable flag
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Read the entire register set (0x00 - 0x0F) to Shadow
-// Reading is in following register address sequence 0A,0B,0C,0D,0E,0F,00,01,02,03,04,05,06,07,08,09 = 16 Words = 32 bytes.
+// Načítanie celého registračného priestoru (0x00 - 0x0F) do shadow štruktúry
+// Číta sa v poradí: 0A,0B,0C,0D,0E,0F,00,01,02,03,04,05,06,07,08,09 = 16 slov = 32 bajtov
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Načíta všetkých 16 registrov Si4703 do internej „shadow“ štruktúry.
+ *
+ * Funkcia:
+ *  - otvorí I2C komunikáciu v režime čítania,
+ *  - prečíta 32 bajtov v definovanom poradí,
+ *  - poskladá z nich 16-bitové slová do poľa @c shadow.word.
+ */
 void Si4703::getShadow()
 {
-    // Adresa Slave zařízení posunuta o 1 bit doleva pro R/W bit (1=READ)
+    // Adresa slave zariadenia posunutá o 1 bit doľava, doplnený R/W bit (1 = READ)
     uint8_t slave_read_addr = (I2C_ADDR << 1) | TWI_READ; 
     
-    // START komunikace a odeslání SLA+R
+    // Začiatok komunikácie a odoslanie SLA+R
     twi_start();
     if (twi_write(slave_read_addr) != TWI_ACK) {
-        twi_stop(); // Zařízení neodpovědělo
+        // Zariadenie neodpovedalo ACK – ukončíme komunikáciu
+        twi_stop();
         return;
     }
     
-    // Čtení 32 bytů (16 dvouslovných registrů)
-    for(int i = 0 ; i < 16; i++) {
+    // Čítanie 32 bajtov (16 16-bitových registrov)
+    for (int i = 0; i < 16; i++) {
         uint8_t msb, lsb;
 
-        // Čtení MSB (Všechny kromě 32. bytu dostávají ACK)
+        // Čítanie horného bajtu (MSB) – všetky okrem posledného LSB dostanú ACK
         msb = twi_read(TWI_ACK);
 
-        // Čtení LSB
+        // Čítanie dolného bajtu (LSB)
         if (i < 15) {
-            // LSB 1. až 15. slova dostanou ACK, aby Slave poslal další byte
+            // LSB 1. až 15. slova dostanú ACK, aby slave pokračoval ďalším bajtom
             lsb = twi_read(TWI_ACK);
         } else {
-            // LSB 16. slova je POSLEDNÍ byte (32. byte), proto dostane NACK
+            // LSB 16. slova je posledný bajt – posielame NACK
             lsb = twi_read(TWI_NACK);
         }
         
-        // Skládání 16-bitového slova
+        // Zloženie 16-bitového slova z MSB a LSB
         shadow.word[i] = ((uint16_t)msb << 8) | lsb;
     }
 
-    // STOP komunikace
+    // Ukončenie I2C komunikácie
     twi_stop();
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Write the current 9 control registers (0x02 to 0x07) to the Si4703
-// The Si4703 assumes you are writing to 0x02 first, then increments
+// Zápis riadiacich registrov (0x02 až 0x07) z shadow štruktúry do Si4703
+// Čip predpokladá, že prvý zapisovaný register je 0x02 a ďalej sa adresa inkrementuje
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Zapíše riadiace registre zo shadow štruktúry do čipu Si4703.
+ *
+ * Funkcia zapisuje subset registrov:
+ *  - postupne od indexu 8 po 13 v poli @c shadow.word,
+ *  - každý register ako MSB a LSB bajt cez I2C.
+ *
+ * @return 0 pri úspechu, nenulový kód pri chybe (NACK po adrese alebo bajte).
+ */
 uint8_t Si4703::putShadow()
 {
-    // Adresa Slave zařízení (I2C_ADDR) posunuta o 1 bit doleva pro R/W bit
-    // TWI_WRITE (0) je R/W bit nastavený na zápis
+    // Adresa slave zariadenia posunutá o 1 bit doľava, R/W bit = zápis
     uint8_t slave_write_addr = (I2C_ADDR << 1) | TWI_WRITE; 
-    uint8_t result = 0; // Bude obsahovat výsledek poslední twi_write
+    uint8_t result = 0; // Výsledok posledného twi_write
 
-    // 1. Zahájit komunikaci (START condition)
+    // 1. Začiatok komunikácie (START)
     twi_start();
     
-    // 2. Poslat adresu Slave zařízení s příznakem zápisu (SLA+W)
-    // Výsledek (ACK/NACK) je uložen do 'result'
+    // 2. Odoslanie SLA+W
     result = twi_write(slave_write_addr); 
     
-    // Kontrola, zda Slave ACKnoval (odpověděl)
+    // Kontrola ACK od slave
     if (result != TWI_ACK) {
         twi_stop();
         return 1; // Chyba: NACK po adrese
     }
 
-    // 3. Odeslat 6 dvouslovných registrů (12 bytů)
-    for(int i = 8 ; i < 14; i++) { 
-        
-        // Zápis Horního bytu (Upper byte)
+    // 3. Odoslanie 6 registrov (12 bajtov) – horný a dolný bajt
+    for (int i = 8; i < 14; i++) { 
+        // Horný bajt
         uint8_t upper_byte = shadow.word[i] >> 8;
         result = twi_write(upper_byte); 
         if (result != TWI_ACK) {
             twi_stop();
-            return 2; // Chyba: NACK po Upper byte
+            return 2; // Chyba: NACK po hornom bajte
         }
         
-        // Zápis Spodního bytu (Lower byte)
+        // Dolný bajt
         uint8_t lower_byte = shadow.word[i] & 0x00FF;
         result = twi_write(lower_byte); 
         if (result != TWI_ACK) {
             twi_stop();
-            return 3; // Chyba: NACK po Lower byte
+            return 3; // Chyba: NACK po dolnom bajte
         }
     }
     
-    // 4. Ukončit komunikaci (STOP condition)
+    // 4. Ukončenie komunikácie (STOP)
     twi_stop();
 
-    // Vracíme 0, pokud byl celý proces úspěšný (vše ACK)
+    // Všetko prebehlo úspešne
     return 0; 
 }
-//-----------------------------------------------------------------------------------------------------------------------------------
-// 3-Wire Control Interface (SCLK, SEN, SDIO)
-//-----------------------------------------------------------------------------------------------------------------------------------
 
-void	Si4703::bus3Wire(void)
+//-----------------------------------------------------------------------------------------------------------------------------------
+// 3-vodičové rozhranie (SCLK, SEN, SDIO) – zatiaľ neimplementované
+//-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Inicializácia 3-wire rozhrania (SCLK, SEN, SDIO).
+ *
+ * Funkcia je zatiaľ neimplementovaná (TODO). Projekt používa 2-wire (I2C) režim.
+ */
+void Si4703::bus3Wire(void)
 {
-  // TODO:
+  // TODO: Implementácia 3-wire rozhrania podľa dokumentácie Si4703
 }			
-//-----------------------------------------------------------------------------------------------------------------------------------
-// 2-Wire Control Interface (SCLCK, SDIO)
-//-----------------------------------------------------------------------------------------------------------------------------------
-void	Si4703::bus2Wire(void)		
-{
-  // Set IO pins directions
-  gpio_mode_output(&DDRD, _rstPin);    // Reset pin
-  gpio_mode_output(&DDRC, _sdioPin);   // I2C data IO pin
-  
-  // Set communcation mode to 2-Wire
-  gpio_write_low(&PORTD, _rstPin);   // Put Si4703 into reset
-  gpio_write_low(&PORTC, _sdioPin);  // A low SDIO indicates a 2-wire interface
-  _delay_ms(1);                     // Delay to allow pins to settle
-  gpio_write_high(&PORTD, _rstPin);  // Bring Si4703 out of reset with SDIO set to low and SEN pulled high with on-board resistor
-  _delay_ms(1);                     // Allow Si4703 to come out of reset
-  twi_init();                // Now that the unit is reset and I2C inteface mode, we need to begin I2C
 
+//-----------------------------------------------------------------------------------------------------------------------------------
+// 2-vodičové rozhranie (I2C: SCLCK, SDIO) – príprava pinov a prepnutie čipu do 2-wire módu
+//-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Inicializuje 2-wire (I2C) rozhranie pre Si4703 a prepne čip do I2C módu.
+ *
+ * Kroky:
+ *  - nastaví smer pinov RST a SDIO,
+ *  - privedie čip do resetu so SDIO = LOW (signál pre 2-wire mód),
+ *  - pustí reset a inicializuje TWI (I2C) jednotku.
+ */
+void Si4703::bus2Wire(void)		
+{
+  // Nastavenie smeru pinov
+  gpio_mode_output(&DDRD, _rstPin);    // Reset pin
+  gpio_mode_output(&DDRC, _sdioPin);   // I2C dátová linka
+  
+  // Nastavenie komunikačného režimu na 2-wire
+  gpio_write_low(&PORTD, _rstPin);   // Si4703 do resetu
+  gpio_write_low(&PORTC, _sdioPin);  // SDIO = LOW -> 2-wire rozhranie
+  _delay_ms(1);                      // Krátke čakanie na ustálenie pinov
+  gpio_write_high(&PORTD, _rstPin);  // Uvoľnenie resetu so SDIO = LOW
+  _delay_ms(1);                      // Čas na naštartovanie čipu
+
+  // Inicializácia TWI (I2C) po prechode do 2-wire módu
+  twi_init();
 }	
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Power Up Device
+// Power-up sekvencia – zapnutie oscilátora a povolenie čipu
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Zapne čip Si4703 – najprv oscilátor, potom samotné rádio.
+ *
+ * Kroky:
+ *  - načíta registre do shadow,
+ *  - povolí kryštálový oscilátor (XOSCEN),
+ *  - po čakaní povolí napájanie rádia (ENABLE) a zruší MUTE (DMUTE).
+ */
 void Si4703::powerUp()
 {
-  // Enable Oscillator
-  getShadow();                            // Read the current register set
-  shadow.reg.TEST1.bits.XOSCEN = 1;       // Enable the oscillator
-  putShadow();                            // Write to registers
-  _delay_ms(500);                             // Wait for oscillator to settle
+  // Povolenie oscilátora
+  getShadow();                            // Načítanie registrov
+  shadow.reg.TEST1.bits.XOSCEN = 1;       // Povoliť oscilátor
+  putShadow();                            // Zápis do registrov
+  _delay_ms(500);                         // Čas na ustálenie oscilátora
 
-  // Enable Device
-  getShadow();                            // Read the current register set
-  shadow.reg.POWERCFG.bits.ENABLE   = 1;  // Powerup Enable=1
-  shadow.reg.POWERCFG.bits.DISABLE  = 0;  // Powerup Disable=0
-  shadow.reg.POWERCFG.bits.DMUTE    = 1;  // Disable Mute
-  putShadow();                            // Write to registers
-  _delay_ms(110);                             // wait for max power up time
+  // Povolenie zariadenia
+  getShadow();                            // Načítanie registrov
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;  // Powerup enable
+  shadow.reg.POWERCFG.bits.DISABLE  = 0;  // Powerdown disable
+  shadow.reg.POWERCFG.bits.DMUTE    = 1;  // Zrušiť mute (audio zapnuté)
+  putShadow();                            // Zápis do registrov
+  _delay_ms(110);                         // Max. čas power-up podľa datasheetu
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Power Down
+// Power-down sekvencia – vypnutie audio výstupu a rádia
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Vypne čip Si4703 a nastaví audio výstupy do vysokej impedancie.
+ *
+ * Kroky:
+ *  - nastaví výstupy do Hi-Z,
+ *  - GPIO piny do Hi-Z,
+ *  - nastaví príznaky pre power-down a zapíše registre.
+ */
 void Si4703::powerDown()
 {
-  getShadow();                                // Read the current register set
-  shadow.reg.TEST1.bits.AHIZEN      = 1;      // LOUT/LOUT = High impedance
+  getShadow();                                // Načítanie registrov
+  shadow.reg.TEST1.bits.AHIZEN      = 1;      // Audio výstupy do vysokej impedancie
 
-  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z; // GPIO1 = High impedance (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z; // GPIO2 = High impedance (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z; // GPIO3 = High impedance (default)
+  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z; // GPIO1 = Hi-Z
+  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z; // GPIO2 = Hi-Z
+  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z; // GPIO3 = Hi-Z
 
-  shadow.reg.POWERCFG.bits.DMUTE    = 0;      // Disable Mute
-  shadow.reg.POWERCFG.bits.ENABLE   = 1;      // PowerDown Enable=1
-  shadow.reg.POWERCFG.bits.DISABLE  = 1;      // PowerDown Disable=1
+  shadow.reg.POWERCFG.bits.DMUTE    = 0;      // Mute (audio vypnuté)
+  shadow.reg.POWERCFG.bits.ENABLE   = 1;      // Power-up bit ponechaný
+  shadow.reg.POWERCFG.bits.DISABLE  = 1;      // Power-down aktivovaný
   
-  putShadow();                                // Write to registers
-  _delay_ms(2);                                   // wait for max power down time
+  putShadow();                                // Zápis do registrov
+  _delay_ms(2);                               // Krátky čas na vypnutie
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// To get the Si4703 in to 2-wire mode, SEN needs to be high and SDIO needs to be low after a reset
-// The breakout board has SEN pulled high, but also has SDIO pulled high. Therefore, after a normal power up
-// The Si4703 will be in an unknown state. RST must be controlled
+// Štart rádia – prepnutie do 2-wire módu, power-up a základná konfigurácia
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Spustí rádio: nastaví I2C režim, zapne čip a vykoná základnú konfiguráciu.
+ *
+ * Robí:
+ *  - inicializáciu 2-wire rozhrania,
+ *  - power-up sekvenciu,
+ *  - nastavenie pásma, rozstupu, de-emfázy,
+ *  - konfiguráciu seeku, RDS, audio parametrov a GPIO,
+ *  - uloženie konfigurácie zápisom shadow registrov.
+ */
 void Si4703::start() 
 {
-  bus2Wire();   // 2-Wire Control Interface (SCLCK, SDIO)
-  powerUp();    // Power Up device
+  bus2Wire();   // Inicializácia 2-wire rozhrania (I2C)
+  powerUp();    // Power-up čipu
 
-  // Default Start Configuration
-  getShadow();                            // Read the current register set
+  // Predvolená začiatočná konfigurácia
+  getShadow();                            // Načítanie registrov
 
-  // Select region band
-  setRegion(_band,_space,_de);                      // Select region band limits
-  shadow.reg.SYSCONFIG2.bits.SPACE  = _space;       // Select Channel Spacing Type
-  shadow.reg.SYSCONFIG2.bits.BAND   = _band;        // Select Band frequency range
-  shadow.reg.SYSCONFIG1.bits.DE     = _de;          // Select de-emphasis                          
+  // Výber pásma a regiónu
+  setRegion(_band,_space,_de);                      // Nastavenie hraníc pásma
+  shadow.reg.SYSCONFIG2.bits.SPACE  = _space;       // Rozstup kanálov
+  shadow.reg.SYSCONFIG2.bits.BAND   = _band;        // Pásmo
+  shadow.reg.SYSCONFIG1.bits.DE     = _de;          // De-emfáza
 
-  // Set Tune
-  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Disable Seek/Tune Complete Interrupt
+  // Nastavenie tuningu
+  shadow.reg.SYSCONFIG1.bits.STCIEN = 0;            // Interrupt STC vypnutý
 
-  // Set seek mode
-  shadow.reg.POWERCFG.bits.SEEK     = 0;            // Disable Seek
-  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Seek direction = UP
-  shadow.reg.POWERCFG.bits.SKMODE   = _skmode;      // Seek mode Wrap/Stop
-  shadow.reg.SYSCONFIG2.bits.SEEKTH = _seekth;      // Seek Threshold
-  shadow.reg.SYSCONFIG3.bits.SKCNT  = _skcnt;       // Seek Clicks Number Threshold
-  shadow.reg.SYSCONFIG3.bits.SKSNR  = _sksnr;       // Seek Signal/Noise Ratio
-  shadow.reg.SYSCONFIG1.bits.AGCD   = _agcd;        // AGC Disable
+  // Nastavenie seek režimu
+  shadow.reg.POWERCFG.bits.SEEK     = 0;            // Seek vypnutý
+  shadow.reg.POWERCFG.bits.SEEKUP   = 1;            // Predvolený smer seeku = hore
+  shadow.reg.POWERCFG.bits.SKMODE   = _skmode;      // Režim seeku (wrap/stop)
+  shadow.reg.SYSCONFIG2.bits.SEEKTH = _seekth;      // RSSI prah pre seek
+  shadow.reg.SYSCONFIG3.bits.SKCNT  = _skcnt;       // Prah impulzov
+  shadow.reg.SYSCONFIG3.bits.SKSNR  = _sksnr;       // SNR prah
+  shadow.reg.SYSCONFIG1.bits.AGCD   = _agcd;        // AGC disable
 
-  // Set RDS mode
-  shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // Enable/Disable RDS Interrupt
-  shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS Mode Standard/Verbose
-  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // Enable/Disable RDS
+  // Nastavenie RDS
+  shadow.reg.SYSCONFIG1.bits.RDSIEN = 0;            // RDS interrupt vypnutý
+  shadow.reg.POWERCFG.bits.RDSM     = 0;            // RDS štandardný režim
+  shadow.reg.SYSCONFIG1.bits.RDS    = 1;            // RDS povolené
 
-  // Set Audio
-  shadow.reg.TEST1.bits.AHIZEN      = 0;            // Enable Audio
-  shadow.reg.POWERCFG.bits.MONO     = 0;            // Disable MONO Mode
-  shadow.reg.SYSCONFIG1.bits.BLNDADJ= BLA_31_49;    // Stereo/Mono Blend Level Adjustment 31–49 RSSI dBμV (default)
-  shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Set volume to 0
-  shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // disabled (default)
+  // Nastavenie audia
+  shadow.reg.TEST1.bits.AHIZEN      = 0;            // Audio výstupy povolené
+  shadow.reg.POWERCFG.bits.MONO     = 0;            // Stereo režim
+  shadow.reg.SYSCONFIG1.bits.BLNDADJ= BLA_31_49;    // Blend úroveň 31–49 dBμV
+  shadow.reg.SYSCONFIG2.bits.VOLUME = 0;            // Začiatok s hlasitosťou 0
+  shadow.reg.SYSCONFIG3.bits.VOLEXT = 0;            // Rozšírený rozsah hlasitosti vypnutý
   
-  // Set Softmute mode
-  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Disable Softmute
-  shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute Attenuation 16dB (default)
-  shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Softmute Attack/Recover Rate = Fastest (default)
+  // Nastavenie softmute
+  shadow.reg.POWERCFG.bits.DSMUTE   = 1;            // Softmute vypnutý
+  shadow.reg.SYSCONFIG3.bits.SMUTEA = SMA_16dB;     // Softmute útlm 16 dB
+  shadow.reg.SYSCONFIG3.bits.SMUTER = SMRR_Fastest; // Najrýchlejšia reakcia softmute
 
-  // Set GPIOs
-  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = High impedance (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = High impedance (default)
-  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = High impedance (default)
+  // Nastavenie GPIO pinov
+  shadow.reg.SYSCONFIG1.bits.GPIO1  = GPIO_Z;       // GPIO1 = Hi-Z
+  shadow.reg.SYSCONFIG1.bits.GPIO2  = GPIO_Z;       // GPIO2 = Hi-Z
+  shadow.reg.SYSCONFIG1.bits.GPIO3  = GPIO_Z;       // GPIO3 = Hi-Z
 
-  putShadow();                                      // Write to registers
+  putShadow();                                      // Zápis konfigurácie do čipu
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Set FM Band Region limits and spacing
+// Nastavenie hraníc pásma a rozstupu kanálov
 //-----------------------------------------------------------------------------------------------------------------------------------
-void	Si4703::setRegion(int band,	  // Band Range
-                        int space,	// Band Spacing
-                        int de)		  // De-Emphasis
+/**
+ * @brief Nastaví hranice pásma a rozstup kanálov podľa zvoleného regiónu.
+ *
+ * @param band  Kód pásma (BAND_US_EU, BAND_JPW, BAND_JP).
+ * @param space Kód rozstupu (SPACE_50KHz/100KHz/200KHz).
+ * @param de    De-emfáza (aktuálne len uložené do člena, vlastné spracovanie je inde).
+ */
+void Si4703::setRegion(int band,   // Band Range
+                       int space,  // Band Spacing
+                       int de)     // De-Emphasis
 {
+  (void)de; // de sa reálne spracúva inde, tu sa riešia hlavne frekvencie
+
   switch (band)
   {
-    case BAND_US_EU:      // 87.5–108 MHz (US / Europe, Default)
-      _bandStart = 8750;  // Bottom of Band (kHz)
-      _bandEnd		= 10800;	// Top of Band (kHz)
+    case BAND_US_EU:      // 87.5–108 MHz (US / Európa)
+      _bandStart = 8750;  // Spodná hranica pásma (kHz)
+      _bandEnd   = 10800; // Horná hranica pásma (kHz)
       break;
     
-    case BAND_JPW:        // 76–108 MHz (Japan wide band)
-      _bandStart = 7600;  // Bottom of Band (kHz)
-      _bandEnd		= 10800;	// Top of Band (kHz)
+    case BAND_JPW:        // 76–108 MHz (Japonsko – široké pásmo)
+      _bandStart = 7600;  // Spodná hranica pásma (kHz)
+      _bandEnd   = 10800; // Horná hranica pásma (kHz)
       break;
     
-    case BAND_JP:         // 76–90 MHz (Japan)
-      _bandStart = 7600;	// Bottom of Band (kHz)
-      _bandEnd		= 9000;	// Top of Band (kHz)
+    case BAND_JP:         // 76–90 MHz (Japonsko – úzke pásmo)
+      _bandStart = 7600;  // Spodná hranica pásma (kHz)
+      _bandEnd   = 9000;  // Horná hranica pásma (kHz)
       break;
 
     default:
@@ -289,16 +373,16 @@ void	Si4703::setRegion(int band,	  // Band Range
 
   switch (space)
   {
-    case SPACE_100KHz:    // 200 kHz (US / Australia, Default)
-      _bandSpacing	= 10;	// Band Spacing (kHz)
+    case SPACE_100KHz:
+      _bandSpacing = 10;  // 100 kHz krok (v kHz)
       break;
 
-    case SPACE_200KHz:    // 100 kHz (Europe / Japan)
-      _bandSpacing	= 20;	// Band Spacing (kHz)
+    case SPACE_200KHz:
+      _bandSpacing = 20;  // 200 kHz krok
       break;
 
-    case SPACE_50KHz:     // 50 kHz (Other)
-      _bandSpacing	= 5;		// Band Spacing (kHz)
+    case SPACE_50KHz:
+      _bandSpacing = 5;   // 50 kHz krok
       break;
     
     default:
@@ -307,254 +391,384 @@ void	Si4703::setRegion(int band,	  // Band Range
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Set Mono
+// Nastavenie mono režimu
 //-----------------------------------------------------------------------------------------------------------------------------------
-void	Si4703::setMono(bool en)
+/**
+ * @brief Prepne rádio do mono režimu alebo späť do stereo.
+ *
+ * @param en true = mono, false = stereo.
+ */
+void Si4703::setMono(bool en)
 {
-  getShadow();                            // Read the current register set
-  shadow.reg.POWERCFG.bits.MONO = en;     // 1 = Force Mono
-  putShadow();                            // Write to registers
+  getShadow();                            // Načítanie registrov
+  shadow.reg.POWERCFG.bits.MONO = en;     // Nastavenie mono bitu
+  putShadow();                            // Zápis registrov
 }	
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get Mono Status
+// Zistenie mono režimu
 //-----------------------------------------------------------------------------------------------------------------------------------
-bool	Si4703::getMono(void)
+/**
+ * @brief Zistí, či je zapnutý mono režim.
+ *
+ * @return true ak je rádio v mono režime, inak false.
+ */
+bool Si4703::getMono(void)
 {
-  getShadow();                              // Read the current register set
-  return (shadow.reg.POWERCFG.bits.MONO);   // return status
+  getShadow();                              // Načítanie registrov
+  return (shadow.reg.POWERCFG.bits.MONO);   // Stav mono bitu
 }	
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Set Audio Mute
+// Nastavenie mute (ticho)
 //-----------------------------------------------------------------------------------------------------------------------------------
-void	Si4703::setMute(bool en)
+/**
+ * @brief Nastaví alebo zruší mute (vypnutie zvuku).
+ *
+ * @param en true = audio zapnuté (DMUTE=1), false = audio vypnuté.
+ */
+void Si4703::setMute(bool en)
 {
-  getShadow();                              // Read the current register set
-  shadow.reg.POWERCFG.bits.DMUTE = en;      // 0= Mute disabled
-  putShadow();                              // Write to registers
+  getShadow();                              // Načítanie registrov
+  shadow.reg.POWERCFG.bits.DMUTE = en;      // Nastavenie DMUTE
+  putShadow();                              // Zápis registrov
 }	
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// get Audio Mute
+// Zistenie mute stavu
 //-----------------------------------------------------------------------------------------------------------------------------------
-bool	Si4703::getMute(void)
+/**
+ * @brief Zistí aktuálny mute stav.
+ *
+ * @return true ak je DMUTE=1 (audio povolené), false ak je DMUTE=0.
+ */
+bool Si4703::getMute(void)
 {
-  getShadow();                              // Read the current register set
-  return (shadow.reg.POWERCFG.bits.DMUTE);  // return status
+  getShadow();                              // Načítanie registrov
+  return (shadow.reg.POWERCFG.bits.DMUTE);  // Stav DMUTE
 }	
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Set Extended Volume Range
+// Nastavenie rozšíreného rozsahu hlasitosti
 //-----------------------------------------------------------------------------------------------------------------------------------
-void	Si4703::setVolExt(bool en)
+/**
+ * @brief Povolenie alebo zakázanie rozšíreného rozsahu hlasitosti (VOLEXT).
+ *
+ * @param en true = rozšírený rozsah, false = normálny rozsah.
+ */
+void Si4703::setVolExt(bool en)
 {
-  getShadow();                              // Read the current register set
-  shadow.reg.SYSCONFIG3.bits.VOLEXT = en;   // 0=disabled (default)
-  putShadow();                              // Write to registers
+  getShadow();                              // Načítanie registrov
+  shadow.reg.SYSCONFIG3.bits.VOLEXT = en;   // Nastavenie VOLEXT
+  putShadow();                              // Zápis registrov
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get Extended Volume Range
+// Zistenie rozšíreného rozsahu hlasitosti
 //-----------------------------------------------------------------------------------------------------------------------------------
-bool	Si4703::getVolExt(void)
+/**
+ * @brief Zistí, či je zapnutý rozšírený rozsah hlasitosti.
+ *
+ * @return true ak je VOLEXT=1, inak false.
+ */
+bool Si4703::getVolExt(void)
 {
-  getShadow();                               // Read the current register set
-  return (shadow.reg.SYSCONFIG3.bits.VOLEXT);// return status
+  getShadow();                               // Načítanie registrov
+  return (shadow.reg.SYSCONFIG3.bits.VOLEXT);// Stav VOLEXT
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get Current Volume
+// Aktuálna hlasitosť
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Vráti aktuálnu nastavenú hlasitosť.
+ *
+ * @return Hodnota v rozsahu 0–15.
+ */
 int Si4703::getVolume(void)
 {
-  getShadow();                                // Read the current register set
-  return(shadow.reg.SYSCONFIG2.bits.VOLUME);
+  getShadow();                                // Načítanie registrov
+  return (shadow.reg.SYSCONFIG2.bits.VOLUME);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Set Volume
+// Nastavenie hlasitosti
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Nastaví hlasitosť na zadanú hodnotu v rozsahu 0–15.
+ *
+ * Hodnota sa orezáva do povoleného rozsahu. Po nastavení vráti
+ * aktuálnu hlasitosť načítanú z registra.
+ *
+ * @param volume Hodnota hlasitosti 0–15.
+ * @return Skutočne nastavená hlasitosť.
+ */
 int Si4703::setVolume(int volume)
 {
-  getShadow();                                // Read the current register set
-  if (volume < 0 ) volume = 0;                // Accepted Volume value 0-15
-  if (volume > 15) volume = 15;               // Accepted Volume value 0-15
-  shadow.reg.SYSCONFIG2.bits.VOLUME = volume; // Set volume to 0
-  putShadow();                                // Write to registers
-  return(getVolume());
+  getShadow();                                // Načítanie registrov
+  if (volume < 0 ) volume = 0;                // Orezanie spodnej hranice
+  if (volume > 15) volume = 15;               // Orezanie hornej hranice
+  shadow.reg.SYSCONFIG2.bits.VOLUME = volume; // Nastavenie hlasitosti
+  putShadow();                                // Zápis registrov
+  return (getVolume());
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Increment Volume
+// Zvýšenie hlasitosti o 1 krok
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Zvýši hlasitosť o jeden krok.
+ *
+ * @return Nová hodnota hlasitosti.
+ */
 int Si4703::incVolume(void)
 {
-  return(setVolume(getVolume()+1));
+  return (setVolume(getVolume() + 1));
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Decrement Volume
+// Zníženie hlasitosti o 1 krok
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Zníži hlasitosť o jeden krok.
+ *
+ * @return Nová hodnota hlasitosti.
+ */
 int Si4703::decVolume(void)
 {
-  return(setVolume(getVolume()-1));
+  return (setVolume(getVolume() - 1));
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Reads the current channel from READCHAN
-// Returns a number like 974 for 97.4MHz
+// Získanie aktuálne naladenej frekvencie z READCHAN
+// Vracia napr. 9740 pre 97,40 MHz (v kHz)
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Získa aktuálne naladenú frekvenciu na základe registra READCHAN.
+ *
+ * Výpočet:
+ *  - Freq = _bandSpacing * READCHAN + _bandStart (v kHz).
+ *
+ * @return Frekvencia v kHz.
+ */
 int Si4703::getChannel()
 {
-  getShadow();                                // Read the current register set
+  getShadow();                                // Načítanie registrov
   
-  // Freq = Spacing * Channel + Bottom of Band.
+  // Freq = Spacing * Channel + Bottom of Band
   return (_bandSpacing * shadow.reg.READCHAN.bits.READCHAN + _bandStart);  
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Sets Channel frequency
+// Nastavenie kanála (frekvencie) v kHz
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Nastaví naladenú frekvenciu (v kHz) v rámci aktuálneho pásma.
+ *
+ * Hodnota je orezaná na interval <_bandStart, _bandEnd>. Interný kanál sa vypočíta
+ * z rozdielu a rozstupu. Funkcia počká na dokončenie tuningu pomocou STC.
+ *
+ * @param freq Frekvencia v kHz.
+ * @return Skutočne naladená frekvencia v kHz.
+ */
 int Si4703::setChannel(int freq)
 {
-  if (freq > _bandEnd)    freq = _bandEnd;    // check upper limit
-  if (freq < _bandStart)  freq = _bandStart;  // check lower limit
+  if (freq > _bandEnd)    freq = _bandEnd;    // Horná hranica
+  if (freq < _bandStart)  freq = _bandStart;  // Spodná hranica
 
   // Freq     = Spacing * Channel + bandStart.
   // Channel  = (Freq - bandStart) / Spacing
-  getShadow();                              // Read the current register set
+  getShadow();                              // Načítanie registrov
   shadow.reg.CHANNEL.bits.CHAN  = (freq - _bandStart) / _bandSpacing;
-  shadow.reg.CHANNEL.bits.TUNE  = 1;        // Set the TUNE bit to start
-  putShadow();                              // Write to registers
+  shadow.reg.CHANNEL.bits.TUNE  = 1;        // Spustenie tuningu
+  putShadow();                              // Zápis registrov
 
-  if (shadow.reg.SYSCONFIG1.bits.STCIEN == 0) // Select method Interrupt or STC
-    while(!getSTC());                         // Wait for the si4703 to set the STC
+  if (shadow.reg.SYSCONFIG1.bits.STCIEN == 0) // STC polling mód
+    while (!getSTC());                       // Čakanie na nastavenie STC
   else
     {
-      // Wait for interrupt indicating STC (Seek/Tune Complete)
-      // TODO:
+      // Čakanie na HW interrupt STC (ak je použitý)
+      // TODO: implementovať obsluhu interruptu podľa potreby
     }
 
-  getShadow();                              // Read the current register set
-  shadow.reg.CHANNEL.bits.TUNE  =0;         // Clear Tune bit
-  putShadow();                              // Write to registers
-  while(getSTC());                          // Wait for the si4703 to clear the STC
+  getShadow();                              // Obnovenie registrov
+  shadow.reg.CHANNEL.bits.TUNE  = 0;        // Zrušenie TUNE bitu
+  putShadow();                              // Zápis registrov
+  while (getSTC());                         // Čakanie, kým čip vynuluje STC
 
   return getChannel();
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Increment frequency one band step
+// Zvýšenie frekvencie o jeden krok v rámci pásma (s obehnutím)
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Zvýši frekvenciu o jeden krok (_bandSpacing) s obehnutím na spodnú hranicu.
+ *
+ * @return Nová naladená frekvencia v kHz.
+ */
 int Si4703::incChannel(void)
 {
-  int freq = getChannel();          // aktuálna frekvencia
-  freq += _bandSpacing;             // posun o 1 krok hore
+  int freq = getChannel();          // Aktuálna frekvencia
+  freq += _bandSpacing;             // Posun o jeden krok hore
 
-  if (freq > _bandEnd) {            // ak sme preleteli nad hornú hranicu
-    freq = _bandStart;              // skoč na spodnú hranicu
+  if (freq > _bandEnd) {            // Ak preskočíme hornú hranicu
+    freq = _bandStart;              // Skok na spodnú hranicu
   }
 
   return setChannel(freq);
 }
 
+/**
+ * @brief Zníži frekvenciu o jeden krok (_bandSpacing) s obehnutím na hornú hranicu.
+ *
+ * @return Nová naladená frekvencia v kHz.
+ */
 int Si4703::decChannel(void)
 {
-  int freq = getChannel();          // aktuálna frekvencia
-  freq -= _bandSpacing;             // posun o 1 krok dole
+  int freq = getChannel();          // Aktuálna frekvencia
+  freq -= _bandSpacing;             // Posun o jeden krok dole
 
-  if (freq < _bandStart) {          // ak sme prešli pod spodnú hranicu
-    freq = _bandEnd;                // skoč na hornú hranicu
+  if (freq < _bandStart) {          // Ak prejdeme pod spodnú hranicu
+    freq = _bandEnd;                // Skok na hornú hranicu
   }
 
   return setChannel(freq);
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get STC status
+// Zistenie STC (Seek/Tune Complete) stavu
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Zistí stav príznaku STC (seek/tune complete).
+ *
+ * @return true ak je STC=1, inak false.
+ */
 bool Si4703::getSTC(void)
 {
-  getShadow();                                  // Read the current register set
-  return(shadow.reg.STATUSRSSI.bits.STC);
+  getShadow();                                  // Načítanie registrov
+  return (shadow.reg.STATUSRSSI.bits.STC);
 }
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Seeks the next available station
-// Returns freq if seek succeeded
-// Returns zero if seek failed
-//-----------------------------------------------------------------------------------------------------------------------------------
-int Si4703::seek(byte seekDirection){
 
-  getShadow();                                      // Read the current register set
-  shadow.reg.POWERCFG.bits.SEEKUP = seekDirection;  // Seek direction = UP/Down
-  shadow.reg.POWERCFG.bits.SEEK   = 1;              // Start seek
-  putShadow();                                      // Write to registers to start seeking
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Seek na ďalšiu dostupnú stanicu
+// Vracia frekvenciu pri úspechu, 0 pri zlyhaní
+//-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Vykoná seek v zadanom smere a vráti nájdenú frekvenciu.
+ *
+ * @param seekDirection SEEK_UP alebo SEEK_DOWN.
+ * @return Naladená frekvencia v kHz pri úspechu, 0 pri zlyhaní (band limit / nič nenašiel).
+ */
+int Si4703::seek(byte seekDirection)
+{
+  getShadow();                                      // Načítanie registrov
+  shadow.reg.POWERCFG.bits.SEEKUP = seekDirection;  // Smer seeku
+  shadow.reg.POWERCFG.bits.SEEK   = 1;              // Spustenie seeku
+  putShadow();                                      // Zápis registrov
 
-  if (shadow.reg.SYSCONFIG1.bits.STCIEN == 0)       // Select method Interrupt or STC
+  if (shadow.reg.SYSCONFIG1.bits.STCIEN == 0)       // Polling STC
     {
-      while(!getSTC())                              // Wait for the si4703 to set the STC
+      while (!getSTC())                             // Čakanie na nastavenie STC
       {
         _delay_ms(40);
-        // you can show READCHAN value as a seek progress here
-        // TODO:
+        // Sem je možné doplniť zobrazenie progresu podľa READCHAN
+        // TODO: podľa potreby
       }
     }
   else
     {
-      // Wait for interrupt indicating STC (Seek/Tune Complete)
-      // TODO:
+      // Čakanie na interrupt indikujúci STC (Seek/Tune Complete)
+      // TODO: ak sa použije interruptová obsluha
     }
   
-  getShadow();                                      // Read the current register set
-  bool sfbl = shadow.reg.STATUSRSSI.bits.SFBL;      // Save SFBL status
-  shadow.reg.POWERCFG.bits.SEEK   = 0;              // Stop seek
-  putShadow();                                      // Write to registers
-  while(getSTC());                                  // Wait for the si4703 to clear the STC
+  getShadow();                                      // Načítanie registrov
+  bool sfbl = shadow.reg.STATUSRSSI.bits.SFBL;      // Stav SFBL (band limit / fail)
+  shadow.reg.POWERCFG.bits.SEEK   = 0;              // Ukončenie seeku
+  putShadow();                                      // Zápis registrov
+  while (getSTC());                                 // Čakanie na vynulovanie STC
 
-  if(sfbl)  return(0);   // Failure: SFBL is indicating we hit a band limit or failed to find a station
-  return getChannel();                              // Success: return new frequency
+  if (sfbl)  return 0;   // Neúspech: band limit alebo stanica nenájdená
+  return getChannel();   // Úspech: vráti novú frekvenciu
 }
 
-//----------------------------------------------------------------------------------------------------------------------------------
-// Seek Up
 //-----------------------------------------------------------------------------------------------------------------------------------
+// Seek nahor s obehnutím pásma pri zlyhaní
+//-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Seek smerom nahor s pokusom obehnúť pásmo pri neúspechu.
+ *
+ * @return Naladená frekvencia v kHz alebo 0, ak sa nenašla žiadna stanica.
+ */
 int Si4703::seekUp()
 {
     int result = seek(SEEK_UP);
     if (result == 0) {
-        // zrejme sme narazili na hornú hranicu alebo nič nenašli
-        // skočíme na spodnú hranicu a skúsime ešte raz
+        // Pravdepodobne horná hranica alebo bez stanice,
+        // skočíme na spodnú hranicu a skúšame ešte raz
         setChannel(_bandStart);
         result = seek(SEEK_UP);
     }
     return result;
 }
 
+/**
+ * @brief Seek smerom nadol s pokusom obehnúť pásmo pri neúspechu.
+ *
+ * @return Naladená frekvencia v kHz alebo 0 pri zlyhaní.
+ */
 int Si4703::seekDown()
 {
     int result = seek(SEEK_DOWN);
     if (result == 0) {
-        // zrejme spodná hranica / nič nenašiel
-        // skočíme na hornú hranicu a skúsime ešte raz
+        // Pravdepodobne spodná hranica alebo bez stanice,
+        // skočíme na hornú hranicu a skúšame ešte raz
         setChannel(_bandEnd);
         result = seek(SEEK_DOWN);
     }
     return result;
 }
 
-
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get Sterio current value
+// Zistenie stereo/mono stavu (ST bit)
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Zistí, či je aktuálny príjem stereo (ST=1) alebo mono.
+ *
+ * @return true ak je stereo, inak false.
+ */
 bool Si4703::getST(void)
 {
-  getShadow();                              // Read the current register set
-  return(shadow.reg.STATUSRSSI.bits.ST);    // Return ST value
-}
-//-----------------------------------------------------------------------------------------------------------------------------------
-// Read RDS
-//-----------------------------------------------------------------------------------------------------------------------------------
-void Si4703::readRDS(void)
-{ 
-  // TODO:
+  getShadow();                              // Načítanie registrov
+  return (shadow.reg.STATUSRSSI.bits.ST);   // ST bit
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Writes GPIO1-GPIO3
+// Čítanie RDS – zatiaľ neimplementované
 //-----------------------------------------------------------------------------------------------------------------------------------
-	void	Si4703::writeGPIO(int GPIO, int val)
+/**
+ * @brief Prečíta RDS dáta z registračných blokov.
+ *
+ * Funkcia je pripravená ako vstupný bod pre spracovanie RDS (PS, RT a pod.),
+ * aktuálne obsahuje len TODO.
+ */
+void Si4703::readRDS(void)
+{ 
+  // TODO: Implementovať čítanie a dekódovanie RDS blokov RDSA–RDSD
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------
+// Zápis na GPIO1–GPIO3
+//-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Nastaví režim zvoleného GPIO pinu Si4703.
+ *
+ * @param GPIO Identifikátor pinu (GPIO1, GPIO2, GPIO3).
+ * @param val  Režim pinu (GPIO_Z, GPIO_I, GPIO_Low, GPIO_High).
+ */
+void Si4703::writeGPIO(int GPIO, int val)
 {
-  getShadow();    // Read the current register set
+  getShadow();    // Načítanie registrov
 
   switch (GPIO)
   {
@@ -574,75 +788,128 @@ void Si4703::readRDS(void)
       break;
   }
   
-  putShadow();  // Write to registers
+  putShadow();  // Zápis registrov
 }
 
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get DeviceID:Part Number
+// Získanie PN (Part Number) z DEVICEID
 //-----------------------------------------------------------------------------------------------------------------------------------
-int	Si4703::getPN()
+/**
+ * @brief Vráti Part Number (PN) z registra DEVICEID.
+ *
+ * @return Hodnota PN.
+ */
+int Si4703::getPN()
 {
-  getShadow();    // Read the current register set
-  return(shadow.reg.DEVICEID.bits.PN);
+  getShadow();    // Načítanie registrov
+  return (shadow.reg.DEVICEID.bits.PN);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get DeviceID:Manufacturer ID
+// Získanie Manufacturer ID z DEVICEID
 //-----------------------------------------------------------------------------------------------------------------------------------
-int	Si4703::getMFGID()
+/**
+ * @brief Vráti Manufacturer ID (MFGID) z registra DEVICEID.
+ *
+ * @return Hodnota MFGID.
+ */
+int Si4703::getMFGID()
 {
-  getShadow();    // Read the current register set
-  return(shadow.reg.DEVICEID.bits.MFGID);
+  getShadow();    // Načítanie registrov
+  return (shadow.reg.DEVICEID.bits.MFGID);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get ChipID:Chip Version
+// Získanie REV (verzie čipu) z CHIPID
 //-----------------------------------------------------------------------------------------------------------------------------------
-int	Si4703::getREV()
+/**
+ * @brief Vráti revíziu čipu (REV) z registra CHIPID.
+ *
+ * @return Hodnota REV.
+ */
+int Si4703::getREV()
 {
-  getShadow();    // Read the current register set
-  return(shadow.reg.CHIPID.bits.REV);
+  getShadow();    // Načítanie registrov
+  return (shadow.reg.CHIPID.bits.REV);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get ChipID:Device
+// Získanie DEV (typ zariadenia) z CHIPID
 //-----------------------------------------------------------------------------------------------------------------------------------
-int	Si4703::getDEV()
+/**
+ * @brief Vráti typ zariadenia (DEV) z registra CHIPID.
+ *
+ * @return Hodnota DEV.
+ */
+int Si4703::getDEV()
 {
-  getShadow();    // Read the current register set
-  return(shadow.reg.CHIPID.bits.DEV);
+  getShadow();    // Načítanie registrov
+  return (shadow.reg.CHIPID.bits.DEV);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get ChipID:Firmware Version
+// Získanie verzie firmvéru z CHIPID
 //-----------------------------------------------------------------------------------------------------------------------------------
-int	Si4703::getFIRMWARE()
+/**
+ * @brief Vráti verziu firmvéru z registra CHIPID.
+ *
+ * @return Hodnota FIRMWARE.
+ */
+int Si4703::getFIRMWARE()
 {
-  getShadow();    // Read the current register set
-  return(shadow.reg.CHIPID.bits.FIRMWARE);
+  getShadow();    // Načítanie registrov
+  return (shadow.reg.CHIPID.bits.FIRMWARE);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get Band Start Frequency
+// Začiatok pásma (spodná hranica)
 //-----------------------------------------------------------------------------------------------------------------------------------
-int	Si4703::getBandStart()
+/**
+ * @brief Vráti spodnú hranicu aktuálne nastaveného pásma (v kHz).
+ *
+ * @return Spodná hranica pásma v kHz.
+ */
+int Si4703::getBandStart()
 {
-  return(_bandStart);
+  return (_bandStart);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get Band End Frequency
+// Koniec pásma (horná hranica)
 //-----------------------------------------------------------------------------------------------------------------------------------
-int	Si4703::getBandEnd()
+/**
+ * @brief Vráti hornú hranicu aktuálne nastaveného pásma (v kHz).
+ *
+ * @return Horná hranica pásma v kHz.
+ */
+int Si4703::getBandEnd()
 {
-  return(_bandEnd);
+  return (_bandEnd);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get Band Step
+// Rozstup kanálov (krok v kHz)
 //-----------------------------------------------------------------------------------------------------------------------------------
-int	Si4703::getBandSpace()
+/**
+ * @brief Vráti rozstup kanálov (krok) v kHz.
+ *
+ * @return Hodnota _bandSpacing v kHz.
+ */
+int Si4703::getBandSpace()
 {
-  return(_bandSpacing);
+  return (_bandSpacing);
 }
+
 //-----------------------------------------------------------------------------------------------------------------------------------
-// Get RSSI current value
+// Získanie aktuálnej hodnoty RSSI
 //-----------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @brief Vráti aktuálnu hodnotu RSSI (intenzita prijímaného signálu).
+ *
+ * @return RSSI v jednotkách definovaných čipom (dBμV podľa dokumentácie).
+ */
 int Si4703::getRSSI(void)
 {
-  getShadow();                              // Read the current register set
-  return(shadow.reg.STATUSRSSI.bits.RSSI);  // Return RSSI value
+  getShadow();                              // Načítanie registrov
+  return (shadow.reg.STATUSRSSI.bits.RSSI); // RSSI hodnota
 }

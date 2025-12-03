@@ -36,6 +36,24 @@
 *   GNU General Public License for more details.
 *
 *************************************************************************/
+
+/**
+ * @file uart.c
+ * @brief Implementácia prerušeniami riadenej UART knižnice s kruhovými buffermi.
+ *
+ * Tento súbor obsahuje implementáciu funkcií deklarovaných v @ref uart.h.
+ * Prijímanie aj odosielanie dát prebieha cez prerušenia a údaje sa ukladajú
+ * do kruhových bufferov v SRAM. Hlavný program tak nemusí čakať na dokončenie
+ * prenosu – vystačí si s čítaním/zápisom z/do bufferov.
+ *
+ * Veľkosť prijímacieho a vysielacieho bufferu je určená konštantami
+ * #UART_RX_BUFFER_SIZE a #UART_TX_BUFFER_SIZE, ktoré musia byť mocninou 2.
+ *
+ * Implementácia vychádza z aplikačnej poznámky Atmel AVR306 a knižnice
+ * Petra Fleuryho. V projekte je tento súbor použitý bez zásahu do logiky
+ * kódu, iba s doplnenými/slovenskými komentármi.
+ */
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
@@ -43,13 +61,14 @@
 
 
 /*
- *  constants and macros
+ *  Konštanty a makrá pre prácu s kruhovými buffermi
  */
 
-/* size of RX/TX buffers */
+/* masky pre RX/TX buffre (predpokladá sa veľkosť ako mocnina 2) */
 #define UART_RX_BUFFER_MASK ( UART_RX_BUFFER_SIZE - 1)
 #define UART_TX_BUFFER_MASK ( UART_TX_BUFFER_SIZE - 1)
 
+/* kontrola, či je veľkosť RX/TX bufferov skutočne mocnina 2 */
 #if ( UART_RX_BUFFER_SIZE & UART_RX_BUFFER_MASK )
 # error RX buffer size is not a power of 2
 #endif
@@ -58,10 +77,16 @@
 #endif
 
 
+/* 
+ * Makrá mapujúce registre a príznaky podľa konkrétneho typu AVR.
+ * Jednotlivé vetvy #if/#elif zabezpečujú, aby knižnica fungovala
+ * na rôznych rodinách mikrokontrolérov s odlišnými názvami registrov.
+ */
+
 #if defined(__AVR_AT90S2313__) || defined(__AVR_AT90S4414__) || defined(__AVR_AT90S8515__) || \
     defined(__AVR_AT90S4434__) || defined(__AVR_AT90S8535__) || \
     defined(__AVR_ATmega103__)
-/* old AVR classic or ATmega103 with one UART */
+/* staršie AVR alebo ATmega103 s jedným UARTom */
 # define UART0_RECEIVE_INTERRUPT  UART_RX_vect
 # define UART0_TRANSMIT_INTERRUPT UART_UDRE_vect
 # define UART0_STATUS             USR
@@ -74,7 +99,7 @@
 # define UART0_BIT_RXEN           RXEN
 # define UART0_BIT_TXEN           TXEN
 #elif defined(__AVR_AT90S2333__) || defined(__AVR_AT90S4433__)
-/* old AVR classic with one UART */
+/* staršie AVR classic s jedným UARTom */
 # define UART0_RECEIVE_INTERRUPT  UART_RX_vect
 # define UART0_TRANSMIT_INTERRUPT UART_UDRE_vect
 # define UART0_STATUS             UCSRA
@@ -87,7 +112,7 @@
 # define UART0_BIT_RXEN           RXEN
 # define UART0_BIT_TXEN           TXEN
 #elif defined(__AVR_AT90PWM216__) || defined(__AVR_AT90PWM316__)
-/* AT90PWN216/316 with one USART */
+/* AT90PWM216/316 s jedným USARTom */
 # define UART0_RECEIVE_INTERRUPT  USART_RX_vect
 # define UART0_TRANSMIT_INTERRUPT USART_UDRE_vect
 # define UART0_STATUS             UCSRA
@@ -107,7 +132,7 @@
     defined(__AVR_ATmega16__) || defined(__AVR_ATmega16A__) || \
     defined(__AVR_ATmega32__) || defined(__AVR_ATmega32A__) || \
     defined(__AVR_ATmega323__)
-/* ATmega with one USART */
+/* ATmega s jedným USARTom */
 # define UART0_RECEIVE_INTERRUPT  USART_RXC_vect
 # define UART0_TRANSMIT_INTERRUPT USART_UDRE_vect
 # define UART0_STATUS             UCSRA
@@ -125,6 +150,7 @@
 # define UART0_BIT_UCSZ1          UCSZ1
 # define UART0_BIT_URSEL          URSEL
 #elif defined(__AVR_ATmega8515__) || defined(__AVR_ATmega8535__)
+/* ATmega s jedným USARTom */
 # define UART0_RECEIVE_INTERRUPT  USART_RX_vect
 # define UART0_TRANSMIT_INTERRUPT USART_UDRE_vect
 # define UART0_STATUS             UCSRA
@@ -142,7 +168,7 @@
 # define UART0_BIT_UCSZ1          UCSZ1
 # define UART0_BIT_URSEL          URSEL
 #elif defined(__AVR_ATmega163__)
-/* ATmega163 with one UART */
+/* ATmega163 s jedným UARTom */
 # define UART0_RECEIVE_INTERRUPT  UART_RX_vect
 # define UART0_TRANSMIT_INTERRUPT UART_UDRE_vect
 # define UART0_STATUS             UCSRA
@@ -156,7 +182,7 @@
 # define UART0_BIT_RXEN           RXEN
 # define UART0_BIT_TXEN           TXEN
 #elif defined(__AVR_ATmega162__)
-/* ATmega with two USART */
+/* ATmega s dvoma USART rozhraniami */
 # define ATMEGA_USART1
 # define UART0_RECEIVE_INTERRUPT  USART0_RXC_vect
 # define UART1_RECEIVE_INTERRUPT  USART1_RXC_vect
@@ -191,10 +217,10 @@
 # define UART1_BIT_UCSZ0          UCSZ10
 # define UART1_BIT_UCSZ1          UCSZ11
 #elif defined(__AVR_ATmega161__)
-/* ATmega with UART */
+/* ATmega s UART – aktuálne nepodporované touto knižnicou */
 # error "AVR ATmega161 currently not supported by this libaray !"
 #elif defined(__AVR_ATmega169__)
-/* ATmega with one USART */
+/* ATmega s jedným USARTom */
 # define UART0_RECEIVE_INTERRUPT  USART0_RX_vect
 # define UART0_TRANSMIT_INTERRUPT USART0_UDRE_vect
 # define UART0_STATUS             UCSRA
@@ -215,7 +241,7 @@
     defined(__AVR_ATmega168__) || defined(__AVR_ATmega168A__) || defined(__AVR_ATmega168P__) || defined(__AVR_ATmega168PA__) || defined(__AVR_ATmega168PB__) || \
     defined(__AVR_ATmega328__) || defined(__AVR_ATmega328P__) || \
     defined(__AVR_ATmega3250__) || defined(__AVR_ATmega3290__) || defined(__AVR_ATmega6450__) || defined(__AVR_ATmega6490__)
-/* ATmega with one USART */
+/* ATmega s jedným USARTom (napr. ATmega328P) */
 # define UART0_RECEIVE_INTERRUPT  USART_RX_vect
 # define UART0_TRANSMIT_INTERRUPT USART_UDRE_vect
 # define UART0_STATUS             UCSR0A
@@ -232,7 +258,7 @@
 # define UART0_BIT_UCSZ0          UCSZ00
 # define UART0_BIT_UCSZ1          UCSZ01
 #elif defined(__AVR_ATtiny2313__) || defined(__AVR_ATtiny2313A__) || defined(__AVR_ATtiny4313__)
-/* ATtiny with one USART */
+/* ATtiny s jedným USARTom */
 # define UART0_RECEIVE_INTERRUPT  USART_RX_vect
 # define UART0_TRANSMIT_INTERRUPT USART_UDRE_vect
 # define UART0_STATUS             UCSRA
@@ -257,7 +283,7 @@
     defined(__AVR_ATmega325A__) || defined(__AVR_ATmega325PA__) || defined(__AVR_ATmega3250A__) || defined(__AVR_ATmega3250PA__) || \
     defined(__AVR_ATmega645A__) || defined(__AVR_ATmega645PA__) || defined(__AVR_ATmega6450A__) || defined(__AVR_ATmega6450PA__) || \
     defined(__AVR_ATmega644__)
-/* ATmega with one USART */
+/* ATmega s jedným USARTom */
 # define UART0_RECEIVE_INTERRUPT  USART0_RX_vect
 # define UART0_TRANSMIT_INTERRUPT USART0_UDRE_vect
 # define UART0_STATUS             UCSR0A
@@ -279,7 +305,7 @@
     defined(__AVR_ATmega164A__) || defined(__AVR_ATmega164PA__) || defined(__AVR_ATmega324A__) || defined(__AVR_ATmega324PA__) || \
     defined(__AVR_ATmega644A__) || defined(__AVR_ATmega644PA__) || defined(__AVR_ATmega1284__) || defined(__AVR_ATmega1284P__) || \
     defined(__AVR_ATtiny1634__)
-/* ATmega with two USART */
+/* ATmega s dvoma USART rozhraniami */
 # define ATMEGA_USART1
 # define UART0_RECEIVE_INTERRUPT  USART0_RX_vect
 # define UART1_RECEIVE_INTERRUPT  USART1_RX_vect
@@ -315,6 +341,7 @@
     defined(__AVR_ATmega16U4__) || defined(__AVR_ATmega32U4__) || \
     defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__) || \
     defined(__AVR_AT90USB646__) || defined(__AVR_AT90USB1286__) || defined(__AVR_AT90USB647__) || defined(__AVR_AT90USB1287__)
+/* AVR USB série s USARTom mapovaným na UART1 registre */
 # define UART0_RECEIVE_INTERRUPT  USART1_RX_vect
 # define UART0_TRANSMIT_INTERRUPT USART1_UDRE_vect
 # define UART0_STATUS             UCSR1A
@@ -330,13 +357,17 @@
 # define UART0_BIT_TXEN           TXEN1
 # define UART0_BIT_UCSZ0          UCSZ10
 # define UART0_BIT_UCSZ1          UCSZ11
-#else  /* if defined(__AVR_AT90S2313__) || defined(__AVR_AT90S4414__) || defined(__AVR_AT90S8515__) || defined(__AVR_AT90S4434__) || defined(__AVR_AT90S8535__) || defined(__AVR_ATmega103__) */
+#else
+/* žiadna podporovaná definícia UART pre daný MCU */
 # error "no UART definition for MCU available"
-#endif /* if defined(__AVR_AT90S2313__) || defined(__AVR_AT90S4414__) || defined(__AVR_AT90S8515__) || defined(__AVR_AT90S4434__) || defined(__AVR_AT90S8535__) || defined(__AVR_ATmega103__) */
+#endif
 
 
 /*
- *  module global variables
+ *  Modulové globálne premenne
+ *
+ *  Kruhové buffre (RX/TX) a indexy hláv/chvostov sú definované
+ *  ako volatile, keďže sú používané aj v ISR (prerušeniach).
  */
 static volatile unsigned char UART_TxBuf[UART_TX_BUFFER_SIZE];
 static volatile unsigned char UART_RxBuf[UART_RX_BUFFER_SIZE];
@@ -357,24 +388,27 @@ static volatile unsigned char UART1_LastRxError;
 #endif
 
 
+/**
+ * @brief Prerušovacia rutina: UART0 prijal znak (Receive Complete).
+ *
+ * ISR sa vyvolá pri prijatí bajtu na rozhraní UART0. Rutina:
+ *  - prečíta stavový register a prijaté dáta,
+ *  - extrahuje príznaky chýb (frame, overrun, parity),
+ *  - uloží prijatý bajt do kruhového prijímacieho bufferu,
+ *  - pri pretečení buffera nastaví chybový príznak.
+ */
 ISR(UART0_RECEIVE_INTERRUPT)
-
-/*************************************************************************
- * Function: UART Receive Complete interrupt
- * Purpose:  called when the UART has received a character
- **************************************************************************/
 {
     unsigned char tmphead;
     unsigned char data;
     unsigned char usr;
     unsigned char lastRxError = 0;
 
-
-    /* read UART status register and UART data register */
+    /* prečítanie stavového registra UART a registra s prijatými dátami */
     usr  = UART0_STATUS;
     data = UART0_DATA;
 
-    /* get FEn (Frame Error) DORn (Data OverRun) UPEn (USART Parity Error) bits */
+    /* zistenie chýb prijímača: Frame Error, Data OverRun, Parity Error */
     #if defined(FE) && defined(DOR) && defined(UPE)
     lastRxError = usr & (_BV(FE) | _BV(DOR) | _BV(UPE) );
     #elif defined(FE0) && defined(DOR0) && defined(UPE0)
@@ -385,59 +419,68 @@ ISR(UART0_RECEIVE_INTERRUPT)
     lastRxError = usr & (_BV(FE) | _BV(DOR) );
     #endif
 
-    /* calculate buffer index */
+    /* výpočet ďalšieho indexu v kruhovom prijímacom buffere */
     tmphead = ( UART_RxHead + 1) & UART_RX_BUFFER_MASK;
 
     if (tmphead == UART_RxTail)
     {
-        /* error: receive buffer overflow */
+        /* chyba: prijímací buffer je plný – pretečenie buffera */
         lastRxError = UART_BUFFER_OVERFLOW >> 8;
     }
     else
     {
-        /* store new index */
+        /* uloženie nového indexu hlavy prijímacieho buffera */
         UART_RxHead = tmphead;
-        /* store received data in buffer */
+        /* uloženie prijatého bajtu do buffera */
         UART_RxBuf[tmphead] = data;
     }
+    /* akumulácia chybového stavu, ktorý si neskôr prečíta uart_getc() */
     UART_LastRxError |= lastRxError;
 }
 
 
+/**
+ * @brief Prerušovacia rutina: UART0 pripravený odoslať ďalší bajt (Data Register Empty).
+ *
+ * ISR sa vyvolá, keď je vysielací register UART0 prázdny a je možné
+ * zapísať ďalší bajt. Rutina:
+ *  - skontroluje, či sú v TX buffere ešte dáta,
+ *  - ak áno, odčíta ďalší bajt a odošle ho,
+ *  - ak nie, zakáže prerušovanie UDRE (aby ISR nebežalo zbytočne).
+ */
 ISR(UART0_TRANSMIT_INTERRUPT)
-
-/*************************************************************************
- * Function: UART Data Register Empty interrupt
- * Purpose:  called when the UART is ready to transmit the next byte
- **************************************************************************/
 {
     unsigned char tmptail;
 
-
     if (UART_TxHead != UART_TxTail)
     {
-        /* calculate and store new buffer index */
+        /* výpočet nového indexu chvosta TX buffera */
         tmptail     = (UART_TxTail + 1) & UART_TX_BUFFER_MASK;
         UART_TxTail = tmptail;
-        /* get one byte from buffer and write it to UART */
-        UART0_DATA = UART_TxBuf[tmptail]; /* start transmission */
+        /* načítanie bajtu z buffera a zápis do dátového registra UART (spustenie prenosu) */
+        UART0_DATA = UART_TxBuf[tmptail]; /* začiatok odosielania */
     }
     else
     {
-        /* tx buffer empty, disable UDRE interrupt */
+        /* TX buffer je prázdny – zakážeme UDRE prerušenie, kým nepribudnú nové dáta */
         UART0_CONTROL &= ~_BV(UART0_UDRIE);
     }
 }
 
 
-/*************************************************************************
- * Function: uart_init()
- * Purpose:  initialize UART and set baudrate
- * Input:    baudrate using macro UART_BAUD_SELECT()
- * Returns:  none
- **************************************************************************/
+/**
+ * @brief Inicializuje UART0 a nastaví prenosovú rýchlosť.
+ *
+ * Funkcia nastaví interné indexy kruhových bufferov, konfiguruje rýchlosť
+ * podľa parametra @p baudrate (vypočítaného pomocou makra #UART_BAUD_SELECT()
+ * alebo #UART_BAUD_SELECT_DOUBLE_SPEED()) a povolí prijímač, vysielač
+ * a prerušenie pri dokončení prijmu.
+ *
+ * @param baudrate Hodnota pre UBRR register, získaná cez výpočtové makro.
+ */
 void uart_init(unsigned int baudrate)
 {
+    /* inicializácia indexov TX/RX bufferov */
     UART_TxHead = 0;
     UART_TxTail = 0;
     UART_RxHead = 0;
@@ -460,11 +503,11 @@ void uart_init(unsigned int baudrate)
     # endif
     #endif /* ifdef UART_TEST */
 
-    /* Set baud rate */
+    /* Nastavenie baud rate – možný režim 2× rýchlosť (U2X) podľa najvyššieho bitu */
     if (baudrate & 0x8000)
     {
         #if UART0_BIT_U2X
-        UART0_STATUS = (1 << UART0_BIT_U2X); // Enable 2x speed
+        UART0_STATUS = (1 << UART0_BIT_U2X); // povoliť 2× rýchlosť UART
         #endif
     }
     #if defined(UART0_UBRRH)
@@ -472,10 +515,10 @@ void uart_init(unsigned int baudrate)
     #endif
     UART0_UBRRL = (unsigned char) (baudrate & 0x00FF);
 
-    /* Enable USART receiver and transmitter and receive complete interrupt */
+    /* Povolíme prijímač, vysielač a prerušenie pri dokončení prijmu (RX Complete) */
     UART0_CONTROL = _BV(UART0_BIT_RXCIE) | (1 << UART0_BIT_RXEN) | (1 << UART0_BIT_TXEN);
 
-    /* Set frame format: asynchronous, 8data, no parity, 1stop bit */
+    /* Nastavenie formátu rámca: asynchrónny mód, 8 dátových bitov, bez parity, 1 stop bit */
     #ifdef UART0_CONTROLC
     # ifdef UART0_BIT_URSEL
     UART0_CONTROLC = (1 << UART0_BIT_URSEL) | (1 << UART0_BIT_UCSZ1) | (1 << UART0_BIT_UCSZ0);
@@ -485,81 +528,104 @@ void uart_init(unsigned int baudrate)
     #endif
 }/* uart_init */
 
-/*************************************************************************
- * Function: uart_getc()
- * Purpose:  return byte from ringbuffer
- * Returns:  lower byte:  received byte from ringbuffer
- *        higher byte: last receive error
- **************************************************************************/
+
+/**
+ * @brief Získa bajt z prijímacieho kruhového bufferu UART0.
+ *
+ * Ak sú dáta k dispozícii, vráti sa 16-bitová hodnota, kde:
+ *  - nižší bajt obsahuje prijatý znak,
+ *  - vyšší bajt obsahuje stav prijímača (chybové príznaky).
+ *
+ * Ak nie sú k dispozícii žiadne dáta, vráti sa kód #UART_NO_DATA.
+ *
+ * @return 16-bitová hodnota:
+ *   - nižší bajt: prijatý znak,
+ *   - vyšší bajt: chybový kód alebo 0, ak prijatie prebehlo bez chyby.
+ */
 unsigned int uart_getc(void)
 {
     unsigned char tmptail;
     unsigned char data;
     unsigned char lastRxError;
 
-
+    /* ak sú indexy hlavy a chvosta rovnaké, buffer je prázdny */
     if (UART_RxHead == UART_RxTail)
     {
-        return UART_NO_DATA; /* no data available */
+        return UART_NO_DATA; /* žiadne dáta nie sú k dispozícii */
     }
 
-    /* calculate buffer index */
+    /* výpočet nového indexu chvosta prijímacieho buffera */
     tmptail = (UART_RxTail + 1) & UART_RX_BUFFER_MASK;
 
-    /* get data from receive buffer */
+    /* načítanie dát z prijímacieho buffera */
     data        = UART_RxBuf[tmptail];
     lastRxError = UART_LastRxError;
 
-    /* store buffer index */
+    /* uloženie nového indexu chvosta */
     UART_RxTail = tmptail;
 
+    /* po prečítaní poslednej chyby ju vynulujeme */
     UART_LastRxError = 0;
+
+    /* kombinácia chybového kódu (vyšší bajt) a prijatého znaku (nižší bajt) */
     return (lastRxError << 8) + data;
 }/* uart_getc */
 
-/*************************************************************************
- * Function: uart_putc()
- * Purpose:  write byte to ringbuffer for transmitting via UART
- * Input:    byte to be transmitted
- * Returns:  none
- **************************************************************************/
+
+/**
+ * @brief Zapíše bajt do vysielacieho kruhového bufferu UART0.
+ *
+ * Funkcia čaká, kým je vo vysielacom buffere voľné miesto, následne
+ * uloží bajt @p data a povolí prerušenie UDRE, ktoré spustí odosielanie.
+ *
+ * @param data Bajt, ktorý sa má odoslať cez UART0.
+ */
 void uart_putc(unsigned char data)
 {
     unsigned char tmphead;
 
-
+    /* výpočet nového indexu hlavy vysielacieho buffera */
     tmphead = (UART_TxHead + 1) & UART_TX_BUFFER_MASK;
 
+    /* čakanie, kým sa v TX buffere neuvoľní miesto */
     while (tmphead == UART_TxTail)
     {
-        ;/* wait for free space in buffer */
+        ;/* čakaj na voľné miesto v buffere */
     }
 
+    /* uloženie dát do buffera a aktualizácia hlavy */
     UART_TxBuf[tmphead] = data;
     UART_TxHead         = tmphead;
 
-    /* enable UDRE interrupt */
+    /* povolenie prerušenia UDRE – UART začne prenášať dáta z buffera */
     UART0_CONTROL |= _BV(UART0_UDRIE);
 }/* uart_putc */
 
-/*************************************************************************
- * Function: uart_puts()
- * Purpose:  transmit string to UART
- * Input:    string to be transmitted
- * Returns:  none
- **************************************************************************/
+
+/**
+ * @brief Odošle nulou ukončený reťazec z RAM cez UART0.
+ *
+ * Reťazec @p s sa postupne prechádza a každý znak sa odošle cez
+ * funkciu #uart_putc(). Odosielanie samotné prebieha na pozadí
+ * pomocou prerušení, funkcia sa stará len o napĺňanie TX buffera.
+ *
+ * @param s Ukazovateľ na nulou ukončený reťazec v RAM.
+ */
 void uart_puts(const char *s)
 {
     while (*s)
         uart_putc(*s++);
 }/* uart_puts */
 
-/*************************************************************************
- * Function: uart_puts_p()
- * Purpose:  transmit string from program memory to UART
- * Input:    program memory string to be transmitted
- * Returns:  none
- **************************************************************************/
+
+/**
+ * @brief Odošle reťazec uložený v programovej pamäti (PROGMEM) cez UART0.
+ *
+ * Reťazec @p progmem_s je uložený vo Flash pamäti. Funkcia ho postupne
+ * číta pomocou #pgm_read_byte() a jednotlivé znaky odosiela cez #uart_putc().
+ *
+ * @param progmem_s Ukazovateľ na reťazec v programovej pamäti.
+ */
 void uart_puts_p(const char *progmem_s)
 {
     register char c;
@@ -568,84 +634,89 @@ void uart_puts_p(const char *progmem_s)
         uart_putc(c);
 }/* uart_puts_p */
 
+
 /*
- * these functions are only for ATmegas with two USART
+ * Nasledujúce funkcie sú dostupné len na ATmegách s dvoma USART rozhraniami.
+ * Rozhranie UART1 (druhé USART) má obdobnú funkcionalitu ako UART0.
  */
 #if defined( ATMEGA_USART1 )
 
+/**
+ * @brief Prerušovacia rutina: UART1 prijal znak (Receive Complete).
+ *
+ * Implementácia je analógická k ISR pre UART0, ale pracuje s oddelenými
+ * buffermi a registrami UART1.
+ */
 ISR(UART1_RECEIVE_INTERRUPT)
-
-/*************************************************************************
- * Function: UART1 Receive Complete interrupt
- * Purpose:  called when the UART1 has received a character
- **************************************************************************/
 {
     unsigned char tmphead;
     unsigned char data;
     unsigned char usr;
     unsigned char lastRxError;
 
-
-    /* read UART status register and UART data register */
+    /* prečítanie stavového registra UART1 a registra s prijatými dátami */
     usr  = UART1_STATUS;
     data = UART1_DATA;
 
-    /* get FEn (Frame Error) DORn (Data OverRun) UPEn (USART Parity Error) bits */
+    /* zistenie chýb prijímača: Frame Error, Data OverRun, Parity Error */
     lastRxError = usr & (_BV(FE1) | _BV(DOR1) | _BV(UPE1) );
 
-    /* calculate buffer index */
+    /* výpočet ďalšieho indexu v kruhovom prijímacom buffere UART1 */
     tmphead = ( UART1_RxHead + 1) & UART_RX_BUFFER_MASK;
 
     if (tmphead == UART1_RxTail)
     {
-        /* error: receive buffer overflow */
+        /* chyba: prijímací buffer UART1 je plný – pretečenie buffera */
         lastRxError = UART_BUFFER_OVERFLOW >> 8;
     }
     else
     {
-        /* store new index */
+        /* uloženie nového indexu hlavy a prijatého bajtu do buffera */
         UART1_RxHead = tmphead;
-        /* store received data in buffer */
         UART1_RxBuf[tmphead] = data;
     }
+    /* akumulácia chybového stavu pre UART1 */
     UART1_LastRxError |= lastRxError;
 }
 
 
+/**
+ * @brief Prerušovacia rutina: UART1 pripravený odoslať ďalší bajt (Data Register Empty).
+ *
+ * Analogické správanie ako ISR pre UART0 – odosielanie dát z TX buffera
+ * rozhrania UART1 a vypnutie UDRE prerušenia pri vyprázdnení buffera.
+ */
 ISR(UART1_TRANSMIT_INTERRUPT)
-
-/*************************************************************************
- * Function: UART1 Data Register Empty interrupt
- * Purpose:  called when the UART1 is ready to transmit the next byte
- **************************************************************************/
 {
     unsigned char tmptail;
 
-
     if (UART1_TxHead != UART1_TxTail)
     {
-        /* calculate and store new buffer index */
+        /* výpočet nového indexu chvosta TX buffera UART1 */
         tmptail      = (UART1_TxTail + 1) & UART_TX_BUFFER_MASK;
         UART1_TxTail = tmptail;
-        /* get one byte from buffer and write it to UART */
-        UART1_DATA = UART1_TxBuf[tmptail]; /* start transmission */
+        /* prenesenie bajtu z buffera do dátového registra UART1 */
+        UART1_DATA = UART1_TxBuf[tmptail]; /* začiatok odosielania */
     }
     else
     {
-        /* tx buffer empty, disable UDRE interrupt */
+        /* TX buffer UART1 je prázdny – zakážeme UDRE prerušenie */
         UART1_CONTROL &= ~_BV(UART1_UDRIE);
     }
 }
 
 
-/*************************************************************************
- * Function: uart1_init()
- * Purpose:  initialize UART1 and set baudrate
- * Input:    baudrate using macro UART_BAUD_SELECT()
- * Returns:  none
- **************************************************************************/
+/**
+ * @brief Inicializuje UART1 a nastaví prenosovú rýchlosť.
+ *
+ * Funkcia pracuje rovnako ako #uart_init(), ale pre druhé USART
+ * rozhranie mikrokontroléra (UART1).
+ *
+ * @param baudrate Hodnota pre UBRR register, vypočítaná cez výpočtové makro.
+ */
 void uart1_init(unsigned int baudrate)
 {
+    /* inicializácia indexov TX/RX bufferov UART1 */
     UART1_TxHead = 0;
     UART1_TxTail = 0;
     UART1_RxHead = 0;
@@ -668,102 +739,116 @@ void uart1_init(unsigned int baudrate)
     #  endif
     # endif /* ifdef UART_TEST */
 
-    /* Set baud rate */
+    /* Nastavenie baud rate pre UART1 – voliteľný režim 2× rýchlosť (U2X) */
     if (baudrate & 0x8000)
     {
         # if UART1_BIT_U2X
-        UART1_STATUS = (1 << UART1_BIT_U2X); // Enable 2x speed
+        UART1_STATUS = (1 << UART1_BIT_U2X); // povoliť 2× rýchlosť pre UART1
         # endif
     }
     UART1_UBRRH = (unsigned char) ((baudrate >> 8) & 0x80);
     UART1_UBRRL = (unsigned char) baudrate;
 
-    /* Enable USART receiver and transmitter and receive complete interrupt */
+    /* povolenie prijímača, vysielača a prerušenia pri dokončení prijmu */
     UART1_CONTROL = _BV(UART1_BIT_RXCIE) | (1 << UART1_BIT_RXEN) | (1 << UART1_BIT_TXEN);
 
-    /* Set frame format: asynchronous, 8data, no parity, 1stop bit */
+    /* formát rámca: asynchrónny, 8 dátových bitov, bez parity, 1 stop bit */
     # ifdef UART1_BIT_URSEL
     UART1_CONTROLC = (1 << UART1_BIT_URSEL) | (1 << UART1_BIT_UCSZ1) | (1 << UART1_BIT_UCSZ0);
     # else
     UART1_CONTROLC = (1 << UART1_BIT_UCSZ1) | (1 << UART1_BIT_UCSZ0);
     # endif
-}/* uart_init */
+}/* uart1_init */
 
-/*************************************************************************
- * Function: uart1_getc()
- * Purpose:  return byte from ringbuffer
- * Returns:  lower byte:  received byte from ringbuffer
- *        higher byte: last receive error
- **************************************************************************/
+
+/**
+ * @brief Získa bajt z prijímacieho kruhového bufferu UART1.
+ *
+ * Správanie je totožné s #uart_getc(), ale pre druhé USART rozhranie (UART1).
+ *
+ * @return 16-bitová hodnota:
+ *   - nižší bajt: prijatý znak,
+ *   - vyšší bajt: chybový kód alebo 0, ak prijatie prebehlo bez chyby.
+ */
 unsigned int uart1_getc(void)
 {
     unsigned char tmptail;
     unsigned int data;
     unsigned char lastRxError;
 
-
+    /* ak sú indexy hlavy a chvosta rovnaké, buffer UART1 je prázdny */
     if (UART1_RxHead == UART1_RxTail)
     {
-        return UART_NO_DATA; /* no data available */
+        return UART_NO_DATA; /* žiadne dáta nie sú k dispozícii */
     }
 
-    /* calculate buffer index */
+    /* výpočet indexu chvosta prijímacieho buffera UART1 */
     tmptail = (UART1_RxTail + 1) & UART_RX_BUFFER_MASK;
 
-    /* get data from receive buffer */
+    /* načítanie dát z buffera a chybového stavu */
     data        = UART1_RxBuf[tmptail];
     lastRxError = UART1_LastRxError;
 
-    /* store buffer index */
+    /* uloženie nového indexu chvosta */
     UART1_RxTail = tmptail;
 
+    /* po prečítaní chyby ju vynulujeme */
     UART1_LastRxError = 0;
+
     return (lastRxError << 8) + data;
 }/* uart1_getc */
 
-/*************************************************************************
- * Function: uart1_putc()
- * Purpose:  write byte to ringbuffer for transmitting via UART
- * Input:    byte to be transmitted
- * Returns:  none
- **************************************************************************/
+
+/**
+ * @brief Zapíše bajt do vysielacieho kruhového bufferu UART1.
+ *
+ * Funkcia čaká na voľné miesto v TX buffere UART1, uloží bajt
+ * a povolí prerušenie UDRE pre odosielanie.
+ *
+ * @param data Bajt, ktorý sa má odoslať cez UART1.
+ */
 void uart1_putc(unsigned char data)
 {
     unsigned char tmphead;
 
-
+    /* výpočet nového indexu hlavy TX buffera UART1 */
     tmphead = (UART1_TxHead + 1) & UART_TX_BUFFER_MASK;
 
+    /* čakanie, kým sa v TX buffere neuvoľní miesto */
     while (tmphead == UART1_TxTail)
     {
-        ;/* wait for free space in buffer */
+        ;/* čakaj na voľné miesto v buffere */
     }
 
     UART1_TxBuf[tmphead] = data;
     UART1_TxHead         = tmphead;
 
-    /* enable UDRE interrupt */
+    /* povolenie UDRE prerušenia pre UART1 */
     UART1_CONTROL |= _BV(UART1_UDRIE);
 }/* uart1_putc */
 
-/*************************************************************************
- * Function: uart1_puts()
- * Purpose:  transmit string to UART1
- * Input:    string to be transmitted
- * Returns:  none
- **************************************************************************/
+
+/**
+ * @brief Odošle nulou ukončený reťazec z RAM cez UART1.
+ *
+ * Správanie je analogické k #uart_puts(), ale pre rozhranie UART1.
+ *
+ * @param s Ukazovateľ na nulou ukončený reťazec v RAM.
+ */
 void uart1_puts(const char *s)
 {
     while (*s)
         uart1_putc(*s++);
 }/* uart1_puts */
 
-/*************************************************************************
- * Function: uart1_puts_p()
- * Purpose:  transmit string from program memory to UART1
- * Input:    program memory string to be transmitted
- * Returns:  none
- **************************************************************************/
+
+/**
+ * @brief Odošle reťazec uložený v programovej pamäti (PROGMEM) cez UART1.
+ *
+ * Správanie je analogické k #uart_puts_p(), ale pre rozhranie UART1.
+ *
+ * @param progmem_s Ukazovateľ na reťazec v programovej pamäti.
+ */
 void uart1_puts_p(const char *progmem_s)
 {
     register char c;

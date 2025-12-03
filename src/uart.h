@@ -29,28 +29,31 @@ extern "C" {
 ************************************************************************/
 
 /**
- *  @file
- *  @defgroup pfleury_uart UART Library <uart.h>
- *  @code #include <uart.h> @endcode
+ * @file uart.h
+ * @defgroup pfleury_uart UART knižnica <uart.h>
+ * @code #include <uart.h> @endcode
  *
- *  @brief Interrupt UART library using the built-in UART with transmit and receive circular buffers.
+ * @brief Prerušeniami riadená UART knižnica s kruhovými buffermi pre príjem a odosielanie.
  *
- *  This library can be used to transmit and receive data through the built in UART.
+ * Táto knižnica poskytuje funkcie na odosielanie a prijímanie dát cez
+ * vstavané UART/USART periférie mikrokontrolérov AVR. Na pozadí využíva
+ * prerušenia a kruhové buffery pre RX aj TX, takže hlavný program môže
+ * pracovať bez čakania na dokončenie prenosu.
  *
- *  An interrupt is generated when the UART has finished transmitting or
- *  receiving a byte. The interrupt handling routines use circular buffers
- *  for buffering received and transmitted data.
+ * Pri prijme a odosielaní bajtov sa generujú prerušenia, v ktorých
+ * obslužné rutiny zapisujú/čítajú dáta do/z kruhových bufferov.
  *
- *  The UART_RX_BUFFER_SIZE and UART_TX_BUFFER_SIZE constants define
- *  the size of the circular buffers in bytes. Note that these constants must be a power of 2.
- *  You may need to adapt these constants to your target and your application by adding
- *  CDEFS += -DUART_RX_BUFFER_SIZE=nn -DUART_TX_BUFFER_SIZE=nn to your Makefile.
+ * Veľkosť kruhových bufferov je daná konštantami #UART_RX_BUFFER_SIZE
+ * a #UART_TX_BUFFER_SIZE, ktoré musia byť mocninou 2. Tieto veľkosti
+ * je možné prispôsobiť projektu napríklad pridaním
+ * `CDEFS += -DUART_RX_BUFFER_SIZE=nn -DUART_TX_BUFFER_SIZE=nn`
+ * do Makefile.
  *
- *  @note Based on Atmel Application Note AVR306
- *  @author Peter Fleury pfleury@gmx.ch  http://tinyurl.com/peterfleury
- *  @copyright (C) 2015 Peter Fleury, GNU General Public License Version 3
+ * @note Implementácia a pôvodná dokumentácia sú prevzaté z knižnice
+ *       Petra Fleuryho (pozri hlavičku vyššie). Tento súbor je použitý
+ *       ako súčasť projektu a môže obsahovať len minimálne úpravy
+ *       konfigurácie alebo komentárov.
  */
-
 
 #include <avr/pgmspace.h>
 
@@ -59,152 +62,227 @@ extern "C" {
 #endif
 
 
-/**@{*/
+/**@{*/  /**< Začiatok skupiny funkcií a makier UART knižnice. */
 
 
 /*
-** constants and macros
+** Konštanty a makrá
 */
 
-
-/** @brief  UART Baudrate Expression
- *  @param  xtalCpu  system clock in Mhz, e.g. 4000000UL for 4Mhz
- *  @param  baudRate baudrate in bps, e.g. 1200, 2400, 9600
+/**
+ * @brief Výpočet hodnoty registra pre nastavenie baudrate v štandardnom režime.
+ *
+ * Makro prepočíta požadovanú prenosovú rýchlosť (baudrate) a frekvenciu
+ * systémového oscilátora na hodnotu, ktorá sa má zapísať do baudrate registra
+ * (UBRR) pri bežnom (16×) vzorkovaní.
+ *
+ * @param xtalCpu Frekvencia systémového oscilátora v Hz
+ *                (napr. 4000000UL pre 4 MHz).
+ * @param baudRate Požadovaná prenosová rýchlosť v bps
+ *                 (napr. 1200, 2400, 9600).
  */
 #define UART_BAUD_SELECT(baudRate, xtalCpu) (((xtalCpu) + 8UL * (baudRate)) / (16UL * (baudRate)) - 1UL)
 
-/** @brief  UART Baudrate Expression for ATmega double speed mode
- *  @param  xtalCpu  system clock in Mhz, e.g. 4000000UL for 4Mhz
- *  @param  baudRate baudrate in bps, e.g. 1200, 2400, 9600
+/**
+ * @brief Výpočet hodnoty registra pre nastavenie baudrate v režime dvojnásobnej rýchlosti.
+ *
+ * Makro prepočíta hodnotu baudrate pre režim „double speed“ (U2X = 1),
+ * kde UART používa 8× vzorkovanie. Výsledkom je hodnota pre UBRR
+ * s nastaveným najvyšším bitom, ktorý indikuje použitie dvojnásobnej rýchlosti.
+ *
+ * @param xtalCpu Frekvencia systémového oscilátora v Hz
+ *                (napr. 4000000UL pre 4 MHz).
+ * @param baudRate Požadovaná prenosová rýchlosť v bps
+ *                 (napr. 1200, 2400, 9600).
  */
 #define UART_BAUD_SELECT_DOUBLE_SPEED(baudRate, xtalCpu) ( ((((xtalCpu) + 4UL * (baudRate)) / (8UL * (baudRate)) - 1UL)) | 0x8000)
 
-/** @brief  Size of the circular receive buffer, must be power of 2
+/**
+ * @brief Veľkosť kruhového prijímacieho bufferu v bajtoch (mocnina 2).
  *
- *  You may need to adapt this constant to your target and your application by adding
- *  CDEFS += -DUART_RX_BUFFER_SIZE=nn to your Makefile.
+ * Ak veľkosť nevyhovuje potrebám aplikácie, je možné ju zmeniť
+ * pridaním prepínača `-DUART_RX_BUFFER_SIZE=nn` do Makefile (cez CDEFS).
  */
 #ifndef UART_RX_BUFFER_SIZE
 # define UART_RX_BUFFER_SIZE 64
 #endif
 
-/** @brief  Size of the circular transmit buffer, must be power of 2
+/**
+ * @brief Veľkosť kruhového vysielacieho bufferu v bajtoch (mocnina 2).
  *
- *  You may need to adapt this constant to your target and your application by adding
- *  CDEFS += -DUART_TX_BUFFER_SIZE=nn to your Makefile.
+ * Ak veľkosť nevyhovuje potrebám aplikácie, je možné ju zmeniť
+ * pridaním prepínača `-DUART_TX_BUFFER_SIZE=nn` do Makefile (cez CDEFS).
  */
 #ifndef UART_TX_BUFFER_SIZE
 # define UART_TX_BUFFER_SIZE 64
 #endif
 
-/* test if the size of the circular buffers fits into SRAM */
+/* test, či sa súčet veľkostí bufferov vojde do SRAM */
 #if ( (UART_RX_BUFFER_SIZE + UART_TX_BUFFER_SIZE) >= (RAMEND - 0x60 ) )
 # error "size of UART_RX_BUFFER_SIZE + UART_TX_BUFFER_SIZE larger than size of SRAM"
 #endif
 
 /*
-** high byte error return code of uart_getc()
+** Kódy chýb pre funkciu uart_getc()
 */
-#define UART_FRAME_ERROR     0x1000 /**< @brief Framing Error by UART       */
-#define UART_OVERRUN_ERROR   0x0800 /**< @brief Overrun condition by UART   */
-#define UART_PARITY_ERROR    0x0400 /**< @brief Parity Error by UART        */
-#define UART_BUFFER_OVERFLOW 0x0200 /**< @brief receive ringbuffer overflow */
-#define UART_NO_DATA         0x0100 /**< @brief no receive data available   */
+
+/** @brief Príznak rámcovej chyby (framing error) prijímača UART. */
+#define UART_FRAME_ERROR     0x1000
+/** @brief Príznak pretečenia (overrun) vnútorného UART prijímača. */
+#define UART_OVERRUN_ERROR   0x0800
+/** @brief Príznak parity chyby prijatého bajtu. */
+#define UART_PARITY_ERROR    0x0400
+/** @brief Príznak pretečenia (overflow) softvérového prijímacieho kruhového bufferu. */
+#define UART_BUFFER_OVERFLOW 0x0200
+/** @brief Príznak, že nie sú k dispozícii žiadne prijaté dáta. */
+#define UART_NO_DATA         0x0100
 
 
 /*
-** function prototypes
+** Deklarácie funkcií UART knižnice
 */
 
 /**
- * @brief   Initialize UART and set baudrate
- * @param   baudrate Specify baudrate using macro UART_BAUD_SELECT()
- * @return  none
+ * @brief Inicializuje UART a nastaví prenosovú rýchlosť (baudrate).
+ *
+ * Funkcia nastaví UART perifériu podľa parametra @p baudrate. Hodnota
+ * parametra sa typicky získa pomocou makra #UART_BAUD_SELECT() alebo
+ * #UART_BAUD_SELECT_DOUBLE_SPEED().
+ *
+ * @param baudrate Hodnota pre UBRR register, vypočítaná cez príslušné makro.
  */
 extern void uart_init(unsigned int baudrate);
 
 
 /**
- *  @brief   Get received byte from ringbuffer
+ * @brief Získa prijatý bajt z prijímacieho kruhového bufferu.
  *
- * Returns in the lower byte the received character and in the
- * higher byte the last receive error.
- * UART_NO_DATA is returned when no data is available.
+ * Funkcia vracia 16-bitovú hodnotu, kde:
+ * - v **nižšom bajte** je prijatý znak,
+ * - vo **vyššom bajte** je stavový kód poslednej chyby prijímača.
  *
- *  @return  lower byte:  received byte from ringbuffer
- *  @return  higher byte: last receive status
- *           - \b 0 successfully received data from UART
- *           - \b UART_NO_DATA
- *             <br>no receive data available
- *           - \b UART_BUFFER_OVERFLOW
- *             <br>Receive ringbuffer overflow.
- *             We are not reading the receive buffer fast enough,
- *             one or more received character have been dropped
- *           - \b UART_OVERRUN_ERROR
- *             <br>Overrun condition by UART.
- *             A character already present in the UART UDR register was
- *             not read by the interrupt handler before the next character arrived,
- *             one or more received characters have been dropped.
- *           - \b UART_FRAME_ERROR
- *             <br>Framing Error by UART
+ * Ak nie sú k dispozícii žiadne dáta, je vrátený kód #UART_NO_DATA.
+ *
+ * @return 16-bitová hodnota:
+ *   - nižší bajt: prijatý znak,
+ *   - vyšší bajt: stav prijímača:
+ *     - 0 – prijatie prebehlo bez chyby,
+ *     - #UART_NO_DATA – nie sú k dispozícii žiadne prijaté dáta,
+ *     - #UART_BUFFER_OVERFLOW – softvérový prijímací buffer pretečie,
+ *     - #UART_OVERRUN_ERROR – hardvérový prijímač UART pretečie (dáta neboli včas prečítané),
+ *     - #UART_FRAME_ERROR – rámcová chyba (nesprávny formát alebo dĺžka rámca).
  */
 extern unsigned int uart_getc(void);
 
 
 /**
- *  @brief   Put byte to ringbuffer for transmitting via UART
- *  @param   data byte to be transmitted
- *  @return  none
+ * @brief Zapíše jeden bajt do vysielacieho kruhového bufferu UART.
+ *
+ * Funkcia vloží bajt @p data do TX bufferu. Skutočné odoslanie prebieha
+ * na pozadí pomocou prerušení. Ak je buffer plný, funkcia môže blokovať,
+ * kým sa neuvoľní miesto.
+ *
+ * @param data Bajt, ktorý sa má odoslať cez UART.
  */
 extern void uart_putc(unsigned char data);
 
 
 /**
- *  @brief   Put string to ringbuffer for transmitting via UART
+ * @brief Zapíše textový reťazec z RAM do vysielacieho bufferu UART.
  *
- *  The string is buffered by the uart library in a circular buffer
- *  and one character at a time is transmitted to the UART using interrupts.
- *  Blocks if it can not write the whole string into the circular buffer.
+ * Funkcia prechádza znakovým reťazcom @p s, ukladá jeho znaky do TX
+ * kruhového bufferu a odosielanie prebieha postupne v prerušení.
+ * Ak sa celý reťazec nezmestí naraz, funkcia môže blokovať,
+ * pokým sa v buffere neuvoľní miesto.
  *
- *  @param   s string to be transmitted
- *  @return  none
+ * @param s Nulou ukončený reťazec v RAM, ktorý sa má odoslať.
  */
 extern void uart_puts(const char *s);
 
 
 /**
- * @brief    Put string from program memory to ringbuffer for transmitting via UART.
+ * @brief Zapíše textový reťazec z programovej pamäte (Flash) do vysielacieho bufferu UART.
  *
- * The string is buffered by the uart library in a circular buffer
- * and one character at a time is transmitted to the UART using interrupts.
- * Blocks if it can not write the whole string into the circular buffer.
+ * Reťazec je uložený v programovej pamäti (PROGMEM). Funkcia postupne
+ * prenáša znaky do TX kruhového bufferu a odosielanie vykonáva UART
+ * pomocou prerušení. Ak sa celý reťazec nezmestí naraz, funkcia môže
+ * blokovať, pokým sa v buffere neuvoľní miesto.
  *
- * @param    s program memory string to be transmitted
- * @return   none
- * @see      uart_puts_P
+ * @param s Ukazovateľ na reťazec v programovej pamäti (PROGMEM).
+ *
+ * @see uart_puts
  */
 extern void uart_puts_p(const char *s);
 
 /**
- * @brief    Macro to automatically put a string constant into program memory
+ * @brief Pomocné makro pre odoslanie reťazca z programovej pamäte.
+ *
+ * Makro automaticky umiestni zadaný textový literál do programovej pamäte
+ * a zavolá funkciu #uart_puts_p().
+ *
+ * @param __s Textový literál (string constant), ktorý sa má odoslať.
  */
 #define uart_puts_P(__s) uart_puts_p(PSTR(__s))
 
 
-/** @brief  Initialize USART1 (only available on selected ATmegas) @see uart_init */
+/**
+ * @brief Inicializuje perifériu USART1 (len na vybraných mikrokontroléroch).
+ *
+ * Funkcia nastaví druhé UART/USART rozhranie (USART1) podobne ako #uart_init().
+ *
+ * @param baudrate Hodnota pre UBRR register, vypočítaná cez príslušné makro.
+ * @see uart_init
+ */
 extern void uart1_init(unsigned int baudrate);
-/** @brief  Get received byte of USART1 from ringbuffer. (only available on selected ATmega) @see uart_getc */
+
+/**
+ * @brief Získa prijatý bajt z prijímacieho bufferu USART1.
+ *
+ * Správa sa rovnako ako #uart_getc(), ale pre druhé rozhranie UART (USART1).
+ *
+ * @return 16-bitová hodnota so znakom v nižšom bajte a stavovým kódom vo vyššom bajte.
+ * @see uart_getc
+ */
 extern unsigned int uart1_getc(void);
-/** @brief  Put byte to ringbuffer for transmitting via USART1 (only available on selected ATmega) @see uart_putc */
+
+/**
+ * @brief Zapíše jeden bajt do vysielacieho bufferu USART1.
+ *
+ * Správa sa rovnako ako #uart_putc(), ale pre druhé rozhranie UART (USART1).
+ *
+ * @param data Bajt, ktorý sa má odoslať cez USART1.
+ * @see uart_putc
+ */
 extern void uart1_putc(unsigned char data);
-/** @brief  Put string to ringbuffer for transmitting via USART1 (only available on selected ATmega) @see uart_puts */
+
+/**
+ * @brief Zapíše reťazec z RAM do vysielacieho bufferu USART1.
+ *
+ * Správa sa rovnako ako #uart_puts(), ale pre druhé rozhranie UART (USART1).
+ *
+ * @param s Nulou ukončený reťazec v RAM, ktorý sa má odoslať cez USART1.
+ * @see uart_puts
+ */
 extern void uart1_puts(const char *s);
-/** @brief  Put string from program memory to ringbuffer for transmitting via USART1 (only available on selected ATmega) @see uart_puts_p */
+
+/**
+ * @brief Zapíše reťazec z programovej pamäte do vysielacieho bufferu USART1.
+ *
+ * Správa sa rovnako ako #uart_puts_p(), ale pre druhé rozhranie UART (USART1).
+ *
+ * @param s Ukazovateľ na reťazec v programovej pamäti (PROGMEM).
+ * @see uart_puts_p
+ */
 extern void uart1_puts_p(const char *s);
-/** @brief  Macro to automatically put a string constant into program memory */
+
+/**
+ * @brief Pomocné makro pre odoslanie reťazca z programovej pamäte cez USART1.
+ *
+ * @param __s Textový literál (string constant), ktorý sa má odoslať.
+ */
 #define uart1_puts_P(__s) uart1_puts_p(PSTR(__s))
 
-/**@}*/
+/**@}*/ /**< Koniec skupiny pfleury_uart. */
 
 #ifdef __cplusplus
 }

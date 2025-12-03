@@ -1,10 +1,21 @@
-#include "RotaryEncoder.h"
+#include "RotaryEncoder.h" 
 #include "uart.h"
 
-/*
-    Konštruktor – uložíme si, ktoré registre a piny používame.
-    Kód tak funguje na ľubovoľných pinoch, nie iba na D2/D3.
-*/
+/**
+ * @file
+ * @brief Implementácia triedy RotaryEncoder na detekciu otáčania a stlačenia tlačidla.
+ */
+
+/**
+ * @brief Konštruktor enkódera – uloží ukazovatele na registre a bity pinov.
+ *
+ * Konštruktor si uloží informácie o:
+ * - dátových smerových registroch (DDR),
+ * - vstupných registroch (PIN),
+ * - bitových pozíciách pinov CLK, DT a SW.
+ *
+ * Vďaka tomu môže enkóder pracovať na ľubovoľných pinoch mikrokontroléra.
+ */
 RotaryEncoder::RotaryEncoder(
     volatile uint8_t *ddrCLK, volatile uint8_t *pinRegCLK, uint8_t bitCLK,
     volatile uint8_t *ddrDT,  volatile uint8_t *pinRegDT,  uint8_t bitDT,
@@ -19,10 +30,16 @@ RotaryEncoder::RotaryEncoder(
     _lastRotaryEvent = 0;
 }
 
-/*
-    begin() – nastavíme všetky 3 piny na INPUT_PULLUP.
-    Vďaka tomu sú v kľude HIGH a pri otočení alebo kliknutí padajú na LOW.
-*/
+/**
+ * @brief Inicializuje piny enkódera ako vstupy s interným pull-up rezistorom.
+ *
+ * Nastaví piny:
+ * - CLK, DT a SW do režimu INPUT_PULLUP,
+ * - uloží počiatočný stav pinu CLK na detekciu neskoršej zmeny.
+ *
+ * V kľudovom stave sú piny log. 1 (HIGH) a pri akcii (otočenie/stlačenie)
+ * padajú na log. 0 (LOW).
+ */
 void RotaryEncoder::begin() {
     gpio_mode_input_pullup(_ddrCLK, _bitCLK);
     gpio_mode_input_pullup(_ddrDT,  _bitDT);
@@ -31,65 +48,72 @@ void RotaryEncoder::begin() {
     _lastCLKState = gpio_read(_pinRegCLK, _bitCLK);
 }
 
-
-/*
- =====================================================================
-  checkEvent() — DETEKCIA TLAČIDLA + GRAYOVO DEKÓDOVANIE ROTÁCIE
- =====================================================================
-
-  Tento dekodér je najstabilnejší pre lacné mechanické EC11 enkódery.
-  Grayov kód zaručí, že aj pri rýchlom otáčaní:
-  - nebude prehadzovať smer
-  - nebudú vznikať falošné CW/CCW
-*/
+/**
+ * @brief Zistí aktuálnu udalosť z enkódera (otáčanie alebo stlačenie).
+ *
+ * Funkcia:
+ * - deteguje stlačenie tlačidla SW s jednoduchým debounce,
+ * - dekóduje otáčanie mechanického enkódera pomocou Grayovho kódu,
+ * - na základe prechodovej tabuľky určí smer otáčania,
+ * - vracia hodnotu typu ::EncoderEvent.
+ *
+ * Implementácia je prispôsobená bežným EC11 enkóderom a snaží sa:
+ * - minimalizovať falošné kroky,
+ * - neprehadzovať smer pri rýchlom otáčaní.
+ *
+ * @return
+ *  - EVENT_BUTTON – detegované stlačenie tlačidla enkódera,
+ *  - EVENT_CW     – otočenie v smere hodinových ručičiek,
+ *  - EVENT_CCW    – otočenie proti smeru hodinových ručičiek,
+ *  - EVENT_NONE   – žiadna nová udalosť.
+ */
 EncoderEvent RotaryEncoder::checkEvent() {
     unsigned long now = timer_millis();
 
-    // =====================================================
-    //                 1. DETEKCIA STLAČENIA
-    // =====================================================
+    // -----------------------------------------------------
+    // 1. Detekcia stlačenia tlačidla (SW) s debounce
+    // -----------------------------------------------------
     uint8_t sw = gpio_read(_pinRegSW, _bitSW);
 
-    if (sw == 0) {  // tlačidlo drží LOW pri stlačení
-        if (now - _lastButtonPress > 250) {   // debounce 250 ms
+    if (sw == 0) {  // tlačidlo je stlačené pri log. 0
+        if (now - _lastButtonPress > 250) {   // debounce ~250 ms
             _lastButtonPress = now;
 
-            // Po kliknutí encoder často urobí malý "pohnutie",
-            // preto blokujeme rotáciu na 150 ms.
+            // Po kliknutí mechanický enkóder často spraví krátky
+            // „záškub“, preto blokujeme spracovanie rotácie
+            // na krátky čas (150 ms).
             _lastRotaryEvent = now + 150;
 
             return EVENT_BUTTON;
         }
     }
 
-    // =====================================================
-    //                 2. DETEKCIA ROTÁCIE
-    // =====================================================
+    // -----------------------------------------------------
+    // 2. Detekcia rotácie enkódera pomocou Grayovho kódu
+    // -----------------------------------------------------
 
-    // načítame kombináciu bitov CLK a DT
+    // Načítame aktuálny stav signálov CLK a DT
     uint8_t clk = gpio_read(_pinRegCLK, _bitCLK);
     uint8_t dt  = gpio_read(_pinRegDT,  _bitDT);
 
-    // dvojbitový stav: 00, 01, 11, 10 → 0 až 3
+    // Zloženie dvojbitového stavu: (CLK, DT) → 0..3
     uint8_t rawState = (clk << 1) | dt;
 
     /*
-        Grayov kód má špecifické poradie zmien:
-        0 → 1 → 3 → 2 → 0 (CW)
-        0 → 2 → 3 → 1 → 0 (CCW)
+        Grayov kód používaný enkóderom má nasledujúce poradie:
+        - pre CW:  0 → 1 → 3 → 2 → 0
+        - pre CCW: 0 → 2 → 3 → 1 → 0
     */
     static const uint8_t GRAY_MAP[4] = {0, 1, 3, 2};
     uint8_t newState = GRAY_MAP[rawState];
 
-    /*
-        lastState si pamätáme medzi dvoma volaniami checkEvent(),
-        aby sme vedeli porovnať predchádzajúci a aktuálny stav.
-    */
+    // Posledný stav si pamätáme medzi volaniami funkcie
     static uint8_t lastState = 0;
 
     /*
-        Prechodová tabuľka podľa Grayovho kódu.
-        Na základe prechodu medzi dvoma stavmi určíme smer.
+        Prechodová tabuľka:
+        - vstup: [starý stav][nový stav]
+        - výstup: +1 = CW, -1 = CCW, 0 = žiadny platný pohyb
     */
     static const int8_t ROTARY_TABLE[4][4] = {
         // new:   0    1    3    2
@@ -99,25 +123,23 @@ EncoderEvent RotaryEncoder::checkEvent() {
         {   +1,   0,  -1,   0 }   // old 3
     };
 
-    // výsledný pohyb: +1 = CW, -1 = CCW, 0 = nič
+    // Výsledný pohyb (+1 = CW, -1 = CCW, 0 = nič)
     int8_t movement = ROTARY_TABLE[lastState][newState];
 
-    // uložíme nový stav
+    // Uložíme nový stav pre ďalšie volanie
     lastState = newState;
 
-    // =====================================================
-    //           3. VRÁTENIE SPRÁVNE OTOČENEJ UDALOSTI
-    // =====================================================
+    // -----------------------------------------------------
+    // 3. Mapa výsledku na logiku aplikácie (CW/CCW ↔ +/−)
+    // -----------------------------------------------------
     /*
-        Ty chceš opačné správanie:
-        → keď encoder hovorí CW, ty chceš UBERAŤ
-        → keď encoder hovorí CCW, ty chceš PRIDÁVAŤ
-
-        Preto výsledok OTOČÍME.
+        V tejto aplikácii chceš otočiť logiku:
+        - ak dekodér hlási CW (movement = +1), vrátime EVENT_CCW,
+        - ak dekodér hlási CCW (movement = -1), vrátime EVENT_CW.
     */
 
-    if (movement == +1) return EVENT_CCW; // otočené
-    if (movement == -1) return EVENT_CW;  // otočené
+    if (movement == +1) return EVENT_CCW;
+    if (movement == -1) return EVENT_CW;
 
     return EVENT_NONE;
 }
