@@ -59,5 +59,21 @@ The firmware operates in a continuous polling loop, handling user inputs and upd
     * Refreshes the OLED display with current status.
 
 
-### Software Flowchart
+## 4. User Manual / Controls
+
+This section explains how to control the FM Radio receiver using the buttons and the rotary encoder.
+
+| Component | Action | Function |
+| :--- | :--- | :--- |
+| **UP Button** | Short Press | **Recall Favorite:** Loads the saved favorite station. |
+| | Long Press | **Save Favorite:** Saves the current station as the favorite. |
+| **DOWN Button** | Short Press | **Mute:** Mutes or unmutes the audio. |
+| | Long Press | **Power:** Turns the radio module On or Off (Standby). |
+| **LEFT Button** | Short Press | **Seek Down:** Automatically searches for the nearest lower station. |
+| **RIGHT Button** | Short Press | **Seek Up:** Automatically searches for the nearest higher station. |
+| **Rotary Encoder** | Rotate | **Adjust Value:** <br>• In *Volume Mode*: Increases/Decreases volume.<br>• In *Freq Mode*: Fine-tunes frequency by steps (manual tuning). |
+| | Click (Press) | **Toggle Mode:** Switches the encoder function between Volume and Frequency control. |
+
+### Control Logic Flowchart
+Below is the logic diagram showing how user inputs are processed.
 <img width="956" height="443" alt="Výkres 3" src="https://github.com/user-attachments/assets/6d446190-c761-4fb4-85e6-d05a0ced022b" />
