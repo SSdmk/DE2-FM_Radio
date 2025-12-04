@@ -1,6 +1,6 @@
 # FM Radio Receiver with Digital Tuning
 
-This project is a digital FM receiver built around a microcontroller (MCU) and a specialized Si4703 tuner module. It allows for precise digital tuning, station seeking, volume control via a rotary encoder, and displays frequency and station information (RDS) on an OLED screen.
+This project is a digital FM receiver built around a microcontroller (MCU) and a specialized Si4703 tuner module. It allows for precise digital tuning, station seeking, volume control via a rotary encoder, and displays frequency and station RSSI on an OLED screen.
 
 ## Our Team
 * Lukáš Vizina
@@ -18,7 +18,7 @@ Our solution uses a microcontroller (**Arduino Uno**) as the control unit, which
 
 1.  **User Inputs:** The system processes inputs from **4 tactile buttons** (for seeking, mute, power, and favorites) and a **Rotary Encoder** (for smooth volume control and fine-tuning).
 2.  **Tuner Control:** The MCU sends commands directly to the Si4703 module (e.g., "tune to 94.8 MHz" or "find the next strong station").
-3.  **Data Display:** The MCU reads the current status from the tuner (frequency, signal strength) and any available RDS data. It then displays this information in real-time on an OLED display.
+3.  **Data Display:** The MCU reads the current status from the tuner (frequency, signal strength). It then displays this information in real-time on an OLED display.
 
 The result is a compact, accurate, and user-friendly FM receiver.
 
@@ -30,7 +30,7 @@ A list of the main components required for the build.
 | Component | Quantity | Justification |
 | :--- | :---: | :--- |
 | **MCU: Arduino Uno** | 1 pc | The heart of the project. It processes inputs, controls the tuner, and the display via the I2C bus. |
-| **FM Tuner: Si4703 Breakout Board**| 1 pc | A key component. It is a complete FM receiver on a chip. It is controlled digitally (I2C) and **supports RDS**. |
+| **FM Tuner: Si4703 Breakout Board**| 1 pc | A key component. It is a complete FM receiver on a chip. It is controlled digitally (I2C). |
 | **Rotary Encoder (KY-040)** | 1 pc | Used for intuitive **volume control**. It also includes a push-button to toggle between volume and frequency tuning modes. |
 | **Display: OLED 0.96" (SSD1306)** | 1 pc | Displays the frequency, station name, and signal strength. Chosen for its high contrast and I2C interface. |
 | **Tactile Buttons** | 4 pcs | Used for specific actions: Seek Left/Right, Mute, Power On/Off, and saving favorite stations (Long Press). |
