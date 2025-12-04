@@ -11,7 +11,7 @@ This project is a digital FM receiver built around a microcontroller (MCU) and a
 ## 1. Problem Statement & Solution
 
 ### Problem Statement
-Traditional analog FM radios often rely on manual tuning using a variable capacitor, which is imprecise and cumbersome. The user cannot see the exact frequency they are tuned to, and modern features like automatic station seeking, digital volume control, or displaying the station name (RDS) are missing.
+Traditional analog FM radios often rely on manual tuning using a variable capacitor, which is imprecise and cumbersome. The user cannot see the exact frequency they are tuned to, and modern features like automatic station seeking, digital volume control.
 
 ### Proposed Solution (with MCU)
 Our solution uses a microcontroller (**Arduino Uno**) as the control unit, which communicates digitally with the FM tuner module (Si4703) via the I2C bus.
